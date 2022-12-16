@@ -82,15 +82,18 @@ public abstract class Endpoint<O, I> {
 
                 if (response.body() != null) {
                     JsonElement unparsedObject = this.gson.fromJson(response.body(), JsonElement.class);
-                    if (unparsedObject.isJsonObject())
-                        if (unparsedObject.getAsJsonObject().has("error")) {
-                            String error = unparsedObject.getAsJsonObject().get("error").getAsString();
-                            String description = unparsedObject.getAsJsonObject().get("description").getAsString();
+                    if (unparsedObject != null) {
+                        if (unparsedObject.isJsonObject())
+                            if (unparsedObject.getAsJsonObject().has("error")) {
+                                String error = unparsedObject.getAsJsonObject().get("error").getAsString();
+                                String description = unparsedObject.getAsJsonObject().get("description").getAsString();
 
-                            throw new EndpointError(error, description);
-                        }
-                    O object = this.gson.fromJson(unparsedObject, getResponseClass());
-                    return object;
+                                throw new EndpointError(error, description);
+                            }
+                        O object = this.gson.fromJson(unparsedObject, getResponseClass());
+                        return object;
+                    }
+                    return null;
                 } else {
                     return null;
                 }
