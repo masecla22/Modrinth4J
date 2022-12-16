@@ -46,4 +46,15 @@ public class ProjectEndpoints {
     public CompletableFuture<Project> create(CreateProjectRequest request) {
         return new CreateProject(client, gson).sendRequest(request);
     }
+
+    public CompletableFuture<Boolean> checkSlugAvailability(String slug) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", slug);
+        return new CheckSlugAvailability(client, gson).sendRequest(new EmptyRequest(), parameters)
+                .thenApply(response -> {
+                    if (response == null)
+                        return true;
+                    return false;
+                });
+    }
 }
