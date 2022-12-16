@@ -10,15 +10,18 @@ import lombok.AllArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyRequest;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
-import masecla.modrinth4j.endpoints.project.CreateGalleryImage.CreateGalleryImageRequest;
 import masecla.modrinth4j.endpoints.project.CreateProject.CreateProjectRequest;
-import masecla.modrinth4j.endpoints.project.DeleteGalleryImage.DeleteGalleryImageRequest;
 import masecla.modrinth4j.endpoints.project.GetMultipleProjects.GetMultipleProjectsRequest;
 import masecla.modrinth4j.endpoints.project.GetProjectDependencies.GetProjectDependenciesResponse;
-import masecla.modrinth4j.endpoints.project.ModifyGalleryImage.ModifyGalleryImageRequest;
 import masecla.modrinth4j.endpoints.project.ModifyProject.ModifyProjectRequest;
 import masecla.modrinth4j.endpoints.project.follow.FollowProject;
 import masecla.modrinth4j.endpoints.project.follow.UnfollowProject;
+import masecla.modrinth4j.endpoints.project.gallery.CreateGalleryImage;
+import masecla.modrinth4j.endpoints.project.gallery.DeleteGalleryImage;
+import masecla.modrinth4j.endpoints.project.gallery.ModifyGalleryImage;
+import masecla.modrinth4j.endpoints.project.gallery.CreateGalleryImage.CreateGalleryImageRequest;
+import masecla.modrinth4j.endpoints.project.gallery.DeleteGalleryImage.DeleteGalleryImageRequest;
+import masecla.modrinth4j.endpoints.project.gallery.ModifyGalleryImage.ModifyGalleryImageRequest;
 import masecla.modrinth4j.model.project.Project;
 
 @AllArgsConstructor

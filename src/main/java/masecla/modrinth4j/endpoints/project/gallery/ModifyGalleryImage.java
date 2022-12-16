@@ -1,4 +1,4 @@
-package masecla.modrinth4j.endpoints.project;
+package masecla.modrinth4j.endpoints.project.gallery;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -17,7 +17,7 @@ import lombok.Data;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
-import masecla.modrinth4j.endpoints.project.ModifyGalleryImage.ModifyGalleryImageRequest;
+import masecla.modrinth4j.endpoints.project.gallery.ModifyGalleryImage.ModifyGalleryImageRequest;
 
 public class ModifyGalleryImage extends Endpoint<EmptyResponse, ModifyGalleryImageRequest> {
     @Data

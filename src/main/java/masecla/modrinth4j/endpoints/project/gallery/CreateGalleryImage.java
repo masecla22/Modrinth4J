@@ -1,4 +1,4 @@
-package masecla.modrinth4j.endpoints.project;
+package masecla.modrinth4j.endpoints.project.gallery;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,7 +17,7 @@ import lombok.Data;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
-import masecla.modrinth4j.endpoints.project.CreateGalleryImage.CreateGalleryImageRequest;
+import masecla.modrinth4j.endpoints.project.gallery.CreateGalleryImage.CreateGalleryImageRequest;
 import masecla.modrinth4j.exception.EndpointError;
 
 public class CreateGalleryImage extends Endpoint<EmptyResponse, CreateGalleryImageRequest> {

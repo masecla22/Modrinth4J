@@ -1,4 +1,4 @@
-package masecla.modrinth4j.endpoints.project;
+package masecla.modrinth4j.endpoints.project.gallery;
 
 import org.jsoup.Connection.Method;
 
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
-import masecla.modrinth4j.endpoints.project.DeleteGalleryImage.DeleteGalleryImageRequest;
+import masecla.modrinth4j.endpoints.project.gallery.DeleteGalleryImage.DeleteGalleryImageRequest;
 
 public class DeleteGalleryImage extends Endpoint<EmptyResponse, DeleteGalleryImageRequest> {
 
