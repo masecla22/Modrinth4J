@@ -14,6 +14,7 @@ import masecla.modrinth4j.endpoints.project.CreateGalleryImage.CreateGalleryImag
 import masecla.modrinth4j.endpoints.project.CreateProject.CreateProjectRequest;
 import masecla.modrinth4j.endpoints.project.DeleteGalleryImage.DeleteGalleryImageRequest;
 import masecla.modrinth4j.endpoints.project.GetMultipleProjects.GetMultipleProjectsRequest;
+import masecla.modrinth4j.endpoints.project.GetProjectDependencies.GetProjectDependenciesResponse;
 import masecla.modrinth4j.endpoints.project.ModifyGalleryImage.ModifyGalleryImageRequest;
 import masecla.modrinth4j.endpoints.project.ModifyProject.ModifyProjectRequest;
 import masecla.modrinth4j.model.project.Project;
@@ -77,5 +78,11 @@ public class ProjectEndpoints {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", slug);
         return new DeleteGalleryImage(client, gson).sendRequest(request, parameters);
+    }
+
+    public CompletableFuture<GetProjectDependenciesResponse> getProjectDependencies(String slug) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", slug);
+        return new GetProjectDependencies(client, gson).sendRequest(new EmptyRequest(), parameters);
     }
 }
