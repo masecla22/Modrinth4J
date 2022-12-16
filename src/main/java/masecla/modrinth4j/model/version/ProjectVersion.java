@@ -1,11 +1,20 @@
 package masecla.modrinth4j.model.version;
 
+import com.google.gson.annotations.SerializedName;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProjectVersion {
     private String name;
     private String versionNumber;
     private String changelog;
 
-    private ProjectDependencies[] dependencies;
+    private ProjectDependency[] dependencies;
 
     private String[] gameVersions;
 
@@ -23,14 +32,31 @@ public class ProjectVersion {
 
     private ProjectFile[] files;
 
-    private static class ProjectDependencies {
+    public static enum ProjectDependencyType {
+        @SerializedName("required")
+        REQUIRED,
+        @SerializedName("optional")
+        OPTIONAL,
+        @SerializedName("incompatible")
+        INCOMPATIBLE,
+        @SerializedName("embedded")
+        EMBEDDED;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProjectDependency {
         private String versionId;
         private String projectId;
         private String fileName;
-        private String dependencyType;
+        private ProjectDependencyType dependencyType;
     }
 
-    private static class ProjectFile {
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProjectFile {
         private ProjectFileHashes hashes;
         private String url;
         private String filename;
@@ -38,7 +64,10 @@ public class ProjectVersion {
         private int size;
     }
 
-    private static class ProjectFileHashes {
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProjectFileHashes {
         private String sha512;
         private String sha1;
     }

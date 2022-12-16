@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyRequest;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
+import masecla.modrinth4j.endpoints.project.CreateProject.CreateProjectRequest;
 import masecla.modrinth4j.endpoints.project.GetMultipleProjects.GetMultipleProjectsRequest;
 import masecla.modrinth4j.endpoints.project.ModifyProject.ModifyProjectRequest;
 import masecla.modrinth4j.model.project.Project;
@@ -40,5 +41,9 @@ public class ProjectEndpoints {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", project);
         return new DeleteProject(client, gson).sendRequest(new EmptyRequest(), parameters);
+    }
+
+    public CompletableFuture<Project> create(CreateProjectRequest request) {
+        return new CreateProject(client, gson).sendRequest(request);
     }
 }
