@@ -17,6 +17,8 @@ import masecla.modrinth4j.endpoints.project.GetMultipleProjects.GetMultipleProje
 import masecla.modrinth4j.endpoints.project.GetProjectDependencies.GetProjectDependenciesResponse;
 import masecla.modrinth4j.endpoints.project.ModifyGalleryImage.ModifyGalleryImageRequest;
 import masecla.modrinth4j.endpoints.project.ModifyProject.ModifyProjectRequest;
+import masecla.modrinth4j.endpoints.project.follow.FollowProject;
+import masecla.modrinth4j.endpoints.project.follow.UnfollowProject;
 import masecla.modrinth4j.model.project.Project;
 
 @AllArgsConstructor
@@ -84,5 +86,17 @@ public class ProjectEndpoints {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", slug);
         return new GetProjectDependencies(client, gson).sendRequest(new EmptyRequest(), parameters);
+    }
+
+    public CompletableFuture<EmptyResponse> followProject(String slug) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", slug);
+        return new FollowProject(client, gson).sendRequest(new EmptyRequest(), parameters);
+    }
+
+    public CompletableFuture<EmptyResponse> unfollowProject(String slug) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", slug);
+        return new UnfollowProject(client, gson).sendRequest(new EmptyRequest(), parameters);
     }
 }
