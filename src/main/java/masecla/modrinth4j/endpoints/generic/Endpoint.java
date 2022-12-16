@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
 
 import com.google.gson.Gson;
@@ -55,6 +56,7 @@ public abstract class Endpoint<O, I> {
         String url = getReplacedUrl(urlParams);
         return client.connect(url).thenApply(c -> {
             try {
+                c.method(getMethod());
                 if (this.requiresBody()) {
                     JsonElement jsonBody = gson.toJsonTree(parameters, getRequestClass());
                     // Response response = c.requestBody(jsonBody).execute();
@@ -85,6 +87,10 @@ public abstract class Endpoint<O, I> {
             c.printStackTrace();
             return null;
         });
+    }
+
+    public Method getMethod() {
+        return Method.GET;
     }
 
     public abstract Class<O> getResponseClass();
