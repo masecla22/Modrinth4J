@@ -4,13 +4,10 @@ import com.google.gson.Gson;
 
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
-import masecla.modrinth4j.endpoints.project.GetProject.GetProjectRequest;
+import masecla.modrinth4j.endpoints.generic.empty.EmptyRequest;
 import masecla.modrinth4j.model.project.Project;
 
-public class GetProject extends Endpoint<Project, GetProjectRequest> {
-
-    public static class GetProjectRequest {
-    }
+public class GetProject extends Endpoint<Project, EmptyRequest> {
 
     public GetProject(HttpClient client, Gson gson) {
         super(client, gson);
@@ -22,8 +19,8 @@ public class GetProject extends Endpoint<Project, GetProjectRequest> {
     }
 
     @Override
-    public Class<GetProjectRequest> getRequestClass() {
-        return GetProjectRequest.class;
+    public Class<EmptyRequest> getRequestClass() {
+        return EmptyRequest.class;
     }
 
     @Override
