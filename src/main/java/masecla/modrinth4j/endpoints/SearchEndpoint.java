@@ -29,26 +29,20 @@ public class SearchEndpoint {
 
         private String[] categories;
 
-        @SerializedName("client_side")
         private SupportStatus clientSide;
 
-        @SerializedName("server_side")
         private SupportStatus serverSide;
 
-        @SerializedName("project_type")
         private ProjectType projectType;
 
         private int downloads;
 
-        @SerializedName("icon_url")
         private String iconUrl;
 
-        @SerializedName("project_id")
         private String projectId;
 
         private String author;
 
-        @SerializedName("display_categories")
         private String[] displayCategories;
 
         private String[] versions;
@@ -56,14 +50,11 @@ public class SearchEndpoint {
         private int follows;
 
         /** The date the project was created. ISO-8601 time. */
-        @SerializedName("date_created")
         private String dateCreated;
 
         /** The date the project was last modified. ISO-8601 time. */
-        @SerializedName("date_modified")
         private String dateModified;
 
-        @SerializedName("latest_version")
         private String latestVersion;
 
         private String license;
