@@ -81,16 +81,19 @@ public abstract class Endpoint<O, I> {
                         .ignoreHttpErrors(true)
                         .execute();
 
-                JsonObject unparsedObject = this.gson.fromJson(response.body(), JsonObject.class);
-                if(unparsedObject.has("error")){
-                    String error = unparsedObject.get("error").getAsString();
-                    String description = unparsedObject.get("description").getAsString();
+                if (response.body() != null) {
+                    JsonObject unparsedObject = this.gson.fromJson(response.body(), JsonObject.class);
+                    if (unparsedObject.has("error")) {
+                        String error = unparsedObject.get("error").getAsString();
+                        String description = unparsedObject.get("description").getAsString();
 
-                    throw new EndpointError(error, description);
+                        throw new EndpointError(error, description);
+                    }
+                    O object = this.gson.fromJson(unparsedObject, getResponseClass());
+                    return object;
+                } else {
+                    return null;
                 }
-
-                O object = this.gson.fromJson(unparsedObject, getResponseClass());
-                return object;
             } catch (IOException e) {
                 e.printStackTrace();
                 return null;
