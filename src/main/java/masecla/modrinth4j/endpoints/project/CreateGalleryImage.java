@@ -61,7 +61,7 @@ public class CreateGalleryImage extends Endpoint<EmptyResponse, CreateGalleryIma
     @Override
     public CompletableFuture<EmptyResponse> sendRequest(CreateGalleryImageRequest parameters,
             Map<String, String> urlParams) {
-        String url = getReplacedUrl(urlParams);
+        String url = getReplacedUrl(parameters, urlParams);
         return getClient().connect(url).thenApply(c -> {
             try {
                 c.method(getMethod());
