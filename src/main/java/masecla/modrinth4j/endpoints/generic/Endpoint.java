@@ -32,23 +32,45 @@ public abstract class Endpoint<O, I> {
         return true;
     }
 
+    /**
+     * If this is false, the request will not have a body.
+     */
+    public boolean requiresBody() {
+        return true;
+    }
+
+    private String getReplacedUrl(Map<String, String> parameters) {
+        String url = getEndpoint();
+        for (Map.Entry<String, String> entry : parameters.entrySet()) {
+            url = url.replace("{" + entry.getKey() + "}", entry.getValue());
+        }
+        return url;
+    }
+
     public CompletableFuture<O> sendRequest(I parameters) {
-        return client.connect(getEndpoint()).thenApply(c -> {
+        return sendRequest(parameters, new HashMap<>());
+    }
+
+    public CompletableFuture<O> sendRequest(I parameters, Map<String, String> urlParams) {
+        String url = getReplacedUrl(urlParams);
+        return client.connect(url).thenApply(c -> {
             try {
-                JsonElement jsonBody = gson.toJsonTree(parameters, getRequestClass());
-                // Response response = c.requestBody(jsonBody).execute();
-                if (isJsonBody()) {
-                    c.requestBody(jsonBody.toString());
-                } else {
-                    Map<String, String> data = new HashMap<>();
-                    for (Map.Entry<String, JsonElement> entry : jsonBody.getAsJsonObject().entrySet()) {
-                        if (entry.getValue().isJsonPrimitive()) {
-                            data.put(entry.getKey(), entry.getValue().getAsString());
-                        } else {
-                            data.put(entry.getKey(), entry.getValue().toString());
+                if (this.requiresBody()) {
+                    JsonElement jsonBody = gson.toJsonTree(parameters, getRequestClass());
+                    // Response response = c.requestBody(jsonBody).execute();
+                    if (isJsonBody()) {
+                        c.requestBody(jsonBody.toString());
+                    } else {
+                        Map<String, String> data = new HashMap<>();
+                        for (Map.Entry<String, JsonElement> entry : jsonBody.getAsJsonObject().entrySet()) {
+                            if (entry.getValue().isJsonPrimitive()) {
+                                data.put(entry.getKey(), entry.getValue().getAsString());
+                            } else {
+                                data.put(entry.getKey(), entry.getValue().toString());
+                            }
                         }
+                        c.data(data);
                     }
-                    c.data(data);
                 }
 
                 Response response = c.ignoreContentType(true).execute();
