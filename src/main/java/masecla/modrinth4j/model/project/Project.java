@@ -14,8 +14,8 @@ public class Project {
     private String description;
     private String[] categories;
 
-    private SupportStatus client_side;
-    private SupportStatus server_side;
+    private SupportStatus clientSide;
+    private SupportStatus serverSide;
 
     private String body;
 
