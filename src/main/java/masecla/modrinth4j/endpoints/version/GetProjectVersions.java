@@ -17,14 +17,14 @@ public class GetProjectVersions extends Endpoint<ProjectVersion[], GetProjectVer
     @Data
     @Builder
     public static class GetProjectVersionsRequest {
-        private String loaders;
-        private String gameVersions;
-        private String featured;
+        private String[] loaders;
+        private String[] gameVersions;
+        private boolean featured;
     }
 
     @Override
     public String getEndpoint() {
-        return "project/{id}/version";
+        return "/project/{id}/version";
     }
 
     @Override
