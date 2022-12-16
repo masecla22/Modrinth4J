@@ -59,9 +59,9 @@ public abstract class Endpoint<O, I> {
                 c.method(getMethod());
                 if (this.requiresBody()) {
                     JsonElement jsonBody = gson.toJsonTree(parameters, getRequestClass());
-                    // Response response = c.requestBody(jsonBody).execute();
                     if (isJsonBody()) {
                         c.requestBody(jsonBody.toString());
+                        c.header("Content-Type", "application/json");
                     } else {
                         Map<String, String> data = new HashMap<>();
                         for (Map.Entry<String, JsonElement> entry : jsonBody.getAsJsonObject().entrySet()) {
@@ -75,7 +75,9 @@ public abstract class Endpoint<O, I> {
                     }
                 }
 
-                Response response = c.ignoreContentType(true).execute();
+                Response response = c.ignoreContentType(true)
+                        .ignoreHttpErrors(true)
+                        .execute();
 
                 O object = this.gson.fromJson(response.body(), getResponseClass());
                 return object;
