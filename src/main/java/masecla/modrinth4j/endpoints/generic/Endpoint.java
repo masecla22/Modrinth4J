@@ -41,7 +41,7 @@ public abstract class Endpoint<O, I> {
         return true;
     }
 
-    private String getReplacedUrl(Map<String, String> parameters) {
+    protected String getReplacedUrl(Map<String, String> parameters) {
         String url = getEndpoint();
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
             url = url.replace("{" + entry.getKey() + "}", entry.getValue());
