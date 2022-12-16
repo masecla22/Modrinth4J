@@ -9,7 +9,16 @@ import masecla.modrinth4j.model.project.SupportStatus;
 
 public class SearchEndpoint {
     public static enum IndexType {
-        RELEVANCE, DOWNLOADS, FOLLOWS, NEWEST, UPDATED;
+        @SerializedName("relevance")
+        RELEVANCE,
+        @SerializedName("downloads")
+        DOWNLOADS,
+        @SerializedName("follows")
+        FOLLOWS,
+        @SerializedName("newest")
+        NEWEST,
+        @SerializedName("updated")
+        UPDATED;
     }
 
     @Data
