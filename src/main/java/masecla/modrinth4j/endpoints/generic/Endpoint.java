@@ -14,6 +14,7 @@ import com.google.gson.JsonElement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import masecla.modrinth4j.client.HttpClient;
+import masecla.modrinth4j.endpoints.generic.empty.EmptyRequest;
 import masecla.modrinth4j.exception.EndpointError;
 
 @AllArgsConstructor
@@ -58,7 +59,7 @@ public abstract class Endpoint<O, I> {
         return client.connect(url).thenApply(c -> {
             try {
                 c.method(getMethod());
-                if (this.requiresBody()) {
+                if (this.requiresBody() && !(request instanceof EmptyRequest)) {
                     JsonElement jsonBody = gson.toJsonTree(request, getRequestClass());
                     if (isJsonBody()) {
                         c.requestBody(jsonBody.toString());
