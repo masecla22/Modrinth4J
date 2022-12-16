@@ -10,7 +10,9 @@ import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -63,9 +65,6 @@ public class CreateProject extends Endpoint<Project, CreateProjectRequest> {
 
         @Default
         private boolean isDraft = true;
-
-        @Default
-        private final String[] initialVersions = new String[] {};
     }
 
     @Data
@@ -104,14 +103,20 @@ public class CreateProject extends Endpoint<Project, CreateProjectRequest> {
             try {
                 c.method(getMethod());
 
-                c.data("data", getGson().toJson(parameters.getData()));
-                c.data("icon", parameters.getIcon().getName(), new FileInputStream(parameters.getIcon()));
+                JsonObject obj = getGson().toJsonTree(parameters.getData()).getAsJsonObject();
+                obj.add("initial_versions", new JsonArray());
+                obj.addProperty("is_draft", true);
+
+                c.data("data", getGson().toJson(obj));
+                if (parameters.getIcon() != null)
+                    c.data("icon", parameters.getIcon().getName(), new FileInputStream(parameters.getIcon()));
 
                 Response response = c.ignoreContentType(true)
                         .ignoreHttpErrors(true)
                         .execute();
 
                 if (response.body() != null) {
+                    System.out.println(response.body());
                     JsonElement unparsedObject = getGson().fromJson(response.body(), JsonElement.class);
                     if (unparsedObject.isJsonObject())
                         if (unparsedObject.getAsJsonObject().has("error")) {
