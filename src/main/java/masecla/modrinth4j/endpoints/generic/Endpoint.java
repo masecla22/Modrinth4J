@@ -10,10 +10,12 @@ import org.jsoup.Connection.Response;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import masecla.modrinth4j.client.HttpClient;
+import masecla.modrinth4j.exception.EndpointError;
 
 @AllArgsConstructor
 public abstract class Endpoint<O, I> {
@@ -79,7 +81,15 @@ public abstract class Endpoint<O, I> {
                         .ignoreHttpErrors(true)
                         .execute();
 
-                O object = this.gson.fromJson(response.body(), getResponseClass());
+                JsonObject unparsedObject = this.gson.fromJson(response.body(), JsonObject.class);
+                if(unparsedObject.has("error")){
+                    String error = unparsedObject.get("error").getAsString();
+                    String description = unparsedObject.get("description").getAsString();
+
+                    throw new EndpointError(error, description);
+                }
+
+                O object = this.gson.fromJson(unparsedObject, getResponseClass());
                 return object;
             } catch (IOException e) {
                 e.printStackTrace();
