@@ -41,7 +41,7 @@ public abstract class Endpoint<O, I> {
         return true;
     }
 
-    protected String getReplacedUrl(Map<String, String> parameters) {
+    protected String getReplacedUrl(I request, Map<String, String> parameters) {
         String url = getEndpoint();
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
             url = url.replace("{" + entry.getKey() + "}", entry.getValue());
@@ -53,26 +53,24 @@ public abstract class Endpoint<O, I> {
         return sendRequest(parameters, new HashMap<>());
     }
 
-    public CompletableFuture<O> sendRequest(I parameters, Map<String, String> urlParams) {
-        String url = getReplacedUrl(urlParams);
+    public CompletableFuture<O> sendRequest(I request, Map<String, String> urlParams) {
+        String url = getReplacedUrl(request, urlParams);
         return client.connect(url).thenApply(c -> {
             try {
                 c.method(getMethod());
                 if (this.requiresBody()) {
-                    JsonElement jsonBody = gson.toJsonTree(parameters, getRequestClass());
+                    JsonElement jsonBody = gson.toJsonTree(request, getRequestClass());
                     if (isJsonBody()) {
                         c.requestBody(jsonBody.toString());
                         c.header("Content-Type", "application/json");
                     } else {
-                        Map<String, String> data = new HashMap<>();
                         for (Map.Entry<String, JsonElement> entry : jsonBody.getAsJsonObject().entrySet()) {
                             if (entry.getValue().isJsonPrimitive()) {
-                                data.put(entry.getKey(), entry.getValue().getAsString());
+                                c.data(entry.getKey(), entry.getValue().getAsString());
                             } else {
-                                data.put(entry.getKey(), entry.getValue().toString());
+                                c.data(entry.getKey(), entry.getValue().toString());
                             }
                         }
-                        c.data(data);
                     }
                 }
 
@@ -81,7 +79,13 @@ public abstract class Endpoint<O, I> {
                         .execute();
 
                 if (response.body() != null) {
-                    JsonElement unparsedObject = this.gson.fromJson(response.body(), JsonElement.class);
+                    JsonElement unparsedObject = null;
+                    try {
+                        unparsedObject = this.gson.fromJson(response.body(), JsonElement.class);
+                    } catch (Exception e) {
+                        throw new EndpointError("invalid-json",
+                                "Expected JSON response from endpoint, received: " + response.body() + "");
+                    }
                     if (unparsedObject != null) {
                         if (unparsedObject.isJsonObject())
                             if (unparsedObject.getAsJsonObject().has("error")) {
