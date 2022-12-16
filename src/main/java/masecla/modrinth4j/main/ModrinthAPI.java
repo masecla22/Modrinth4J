@@ -14,6 +14,7 @@ import masecla.modrinth4j.client.instances.UnlimitedHttpClient;
 import masecla.modrinth4j.endpoints.SearchEndpoint;
 import masecla.modrinth4j.endpoints.SearchEndpoint.SearchRequest;
 import masecla.modrinth4j.endpoints.SearchEndpoint.SearchResponse;
+import masecla.modrinth4j.endpoints.project.ProjectEndpoints;
 import masecla.modrinth4j.model.search.FacetCollection;
 import masecla.modrinth4j.model.search.FacetCollection.FacetAdapter;
 
@@ -43,5 +44,9 @@ public class ModrinthAPI {
     public CompletableFuture<SearchResponse> search(SearchRequest request) {
         SearchEndpoint endpoint = new SearchEndpoint(client, gson);
         return endpoint.sendRequest(request);
+    }
+
+    public ProjectEndpoints projects() {
+        return new ProjectEndpoints(gson, client);
     }
 }
