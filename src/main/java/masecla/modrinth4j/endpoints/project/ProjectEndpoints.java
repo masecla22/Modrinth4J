@@ -26,8 +26,6 @@ public class ProjectEndpoints {
     public CompletableFuture<ModifyProjectRequest> modify(String project, ModifyProjectRequest request) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", project);
-
-        System.out.println(gson.toJson(request));
         return new ModifyProject(client, gson).sendRequest(request, parameters);
     }
 }
