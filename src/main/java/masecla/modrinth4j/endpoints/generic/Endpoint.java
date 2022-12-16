@@ -10,7 +10,6 @@ import org.jsoup.Connection.Response;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -82,13 +81,14 @@ public abstract class Endpoint<O, I> {
                         .execute();
 
                 if (response.body() != null) {
-                    JsonObject unparsedObject = this.gson.fromJson(response.body(), JsonObject.class);
-                    if (unparsedObject.has("error")) {
-                        String error = unparsedObject.get("error").getAsString();
-                        String description = unparsedObject.get("description").getAsString();
+                    JsonElement unparsedObject = this.gson.fromJson(response.body(), JsonElement.class);
+                    if (unparsedObject.isJsonObject())
+                        if (unparsedObject.getAsJsonObject().has("error")) {
+                            String error = unparsedObject.getAsJsonObject().get("error").getAsString();
+                            String description = unparsedObject.getAsJsonObject().get("description").getAsString();
 
-                        throw new EndpointError(error, description);
-                    }
+                            throw new EndpointError(error, description);
+                        }
                     O object = this.gson.fromJson(unparsedObject, getResponseClass());
                     return object;
                 } else {
