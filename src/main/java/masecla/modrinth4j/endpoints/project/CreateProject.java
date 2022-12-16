@@ -116,7 +116,6 @@ public class CreateProject extends Endpoint<Project, CreateProjectRequest> {
                         .execute();
 
                 if (response.body() != null) {
-                    System.out.println(response.body());
                     JsonElement unparsedObject = getGson().fromJson(response.body(), JsonElement.class);
                     if (unparsedObject.isJsonObject())
                         if (unparsedObject.getAsJsonObject().has("error")) {
