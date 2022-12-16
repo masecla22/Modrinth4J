@@ -59,7 +59,7 @@ public abstract class Endpoint<O, I> {
         return client.connect(url).thenApply(c -> {
             try {
                 c.method(getMethod());
-                if (this.requiresBody() && !(request instanceof EmptyRequest)) {
+                if (this.requiresBody() && !getRequestClass().equals(EmptyRequest.class)) {
                     JsonElement jsonBody = gson.toJsonTree(request, getRequestClass());
                     if (isJsonBody()) {
                         c.requestBody(jsonBody.toString());
