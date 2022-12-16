@@ -25,7 +25,7 @@ public class Project {
     private String sourceUrl;
     private String wikiUrl;
     private String discordUrl;
-    private String[] donationUrls;
+    private ProjectDonationPlatform[] donationUrls;
 
     private ProjectType projectType;
 
