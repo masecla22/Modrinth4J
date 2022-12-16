@@ -8,7 +8,7 @@ import masecla.modrinth4j.model.project.ProjectType;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Facet {
 
     public static enum FacetType {
