@@ -21,6 +21,7 @@ import masecla.modrinth4j.endpoints.SearchEndpoint;
 import masecla.modrinth4j.endpoints.SearchEndpoint.SearchRequest;
 import masecla.modrinth4j.endpoints.SearchEndpoint.SearchResponse;
 import masecla.modrinth4j.endpoints.project.ProjectEndpoints;
+import masecla.modrinth4j.endpoints.version.VersionEndpoints;
 import masecla.modrinth4j.model.search.FacetCollection;
 import masecla.modrinth4j.model.search.FacetCollection.FacetAdapter;
 
@@ -59,6 +60,10 @@ public class ModrinthAPI {
 
     public ProjectEndpoints projects() {
         return new ProjectEndpoints(gson, client);
+    }
+
+    public VersionEndpoints versions() {
+        return new VersionEndpoints(gson, client);
     }
 
     private static void allowMethods(String... methods) {
