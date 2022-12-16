@@ -18,7 +18,7 @@ public class ProjectVersion {
 
     private String[] gameVersions;
 
-    private String versionType;
+    private VersionType versionType;
     private String[] loaders;
 
     private boolean featured;
@@ -31,6 +31,15 @@ public class ProjectVersion {
     private int downloads;
 
     private ProjectFile[] files;
+
+    public static enum VersionType {
+        @SerializedName("release")
+        RELEASE,
+        @SerializedName("beta")
+        BETA,
+        @SerializedName("alpha")
+        ALPHA;
+    }
 
     public static enum ProjectDependencyType {
         @SerializedName("required")
