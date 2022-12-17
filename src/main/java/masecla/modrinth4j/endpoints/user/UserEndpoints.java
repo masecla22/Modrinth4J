@@ -1,5 +1,6 @@
 package masecla.modrinth4j.endpoints.user;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -10,6 +11,7 @@ import lombok.AllArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyRequest;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
+import masecla.modrinth4j.endpoints.user.ChangeUserIcon.ChangeUserIconRequest;
 import masecla.modrinth4j.endpoints.user.GetUsers.GetUsersRequest;
 import masecla.modrinth4j.endpoints.user.ModifyUser.ModifyUserRequest;
 import masecla.modrinth4j.model.user.ModrinthUser;
@@ -21,6 +23,7 @@ public class UserEndpoints {
 
     /**
      * Gets a user by their ID or username
+     * 
      * @param id - The ID or username of the user
      * @return - The user
      */
@@ -34,6 +37,7 @@ public class UserEndpoints {
     /**
      * Gets multiple users by their IDs. <b> Note: This will only work with IDs, not
      * usernames. </b> unlike {@link #getUser(String)}
+     * 
      * @param ids - The IDs of the users
      * @return - The users
      */
@@ -57,5 +61,12 @@ public class UserEndpoints {
 
     public CompletableFuture<ModrinthUser> getSelf() {
         return new GetSelf(client, gson).sendRequest(new EmptyRequest(), new HashMap<>());
+    }
+
+    public CompletableFuture<EmptyResponse> changeProfilePicture(String username, File file) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", username);
+
+        return new ChangeUserIcon(client, gson).sendRequest(new ChangeUserIconRequest(file), parameters);
     }
 }
