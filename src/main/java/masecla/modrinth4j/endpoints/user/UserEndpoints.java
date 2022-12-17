@@ -79,10 +79,18 @@ public class UserEndpoints {
         return new GetUserProjects(client, gson).sendRequest(new EmptyRequest(), parameters);
     }
 
-    public CompletableFuture<ModrinthUserNotification[]> getNotifications(String id){
+    public CompletableFuture<Project[]> getUserFollowedProjects(String id) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", id);
+
+        return new GetUserFollowedProjects(client, gson).sendRequest(new EmptyRequest(), parameters);
+    }
+
+    public CompletableFuture<ModrinthUserNotification[]> getNotifications(String id) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", id);
 
         return new GetUserNotifications(client, gson).sendRequest(new EmptyRequest(), parameters);
     }
+
 }
