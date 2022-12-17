@@ -14,6 +14,7 @@ import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
 import masecla.modrinth4j.endpoints.user.ChangeUserIcon.ChangeUserIconRequest;
 import masecla.modrinth4j.endpoints.user.GetUsers.GetUsersRequest;
 import masecla.modrinth4j.endpoints.user.ModifyUser.ModifyUserRequest;
+import masecla.modrinth4j.model.project.Project;
 import masecla.modrinth4j.model.user.ModrinthUser;
 
 @AllArgsConstructor
@@ -63,10 +64,17 @@ public class UserEndpoints {
         return new GetSelf(client, gson).sendRequest(new EmptyRequest(), new HashMap<>());
     }
 
-    public CompletableFuture<EmptyResponse> changeProfilePicture(String username, File file) {
+    public CompletableFuture<EmptyResponse> changeProfilePicture(String id, File file) {
         Map<String, String> parameters = new HashMap<>();
-        parameters.put("id", username);
+        parameters.put("id", id);
 
         return new ChangeUserIcon(client, gson).sendRequest(new ChangeUserIconRequest(file), parameters);
+    }
+
+    public CompletableFuture<Project[]> getUserProjects(String id) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", id);
+
+        return new GetUserProjects(client, gson).sendRequest(new EmptyRequest(), parameters);
     }
 }
