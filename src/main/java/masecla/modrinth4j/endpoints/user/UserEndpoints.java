@@ -14,6 +14,8 @@ import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
 import masecla.modrinth4j.endpoints.user.ChangeUserIcon.ChangeUserIconRequest;
 import masecla.modrinth4j.endpoints.user.GetUsers.GetUsersRequest;
 import masecla.modrinth4j.endpoints.user.ModifyUser.ModifyUserRequest;
+import masecla.modrinth4j.endpoints.user.ReportProjectUserOrVersion.ReportProjectUserOrVersionRequest;
+import masecla.modrinth4j.endpoints.user.ReportProjectUserOrVersion.ReportProjectUserOrVersionResponse;
 import masecla.modrinth4j.model.project.Project;
 import masecla.modrinth4j.model.user.ModrinthUser;
 import masecla.modrinth4j.model.user.ModrinthUserNotification;
@@ -93,4 +95,8 @@ public class UserEndpoints {
         return new GetUserNotifications(client, gson).sendRequest(new EmptyRequest(), parameters);
     }
 
+    public CompletableFuture<ReportProjectUserOrVersionResponse> reportProjectUserOrVersion(String id,
+            ReportProjectUserOrVersionRequest request) {
+        return new ReportProjectUserOrVersion(client, gson).sendRequest(request);
+    }
 }
