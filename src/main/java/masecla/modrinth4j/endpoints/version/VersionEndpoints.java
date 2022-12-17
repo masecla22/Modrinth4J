@@ -13,12 +13,17 @@ import masecla.modrinth4j.endpoints.version.AddFilesToVersion.AddFilesToVersionR
 import masecla.modrinth4j.endpoints.version.CreateVersion.CreateVersionRequest;
 import masecla.modrinth4j.endpoints.version.GetVersions.GetVersionsRequest;
 import masecla.modrinth4j.endpoints.version.ModifyVersion.ModifyVersionRequest;
+import masecla.modrinth4j.endpoints.version.files.VersionFilesEndpoints;
 import masecla.modrinth4j.model.version.ProjectVersion;
 
 @AllArgsConstructor
 public class VersionEndpoints {
     private Gson gson;
     private HttpClient httpClient;
+
+    public VersionFilesEndpoints files() {
+        return new VersionFilesEndpoints(gson, httpClient);
+    }
 
     public CompletableFuture<ProjectVersion[]> getProjectVersions(String slug,
             GetProjectVersions.GetProjectVersionsRequest requestObject) {
