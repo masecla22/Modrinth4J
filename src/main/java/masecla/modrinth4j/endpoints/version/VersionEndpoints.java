@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 
 import lombok.AllArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
+import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
 import masecla.modrinth4j.endpoints.version.ModifyVersion.ModifyVersionRequest;
 import masecla.modrinth4j.model.version.ProjectVersion;
 
@@ -36,5 +37,12 @@ public class VersionEndpoints {
         parameters.put("id", versionId);
 
         return new ModifyVersion(httpClient, gson).sendRequest(request, parameters);
+    }
+
+    public CompletableFuture<EmptyResponse> deleteProjectVersion(String versionId) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", versionId);
+
+        return new DeleteVersion(httpClient, gson).sendRequest(null, parameters);
     }
 }
