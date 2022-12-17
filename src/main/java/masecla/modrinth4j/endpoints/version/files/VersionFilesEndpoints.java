@@ -13,9 +13,9 @@ import masecla.modrinth4j.endpoints.version.files.DeleteFileByHash.DeleteFileByH
 import masecla.modrinth4j.endpoints.version.files.GetProjectLatestVersionFromHash.GetProjectLatestVersionFromHashRequest;
 import masecla.modrinth4j.endpoints.version.files.GetVersionByHash.GetVersionByHashRequest;
 import masecla.modrinth4j.endpoints.version.files.GetVersionsFromHashes.GetVersionsFromHashesRequest;
-import masecla.modrinth4j.endpoints.version.files.GetVersionsFromHashes.HashProjectVersionMap;
 import masecla.modrinth4j.model.version.FileHash;
 import masecla.modrinth4j.model.version.ProjectVersion;
+import masecla.modrinth4j.model.version.files.HashProjectVersionMap;
 
 @AllArgsConstructor
 public class VersionFilesEndpoints {

@@ -1,7 +1,5 @@
 package masecla.modrinth4j.endpoints.version.files;
 
-import java.util.HashMap;
-
 import org.jsoup.Connection.Method;
 
 import com.google.gson.Gson;
@@ -13,9 +11,8 @@ import lombok.NoArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.version.files.GetVersionsFromHashes.GetVersionsFromHashesRequest;
-import masecla.modrinth4j.endpoints.version.files.GetVersionsFromHashes.HashProjectVersionMap;
 import masecla.modrinth4j.model.version.FileHash;
-import masecla.modrinth4j.model.version.ProjectVersion;
+import masecla.modrinth4j.model.version.files.HashProjectVersionMap;
 
 public class GetVersionsFromHashes extends Endpoint<HashProjectVersionMap, GetVersionsFromHashesRequest> {
     @Data
@@ -25,9 +22,6 @@ public class GetVersionsFromHashes extends Endpoint<HashProjectVersionMap, GetVe
     public static class GetVersionsFromHashesRequest {
         private FileHash algorithm;
         private String[] hashes;
-    }
-
-    public static class HashProjectVersionMap extends HashMap<String, ProjectVersion> {
     }
 
     public GetVersionsFromHashes(HttpClient client, Gson gson) {
