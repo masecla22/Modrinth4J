@@ -21,6 +21,7 @@ import masecla.modrinth4j.endpoints.SearchEndpoint;
 import masecla.modrinth4j.endpoints.SearchEndpoint.SearchRequest;
 import masecla.modrinth4j.endpoints.SearchEndpoint.SearchResponse;
 import masecla.modrinth4j.endpoints.project.ProjectEndpoints;
+import masecla.modrinth4j.endpoints.tags.TagsEndpoints;
 import masecla.modrinth4j.endpoints.teams.TeamsEndpoints;
 import masecla.modrinth4j.endpoints.user.UserEndpoints;
 import masecla.modrinth4j.endpoints.version.VersionEndpoints;
@@ -77,6 +78,10 @@ public class ModrinthAPI {
 
     public TeamsEndpoints teams() {
         return new TeamsEndpoints(gson, client);
+    }
+
+    public TagsEndpoints tags() {
+        return new TagsEndpoints(gson, client);
     }
 
     private static void allowMethods(String... methods) {
