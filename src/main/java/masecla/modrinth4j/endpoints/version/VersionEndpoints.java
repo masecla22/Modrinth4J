@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
 import masecla.modrinth4j.endpoints.version.CreateVersion.CreateVersionRequest;
+import masecla.modrinth4j.endpoints.version.GetVersions.GetVersionsRequest;
 import masecla.modrinth4j.endpoints.version.ModifyVersion.ModifyVersionRequest;
 import masecla.modrinth4j.model.version.ProjectVersion;
 
@@ -33,6 +34,10 @@ public class VersionEndpoints {
         return new GetVersion(httpClient, gson).sendRequest(null, parameters);
     }
 
+    public CompletableFuture<ProjectVersion[]> getVersions(String... versionIds) {
+        return new GetVersions(httpClient, gson).sendRequest(new GetVersionsRequest(versionIds));
+    }
+
     public CompletableFuture<ProjectVersion> modifyProjectVersion(String versionId, ModifyVersionRequest request) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", versionId);
@@ -50,4 +55,5 @@ public class VersionEndpoints {
     public CompletableFuture<ProjectVersion> createProjectVersion(CreateVersionRequest request) {
         return new CreateVersion(httpClient, gson).sendRequest(request);
     }
+
 }
