@@ -50,4 +50,11 @@ public class TeamsEndpoints {
 
         return new AddMemberToTeam(client, gson).sendRequest(new AddMemberToTeamRequest(userId), parameters);
     }
+
+    public CompletableFuture<EmptyResponse> joinTeam(String teamId){
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", teamId);
+
+        return new JoinTeam(client, gson).sendRequest(new EmptyRequest(), parameters);
+    }
 }
