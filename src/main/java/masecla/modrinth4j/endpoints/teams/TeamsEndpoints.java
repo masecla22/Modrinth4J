@@ -11,6 +11,7 @@ import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyRequest;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
 import masecla.modrinth4j.endpoints.teams.AddMemberToTeam.AddMemberToTeamRequest;
+import masecla.modrinth4j.endpoints.teams.GetTeamsMembers.GetTeamsMembersRequest;
 import masecla.modrinth4j.model.team.ModrinthTeamMember;
 
 @AllArgsConstructor
@@ -30,6 +31,10 @@ public class TeamsEndpoints {
         parameters.put("id", teamId);
 
         return new GetTeamMembers(client, gson).sendRequest(new EmptyRequest(), parameters);
+    }
+
+    public CompletableFuture<ModrinthTeamMember[][]> getTeamMembers(String... teamIds) {
+        return new GetTeamsMembers(client, gson).sendRequest(new GetTeamsMembersRequest(teamIds));
     }
 
     /**
