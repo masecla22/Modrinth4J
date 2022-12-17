@@ -38,4 +38,8 @@ public class UserEndpoints {
 
         return new DeleteUser(client, gson).sendRequest(new EmptyRequest(), parameters);
     }
+
+    public CompletableFuture<ModrinthUser> getSelf() {
+        return new GetSelf(client, gson).sendRequest(new EmptyRequest(), new HashMap<>());
+    }
 }
