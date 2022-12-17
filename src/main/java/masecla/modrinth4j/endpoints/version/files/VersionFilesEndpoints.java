@@ -11,6 +11,7 @@ import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
 import masecla.modrinth4j.endpoints.version.files.DeleteFileByHash.DeleteFileByHashRequest;
 import masecla.modrinth4j.endpoints.version.files.GetProjectLatestVersionFromHash.GetProjectLatestVersionFromHashRequest;
+import masecla.modrinth4j.endpoints.version.files.GetProjectLatestVersionsFromHashes.GetProjectLatestVersionsFromHashesRequest;
 import masecla.modrinth4j.endpoints.version.files.GetVersionByHash.GetVersionByHashRequest;
 import masecla.modrinth4j.endpoints.version.files.GetVersionsFromHashes.GetVersionsFromHashesRequest;
 import masecla.modrinth4j.model.version.FileHash;
@@ -34,7 +35,7 @@ public class VersionFilesEndpoints {
                 .sendRequest(new GetVersionsFromHashesRequest(algorithm, hashes));
     }
 
-    public CompletableFuture<EmptyResponse> deleteFileByHash(String hash, FileHash algorithm) {
+    public CompletableFuture<EmptyResponse> deleteFileByHash(FileHash algorithm, String hash) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("hash", hash);
 
@@ -47,6 +48,11 @@ public class VersionFilesEndpoints {
         parameters.put("hash", hash);
 
         return new GetProjectLatestVersionFromHash(client, gson).sendRequest(request, parameters);
+    }
+
+    public CompletableFuture<HashProjectVersionMap> getLatestVersionsByHash(
+            GetProjectLatestVersionsFromHashesRequest request) {
+        return new GetProjectLatestVersionsFromHashes(client, gson).sendRequest(request);
     }
 
 }
