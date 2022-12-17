@@ -26,6 +26,8 @@ import masecla.modrinth4j.endpoints.user.UserEndpoints;
 import masecla.modrinth4j.endpoints.version.VersionEndpoints;
 import masecla.modrinth4j.model.search.FacetCollection;
 import masecla.modrinth4j.model.search.FacetCollection.FacetAdapter;
+import masecla.modrinth4j.model.team.ModrinthPermissionMask;
+import masecla.modrinth4j.model.team.ModrinthPermissionMask.ModrinthPermissionMaskAdapter;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ModrinthAPI {
@@ -52,6 +54,7 @@ public class ModrinthAPI {
     private void initializeGson() {
         this.gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .registerTypeAdapter(FacetCollection.class, new FacetAdapter())
+                .registerTypeAdapter(ModrinthPermissionMask.class, new ModrinthPermissionMaskAdapter())
                 .create();
     }
 
