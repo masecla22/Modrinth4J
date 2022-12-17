@@ -75,11 +75,22 @@ public class ModrinthPermissionMask {
         return permissionMask;
     }
 
+    public static ModrinthPermissionMask all() {
+        ModrinthPermissionMask permissionMask = new ModrinthPermissionMask();
+        for (PermissionType permission : PermissionType.values()) {
+            permissionMask.addPermission(permission);
+        }
+        return permissionMask;
+    }
+
     public static class ModrinthPermissionMaskAdapter extends TypeAdapter<ModrinthPermissionMask> {
         @Override
         public void write(com.google.gson.stream.JsonWriter out, ModrinthPermissionMask value)
                 throws java.io.IOException {
-            out.value(value.getMask());
+            if (value != null)
+                out.value(value.getMask());
+            else
+                out.nullValue();
         }
 
         @Override
