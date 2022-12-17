@@ -16,6 +16,7 @@ import masecla.modrinth4j.endpoints.user.GetUsers.GetUsersRequest;
 import masecla.modrinth4j.endpoints.user.ModifyUser.ModifyUserRequest;
 import masecla.modrinth4j.model.project.Project;
 import masecla.modrinth4j.model.user.ModrinthUser;
+import masecla.modrinth4j.model.user.ModrinthUserNotification;
 
 @AllArgsConstructor
 public class UserEndpoints {
@@ -76,5 +77,12 @@ public class UserEndpoints {
         parameters.put("id", id);
 
         return new GetUserProjects(client, gson).sendRequest(new EmptyRequest(), parameters);
+    }
+
+    public CompletableFuture<ModrinthUserNotification[]> getNotifications(String id){
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", id);
+
+        return new GetUserNotifications(client, gson).sendRequest(new EmptyRequest(), parameters);
     }
 }
