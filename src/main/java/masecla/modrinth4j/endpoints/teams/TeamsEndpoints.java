@@ -67,4 +67,12 @@ public class TeamsEndpoints {
 
         return new ModifyTeamMemberInfo(client, gson).sendRequest(request, parameters);
     }
+
+    public CompletableFuture<EmptyResponse> removeMemberFromTeam(String teamId, String memberId) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", teamId);
+        parameters.put("user", memberId);
+
+        return new RemoveMemberFromTeam(client, gson).sendRequest(new EmptyRequest(), parameters);
+    }
 }
