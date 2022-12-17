@@ -13,18 +13,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
-import masecla.modrinth4j.endpoints.version.files.GetProjectLatestVersionFromByHash.GetProjectLatestVersionFromByHashRequest;
+import masecla.modrinth4j.endpoints.version.files.GetProjectLatestVersionFromHash.GetProjectLatestVersionFromHashRequest;
 import masecla.modrinth4j.model.version.FileHash;
 import masecla.modrinth4j.model.version.ProjectVersion;
 
-public class GetProjectLatestVersionFromByHash
-        extends Endpoint<ProjectVersion, GetProjectLatestVersionFromByHashRequest> {
+public class GetProjectLatestVersionFromHash
+        extends Endpoint<ProjectVersion, GetProjectLatestVersionFromHashRequest> {
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class GetProjectLatestVersionFromByHashRequest {
+    public static class GetProjectLatestVersionFromHashRequest {
         // Marked as transient to exclude it from the JSON body. It will be injected
         // into the URL instead later.
         private transient FileHash algorithm;
@@ -36,12 +36,12 @@ public class GetProjectLatestVersionFromByHash
         private String[] gameVersions = new String[0];
     }
 
-    public GetProjectLatestVersionFromByHash(HttpClient client, Gson gson) {
+    public GetProjectLatestVersionFromHash(HttpClient client, Gson gson) {
         super(client, gson);
     }
 
     @Override
-    protected String getReplacedUrl(GetProjectLatestVersionFromByHashRequest request, Map<String, String> parameters) {
+    protected String getReplacedUrl(GetProjectLatestVersionFromHashRequest request, Map<String, String> parameters) {
         // We can hook into this method to inject the query parameters.
         // This is a bit of a hack, but it works.
         // Why on earth this is not a part of the request class is beyond me.
@@ -59,8 +59,8 @@ public class GetProjectLatestVersionFromByHash
     }
 
     @Override
-    public Class<GetProjectLatestVersionFromByHashRequest> getRequestClass() {
-        return GetProjectLatestVersionFromByHashRequest.class;
+    public Class<GetProjectLatestVersionFromHashRequest> getRequestClass() {
+        return GetProjectLatestVersionFromHashRequest.class;
     }
 
     @Override

@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
 import masecla.modrinth4j.endpoints.version.files.DeleteFileByHash.DeleteFileByHashRequest;
-import masecla.modrinth4j.endpoints.version.files.GetProjectLatestVersionFromByHash.GetProjectLatestVersionFromByHashRequest;
+import masecla.modrinth4j.endpoints.version.files.GetProjectLatestVersionFromHash.GetProjectLatestVersionFromHashRequest;
 import masecla.modrinth4j.endpoints.version.files.GetVersionByHash.GetVersionByHashRequest;
 import masecla.modrinth4j.endpoints.version.files.GetVersionsFromHashes.GetVersionsFromHashesRequest;
 import masecla.modrinth4j.endpoints.version.files.GetVersionsFromHashes.HashProjectVersionMap;
@@ -42,11 +42,11 @@ public class VersionFilesEndpoints {
     }
 
     public CompletableFuture<ProjectVersion> getLatestVersionByHash(String hash,
-            GetProjectLatestVersionFromByHashRequest request) {
+            GetProjectLatestVersionFromHashRequest request) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("hash", hash);
 
-        return new GetProjectLatestVersionFromByHash(client, gson).sendRequest(request, parameters);
+        return new GetProjectLatestVersionFromHash(client, gson).sendRequest(request, parameters);
     }
 
 }
