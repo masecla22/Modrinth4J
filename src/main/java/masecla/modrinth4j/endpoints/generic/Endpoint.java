@@ -1,5 +1,7 @@
 package masecla.modrinth4j.endpoints.generic;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -110,6 +112,19 @@ public abstract class Endpoint<O, I> {
             c.printStackTrace();
             return null;
         });
+    }
+
+    protected String readFile(File file) {
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            byte[] data = new byte[(int) file.length()];
+            fis.read(data);
+            fis.close();
+            return new String(data, "UTF-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public Method getMethod() {

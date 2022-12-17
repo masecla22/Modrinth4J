@@ -1,7 +1,6 @@
 package masecla.modrinth4j.endpoints.project.gallery;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -44,20 +43,7 @@ public class CreateGalleryImage extends Endpoint<EmptyResponse, CreateGalleryIma
     public Method getMethod() {
         return Method.POST;
     }
-
-    private String readFile(File file) {
-        try {
-            FileInputStream fis = new FileInputStream(file);
-            byte[] data = new byte[(int) file.length()];
-            fis.read(data);
-            fis.close();
-            return new String(data, "UTF-8");
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
+    
     @Override
     public CompletableFuture<EmptyResponse> sendRequest(CreateGalleryImageRequest parameters,
             Map<String, String> urlParams) {
