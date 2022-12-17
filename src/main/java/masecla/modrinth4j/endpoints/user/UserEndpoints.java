@@ -31,4 +31,11 @@ public class UserEndpoints {
 
         return new ModifyUser(client, gson).sendRequest(request, parameters);
     }
+
+    public CompletableFuture<EmptyResponse> deleteUser(String id) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", id);
+
+        return new DeleteUser(client, gson).sendRequest(new EmptyRequest(), parameters);
+    }
 }
