@@ -38,4 +38,9 @@ public class GetTeamsMembers extends Endpoint<ModrinthTeamMember[][], GetTeamsMe
     public Class<ModrinthTeamMember[][]> getResponseClass() {
         return ModrinthTeamMember[][].class;
     }
+
+    @Override
+    public boolean isJsonBody() {
+        return false;
+    }
 }
