@@ -12,6 +12,7 @@ import masecla.modrinth4j.endpoints.generic.empty.EmptyRequest;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
 import masecla.modrinth4j.endpoints.teams.AddMemberToTeam.AddMemberToTeamRequest;
 import masecla.modrinth4j.endpoints.teams.GetTeamsMembers.GetTeamsMembersRequest;
+import masecla.modrinth4j.endpoints.teams.ModifyTeamMemberInfo.ModifyTeamMemberInfoRequest;
 import masecla.modrinth4j.model.team.ModrinthTeamMember;
 
 @AllArgsConstructor
@@ -51,10 +52,19 @@ public class TeamsEndpoints {
         return new AddMemberToTeam(client, gson).sendRequest(new AddMemberToTeamRequest(userId), parameters);
     }
 
-    public CompletableFuture<EmptyResponse> joinTeam(String teamId){
+    public CompletableFuture<EmptyResponse> joinTeam(String teamId) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", teamId);
 
         return new JoinTeam(client, gson).sendRequest(new EmptyRequest(), parameters);
+    }
+
+    public CompletableFuture<EmptyResponse> modifyTeamMemberInfo(String teamId, String memberId,
+            ModifyTeamMemberInfoRequest request) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", teamId);
+        parameters.put("user", memberId);
+
+        return new ModifyTeamMemberInfo(client, gson).sendRequest(request, parameters);
     }
 }
