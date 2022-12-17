@@ -62,7 +62,7 @@ public class VersionEndpoints {
         return new CreateVersion(httpClient, gson).sendRequest(request);
     }
 
-    public CompletableFuture<EmptyResponse> addFilesToVersion(String versionId, AddFilesToVersionRequest request){
+    public CompletableFuture<EmptyResponse> addFilesToVersion(String versionId, AddFilesToVersionRequest request) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", versionId);
 
