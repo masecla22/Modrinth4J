@@ -11,7 +11,7 @@
 
 
 ## Features:
-This API presents a full up-to-date coverage of the Modrinth API, allowing for intuitive native integration with existing java projects.  
+This API presents a (more than) full up-to-date coverage of the Modrinth API, allowing for intuitive native integration with existing java projects.  
 
 ## Usage:
 Documentation will be added in the wiki as soon as the library is mature.
