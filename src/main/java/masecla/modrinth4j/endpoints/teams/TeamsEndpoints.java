@@ -13,6 +13,7 @@ import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
 import masecla.modrinth4j.endpoints.teams.AddMemberToTeam.AddMemberToTeamRequest;
 import masecla.modrinth4j.endpoints.teams.GetTeamsMembers.GetTeamsMembersRequest;
 import masecla.modrinth4j.endpoints.teams.ModifyTeamMemberInfo.ModifyTeamMemberInfoRequest;
+import masecla.modrinth4j.endpoints.teams.TransferOwnership.TransferOwnershipRequest;
 import masecla.modrinth4j.model.team.ModrinthTeamMember;
 
 @AllArgsConstructor
@@ -74,5 +75,13 @@ public class TeamsEndpoints {
         parameters.put("user", memberId);
 
         return new RemoveMemberFromTeam(client, gson).sendRequest(new EmptyRequest(), parameters);
+    }
+
+    public CompletableFuture<EmptyResponse> transferOwnership(String teamId,
+            TransferOwnershipRequest request) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", teamId);
+
+        return new TransferOwnership(client, gson).sendRequest(request, parameters);
     }
 }
