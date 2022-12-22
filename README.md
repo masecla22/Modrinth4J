@@ -30,7 +30,7 @@ dependencies {
 
 ### Maven:
 Add jitpack to your maven repositories:
-```java
+```xml
 <repositories>
   <repository>
     <id>jitpack.io</id>
@@ -40,7 +40,7 @@ Add jitpack to your maven repositories:
 ```
 
 Add Modrinth4J from jitpack:
-```java
+```xml
 <dependency>
     <groupId>com.github.masecla22.Modrinth4j</groupId>
     <artifactId>Modrinth4J</artifactId>
