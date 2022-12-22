@@ -41,7 +41,7 @@ Add jitpack to your maven repositories:
 Add Modrinth4J from jitpack:
 ```xml
 <dependency>
-    <groupId>com.github.masecla22.Modrinth4j</groupId>
+    <groupId>com.github.masecla22</groupId>
     <artifactId>Modrinth4J</artifactId>
     <version>master-SNAPSHOT</version>
 </dependency>
