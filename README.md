@@ -29,6 +29,17 @@ dependencies {
 ```
 
 ### Maven:
+Add jitpack to your maven repositories:
+```java
+<repositories>
+  <repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+  </repository>
+</repositories>
+```
+
+Add Modrinth4J from jitpack:
 ```java
 <dependency>
     <groupId>com.github.masecla22.Modrinth4j</groupId>
