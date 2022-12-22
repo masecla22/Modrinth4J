@@ -13,11 +13,29 @@
 ## Features:
 This API presents a (more than) full up-to-date coverage of the Modrinth API, allowing for intuitive native integration with existing java projects.  
 
-## Usage:
-Documentation will be added in the wiki as soon as the library is mature.
+## Adding to a project:
+### Gradle:
+Add jitpack to the gradle repositories:
+```java
+repositories { 
+     maven { url "https://jitpack.io" }
+}
+```
+Add Modrinth4J from jitpack to the dependencies:
+```java
+dependencies {
+      implementation 'com.github.masecla22:Modrinth4J:07e52ea'
+}
+```
 
-[link to docs + discord for questions]
-
+### Maven:
+```java
+<dependency>
+    <groupId>com.github.masecla22.Modrinth4j</groupId>
+    <artifactId>Modrinth4J</artifactId>
+    <version>07e52ea</version>
+</dependency>
+```
 ## Examples:
 
 [insert examples]
