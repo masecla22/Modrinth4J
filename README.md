@@ -23,7 +23,7 @@ repositories {
 Add Modrinth4J from jitpack to the dependencies:
 ```java
 dependencies {
-      implementation 'com.github.masecla22:Modrinth4J:07e52ea'
+      implementation 'com.github.masecla22:Modrinth4J:master-SNAPSHOT'
 }
 ```
 
@@ -43,7 +43,7 @@ Add Modrinth4J from jitpack:
 <dependency>
     <groupId>com.github.masecla22.Modrinth4j</groupId>
     <artifactId>Modrinth4J</artifactId>
-    <version>07e52ea</version>
+    <version>master-SNAPSHOT</version>
 </dependency>
 ```
 ## Examples:
