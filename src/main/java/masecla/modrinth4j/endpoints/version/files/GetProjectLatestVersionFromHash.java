@@ -2,8 +2,6 @@ package masecla.modrinth4j.endpoints.version.files;
 
 import java.util.Map;
 
-import org.jsoup.Connection.Method;
-
 import com.google.gson.Gson;
 
 import lombok.AllArgsConstructor;
@@ -31,7 +29,7 @@ public class GetProjectLatestVersionFromHash
 
         @Default
         private String[] loaders = new String[0];
-        
+
         @Default
         private String[] gameVersions = new String[0];
     }
@@ -69,7 +67,7 @@ public class GetProjectLatestVersionFromHash
     }
 
     @Override
-    public Method getMethod() {
-        return Method.POST;
+    public String getMethod() {
+        return "POST";
     }
 }

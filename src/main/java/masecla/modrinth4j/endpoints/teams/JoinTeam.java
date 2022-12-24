@@ -1,7 +1,5 @@
 package masecla.modrinth4j.endpoints.teams;
 
-import org.jsoup.Connection.Method;
-
 import com.google.gson.Gson;
 
 import masecla.modrinth4j.client.HttpClient;
@@ -31,7 +29,7 @@ public class JoinTeam extends Endpoint<EmptyResponse, EmptyRequest> {
     }
 
     @Override
-    public Method getMethod() {
-        return Method.POST;
+    public String getMethod() {
+        return "POST";
     }
 }

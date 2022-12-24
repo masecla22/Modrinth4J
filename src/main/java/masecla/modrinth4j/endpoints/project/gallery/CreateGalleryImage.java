@@ -2,14 +2,11 @@ package masecla.modrinth4j.endpoints.project.gallery;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import org.jsoup.Connection.Method;
-import org.jsoup.Connection.Response;
-
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +14,8 @@ import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
 import masecla.modrinth4j.endpoints.project.gallery.CreateGalleryImage.CreateGalleryImageRequest;
-import masecla.modrinth4j.exception.EndpointError;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class CreateGalleryImage extends Endpoint<EmptyResponse, CreateGalleryImageRequest> {
     @Data
@@ -40,50 +38,36 @@ public class CreateGalleryImage extends Endpoint<EmptyResponse, CreateGalleryIma
     }
 
     @Override
-    public Method getMethod() {
-        return Method.POST;
+    public String getMethod() {
+        return "POST";
     }
-    
+
     @Override
     public CompletableFuture<EmptyResponse> sendRequest(CreateGalleryImageRequest parameters,
             Map<String, String> urlParams) {
         String url = getReplacedUrl(parameters, urlParams);
-        return getClient().connect(url).thenApply(c -> {
+
+        String extension = parameters.getFile().getName()
+                .substring(parameters.getFile().getName().lastIndexOf(".") + 1);
+
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("ext", extension);
+        queryParams.put("featured", parameters.isFeatured() + "");
+        queryParams.put("title", parameters.getTitle());
+        queryParams.put("description", parameters.getDescription());
+
+        return getClient().connect(url, urlParams).thenApply(c -> {
             try {
-                c.method(getMethod());
-
-                String extension = parameters.getFile().getName()
-                        .substring(parameters.getFile().getName().lastIndexOf(".") + 1);
-                c.data("ext", extension);
-                c.data("featured", parameters.isFeatured() + "");
-                c.data("title", parameters.getTitle());
-                c.data("description", parameters.getDescription());
-
-                c.requestBody(readFile(parameters.getFile()));
-
+                c.method(getMethod(), RequestBody.create(readFile(parameters.getFile())));
                 c.header("Content-Type", "image/*");
 
-                Response response = c.ignoreContentType(true)
-                        .ignoreHttpErrors(true)
-                        .execute();
+                Response response = getClient().execute(c);
 
-                if (response.body() != null) {
-                    JsonElement unparsedObject = getGson().fromJson(response.body(), JsonElement.class);
-                    if (unparsedObject != null) {
-                        if (unparsedObject.isJsonObject())
-                            if (unparsedObject.getAsJsonObject().has("error")) {
-                                String error = unparsedObject.getAsJsonObject().get("error").getAsString();
-                                String description = unparsedObject.getAsJsonObject().get("description").getAsString();
-                                throw new EndpointError(error, description);
-                            }
-                    }
-                }
-
-                return new EmptyResponse();
+                checkBodyForErrors(response.body());
             } catch (IOException e) {
                 e.printStackTrace();
-                return new EmptyResponse();
             }
+            return new EmptyResponse();
         }).exceptionally(c -> {
             c.printStackTrace();
             return null;

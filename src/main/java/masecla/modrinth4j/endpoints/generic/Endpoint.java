@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import org.jsoup.Connection.Method;
-import org.jsoup.Connection.Response;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
@@ -18,6 +15,10 @@ import lombok.Getter;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyRequest;
 import masecla.modrinth4j.exception.EndpointError;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 @AllArgsConstructor
 public abstract class Endpoint<O, I> {
@@ -58,52 +59,35 @@ public abstract class Endpoint<O, I> {
 
     public CompletableFuture<O> sendRequest(I request, Map<String, String> urlParams) {
         String url = getReplacedUrl(request, urlParams);
-        return client.connect(url).thenApply(c -> {
+
+        Map<String, String> queryParameters = new HashMap<>();
+
+        if (this.requiresBody() && !getRequestClass().equals(EmptyRequest.class) && !isJsonBody()) {
+            JsonElement jsonBody = gson.toJsonTree(request, getRequestClass());
+            for (Map.Entry<String, JsonElement> entry : jsonBody.getAsJsonObject().entrySet()) {
+                if (entry.getValue().isJsonPrimitive()) {
+                    queryParameters.put(entry.getKey(), entry.getValue().getAsString());
+                } else {
+                    queryParameters.put(entry.getKey(), entry.getValue().toString());
+                }
+            }
+        }
+
+        return client.connect(url, queryParameters).thenApply(c -> {
             try {
-                c.method(getMethod());
+                c.method(getMethod(), null);
                 if (this.requiresBody() && !getRequestClass().equals(EmptyRequest.class)) {
                     JsonElement jsonBody = gson.toJsonTree(request, getRequestClass());
                     if (isJsonBody()) {
-                        c.requestBody(jsonBody.toString());
-                        c.header("Content-Type", "application/json");
-                    } else {
-                        for (Map.Entry<String, JsonElement> entry : jsonBody.getAsJsonObject().entrySet()) {
-                            if (entry.getValue().isJsonPrimitive()) {
-                                c.data(entry.getKey(), entry.getValue().getAsString());
-                            } else {
-                                c.data(entry.getKey(), entry.getValue().toString());
-                            }
-                        }
+                        c.method(getMethod(), RequestBody.create(gson.toJson(jsonBody),
+                                MediaType.parse("application/json; charset=utf-8")));
                     }
                 }
 
-                Response response = c.ignoreContentType(true)
-                        .ignoreHttpErrors(true)
-                        .execute();
+                Response response = this.client.execute(c);
+                ResponseBody body = response.body();
 
-                if (response.body() != null) {
-                    JsonElement unparsedObject = null;
-                    try {
-                        unparsedObject = this.gson.fromJson(response.body(), JsonElement.class);
-                    } catch (Exception e) {
-                        throw new EndpointError("invalid-json",
-                                "Expected JSON response from endpoint, received: " + response.body() + "");
-                    }
-                    if (unparsedObject != null) {
-                        if (unparsedObject.isJsonObject())
-                            if (unparsedObject.getAsJsonObject().has("error")) {
-                                String error = unparsedObject.getAsJsonObject().get("error").getAsString();
-                                String description = unparsedObject.getAsJsonObject().get("description").getAsString();
-
-                                throw new EndpointError(error, description);
-                            }
-                        O object = this.gson.fromJson(unparsedObject, getResponseClass());
-                        return object;
-                    }
-                    return null;
-                } else {
-                    return null;
-                }
+                return checkBodyForErrors(body);
             } catch (IOException e) {
                 e.printStackTrace();
                 return null;
@@ -114,21 +98,48 @@ public abstract class Endpoint<O, I> {
         });
     }
 
-    protected String readFile(File file) {
+    protected O checkBodyForErrors(ResponseBody body){
+        if (body.contentLength() != 0) {
+            JsonElement unparsedObject = null;
+            try {
+                unparsedObject = this.gson.fromJson(body.charStream(), JsonElement.class);
+            } catch (Exception e) {
+                throw new EndpointError("invalid-json",
+                        "Expected JSON response from endpoint, received: " + body + "");
+            }
+            if (unparsedObject != null) { 
+                if (unparsedObject.isJsonObject())
+                    if (unparsedObject.getAsJsonObject().has("error")) {
+                        String error = unparsedObject.getAsJsonObject().get("error").getAsString();
+                        String description = unparsedObject.getAsJsonObject().get("description").getAsString();
+
+                        throw new EndpointError(error, description);
+                    }
+                O object = this.gson.fromJson(unparsedObject, getResponseClass());
+                return object;
+            }
+            return null;
+        } else {
+            return null;
+        }
+    }
+
+    protected byte[] readFile(File file) {
         try {
             FileInputStream fis = new FileInputStream(file);
             byte[] data = new byte[(int) file.length()];
             fis.read(data);
             fis.close();
-            return new String(data, "UTF-8");
+
+            return data;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public Method getMethod() {
-        return Method.GET;
+    public String getMethod() {
+        return "GET";
     }
 
     public abstract Class<O> getResponseClass();

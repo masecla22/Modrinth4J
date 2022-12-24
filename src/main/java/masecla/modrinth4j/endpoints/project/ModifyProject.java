@@ -1,7 +1,5 @@
 package masecla.modrinth4j.endpoints.project;
 
-import org.jsoup.Connection.Method;
-
 import com.google.gson.Gson;
 
 import lombok.AllArgsConstructor;
@@ -56,8 +54,8 @@ public class ModifyProject extends Endpoint<ModifyProjectRequest, ModifyProjectR
     }
 
     @Override
-    public Method getMethod() {
-        return Method.PATCH;
+    public String getMethod() {
+        return "PATCH";
     }
 
     @Override

@@ -1,7 +1,5 @@
 package masecla.modrinth4j.endpoints.project.gallery;
 
-import org.jsoup.Connection.Method;
-
 import com.google.gson.Gson;
 
 import lombok.AllArgsConstructor;
@@ -48,7 +46,7 @@ public class DeleteGalleryImage extends Endpoint<EmptyResponse, DeleteGalleryIma
     }
 
     @Override
-    public Method getMethod() {
-        return Method.DELETE;
+    public String getMethod() {
+        return "DELETE";
     }
 }

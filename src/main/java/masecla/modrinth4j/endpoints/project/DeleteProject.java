@@ -1,7 +1,5 @@
 package masecla.modrinth4j.endpoints.project;
 
-import org.jsoup.Connection.Method;
-
 import com.google.gson.Gson;
 
 import masecla.modrinth4j.client.HttpClient;
@@ -31,8 +29,8 @@ public class DeleteProject extends Endpoint<EmptyResponse, EmptyRequest> {
     }
 
     @Override
-    public Method getMethod() {
-        return Method.DELETE;
+    public String getMethod() {
+        return "DELETE";
     }
 
     @Override

@@ -1,7 +1,5 @@
 package masecla.modrinth4j.endpoints.version.files;
 
-import org.jsoup.Connection.Method;
-
 import com.google.gson.Gson;
 
 import lombok.AllArgsConstructor;
@@ -43,8 +41,8 @@ public class DeleteFileByHash extends Endpoint<EmptyResponse, DeleteFileByHashRe
     }
 
     @Override
-    public Method getMethod() {
-        return Method.DELETE;
+    public String getMethod() {
+        return "DELETE";
     }
 
     @Override

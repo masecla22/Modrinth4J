@@ -1,7 +1,5 @@
 package masecla.modrinth4j.endpoints.version.files;
 
-import org.jsoup.Connection.Method;
-
 import com.google.gson.Gson;
 
 import lombok.AllArgsConstructor;
@@ -44,7 +42,7 @@ public class GetVersionsFromHashes extends Endpoint<HashProjectVersionMap, GetVe
     }
 
     @Override
-    public Method getMethod() {
-        return Method.POST;
+    public String getMethod() {
+        return "POST";
     }
 }

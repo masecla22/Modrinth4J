@@ -1,7 +1,5 @@
 package masecla.modrinth4j.endpoints.user;
 
-import org.jsoup.Connection.Method;
-
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
@@ -87,7 +85,7 @@ public class ReportProjectUserOrVersion
     }
 
     @Override
-    public Method getMethod() {
-        return Method.POST;
+    public String getMethod() {
+        return "POST";
     }
 }

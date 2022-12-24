@@ -1,7 +1,5 @@
 package masecla.modrinth4j.endpoints.user;
 
-import org.jsoup.Connection.Method;
-
 import com.google.gson.Gson;
 
 import lombok.AllArgsConstructor;
@@ -45,8 +43,8 @@ public class ModifyUser extends Endpoint<EmptyResponse, ModifyUserRequest> {
     }
 
     @Override
-    public Method getMethod() {
-        return Method.PATCH;
+    public String getMethod() {
+        return "PATCH";
     }
 
 }

@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.jsoup.Connection.Method;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -61,8 +59,8 @@ public class ModifyGalleryImage extends Endpoint<EmptyResponse, ModifyGalleryIma
     }
 
     @Override
-    public Method getMethod() {
-        return Method.PATCH;
+    public String getMethod() {
+        return "PATCH";
     }
 
     @Override

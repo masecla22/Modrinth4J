@@ -1,7 +1,5 @@
 package masecla.modrinth4j.endpoints.teams;
 
-import org.jsoup.Connection.Method;
-
 import com.google.gson.Gson;
 
 import lombok.AllArgsConstructor;
@@ -46,7 +44,7 @@ public class ModifyTeamMemberInfo extends Endpoint<EmptyResponse, ModifyTeamMemb
     }
 
     @Override
-    public Method getMethod() {
-        return Method.PATCH;
+    public String getMethod() {
+        return "PATCH";
     }
 }

@@ -1,30 +1,27 @@
 package masecla.modrinth4j.endpoints.version;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import org.jsoup.Connection.Method;
-import org.jsoup.Connection.Response;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Builder.Default;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.version.CreateVersion.CreateVersionRequest;
-import masecla.modrinth4j.exception.EndpointError;
 import masecla.modrinth4j.model.version.ProjectVersion;
 import masecla.modrinth4j.model.version.ProjectVersion.ProjectDependency;
 import masecla.modrinth4j.model.version.ProjectVersion.VersionType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest> {
     @Data
@@ -63,8 +60,6 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
     public CompletableFuture<ProjectVersion> sendRequest(CreateVersionRequest request, Map<String, String> urlParams) {
         String url = getReplacedUrl(request, urlParams);
         return getClient().connect(url).thenApply(c -> {
-            c.method(getMethod());
-
             JsonObject jsonObject = getGson().toJsonTree(request).getAsJsonObject();
 
             if (request.getFiles().length > 1) {
@@ -81,43 +76,21 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
             }
             jsonObject.add("file_parts", array);
 
-            c.data("data", getGson().toJson(jsonObject));
+            MultipartBody.Builder body = new MultipartBody.Builder()
+                    .addFormDataPart("data", getGson().toJson(jsonObject));
 
             try {
-                for (File file : request.getFiles()) {
-                    c.data(file.getName(), file.getName(), new FileInputStream(file));
-                }
+                for (File file : request.getFiles()) 
+                    body.addFormDataPart(file.getName(), file.getName(), RequestBody.create(this.readFile(file)));
 
-                Response response = c.ignoreContentType(true)
-                        .ignoreHttpErrors(true)
-                        .execute();
+                Response response = this.getClient().execute(c);
 
-                if (response.body() != null) {
-                    JsonElement unparsedObject = null;
-                    try {
-                        unparsedObject = getGson().fromJson(response.body(), JsonElement.class);
-                    } catch (Exception e) {
-                        throw new EndpointError("invalid-json",
-                                "Expected JSON response from endpoint, received: " + response.body() + "");
-                    }
-                    if (unparsedObject != null) {
-                        if (unparsedObject.isJsonObject())
-                            if (unparsedObject.getAsJsonObject().has("error")) {
-                                String error = unparsedObject.getAsJsonObject().get("error").getAsString();
-                                String description = unparsedObject.getAsJsonObject().get("description").getAsString();
-
-                                throw new EndpointError(error, description);
-                            }
-                        ProjectVersion object = getGson().fromJson(unparsedObject, getResponseClass());
-                        return object;
-                    }
-                }
+                ProjectVersion version = this.checkBodyForErrors(response.body());
+                return version;
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }
-
-            return null;
         });
     }
 
@@ -132,7 +105,7 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
     }
 
     @Override
-    public Method getMethod() {
-        return Method.POST;
+    public String getMethod() {
+        return "POST";
     }
 }

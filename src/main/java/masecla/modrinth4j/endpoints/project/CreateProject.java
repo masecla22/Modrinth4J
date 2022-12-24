@@ -1,17 +1,12 @@
 package masecla.modrinth4j.endpoints.project;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import org.jsoup.Connection.Method;
-import org.jsoup.Connection.Response;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import lombok.AllArgsConstructor;
@@ -22,11 +17,13 @@ import lombok.NoArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.project.CreateProject.CreateProjectRequest;
-import masecla.modrinth4j.exception.EndpointError;
 import masecla.modrinth4j.model.project.Project;
 import masecla.modrinth4j.model.project.ProjectDonationPlatform;
 import masecla.modrinth4j.model.project.ProjectType;
 import masecla.modrinth4j.model.project.SupportStatus;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class CreateProject extends Endpoint<Project, CreateProjectRequest> {
 
@@ -83,8 +80,8 @@ public class CreateProject extends Endpoint<Project, CreateProjectRequest> {
     }
 
     @Override
-    public Method getMethod() {
-        return Method.POST;
+    public String getMethod() {
+        return "POST";
     }
 
     @Override
@@ -101,34 +98,22 @@ public class CreateProject extends Endpoint<Project, CreateProjectRequest> {
     public CompletableFuture<Project> sendRequest(CreateProjectRequest parameters, Map<String, String> urlParams) {
         return getClient().connect(getEndpoint()).thenApply(c -> {
             try {
-                c.method(getMethod());
+                MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
 
                 JsonObject obj = getGson().toJsonTree(parameters.getData()).getAsJsonObject();
                 obj.add("initial_versions", new JsonArray());
                 obj.addProperty("is_draft", true);
 
-                c.data("data", getGson().toJson(obj));
+                bodyBuilder.addFormDataPart("data", getGson().toJson(obj));
                 if (parameters.getIcon() != null)
-                    c.data("icon", parameters.getIcon().getName(), new FileInputStream(parameters.getIcon()));
+                    bodyBuilder.addFormDataPart("icon", parameters.getIcon().getName(),
+                            RequestBody.create(readFile(parameters.getIcon())));
 
-                Response response = c.ignoreContentType(true)
-                        .ignoreHttpErrors(true)
-                        .execute();
+                c.method(getMethod(), bodyBuilder.build());
 
-                if (response.body() != null) {
-                    JsonElement unparsedObject = getGson().fromJson(response.body(), JsonElement.class);
-                    if (unparsedObject.isJsonObject())
-                        if (unparsedObject.getAsJsonObject().has("error")) {
-                            String error = unparsedObject.getAsJsonObject().get("error").getAsString();
-                            String description = unparsedObject.getAsJsonObject().get("description").getAsString();
-
-                            throw new EndpointError(error, description);
-                        }
-                    Project object = getGson().fromJson(unparsedObject, Project.class);
-                    return object;
-                } else {
-                    return null;
-                }
+                Response response = getClient().execute(c);
+                
+                return checkBodyForErrors(response.body());
             } catch (IOException e) {
                 e.printStackTrace();
                 return null;

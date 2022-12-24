@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import org.jsoup.Connection.Method;
-import org.jsoup.Connection.Response;
-
 import com.google.gson.Gson;
 
 import lombok.AllArgsConstructor;
@@ -18,6 +15,8 @@ import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
 import masecla.modrinth4j.endpoints.user.ChangeUserIcon.ChangeUserIconRequest;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class ChangeUserIcon extends Endpoint<EmptyResponse, ChangeUserIconRequest> {
 
@@ -62,17 +61,13 @@ public class ChangeUserIcon extends Endpoint<EmptyResponse, ChangeUserIconReques
     public CompletableFuture<EmptyResponse> sendRequest(ChangeUserIconRequest request, Map<String, String> urlParams) {
         String url = getReplacedUrl(request, urlParams);
         return getClient().connect(url).thenApply(c -> {
-            c.method(getMethod());
             try {
                 File f = request.getIcon();
 
-                c.requestBody(readFile(f));
-
-                Response r = c.ignoreContentType(true)
-                        .ignoreHttpErrors(true)
-                        .execute();
-
-                System.out.println(r.body());
+                c.method(getMethod(), RequestBody.create(readFile(f)));
+                
+                Response response = getClient().execute(c);
+                checkBodyForErrors(response.body());
 
                 return new EmptyResponse();
             } catch (IOException e) {
@@ -83,7 +78,7 @@ public class ChangeUserIcon extends Endpoint<EmptyResponse, ChangeUserIconReques
     }
 
     @Override
-    public Method getMethod() {
-        return Method.PATCH;
+    public String getMethod() {
+        return "PATCH";
     }
 }

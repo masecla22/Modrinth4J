@@ -1,25 +1,52 @@
 package masecla.modrinth4j.client;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
-import lombok.AllArgsConstructor;
-
-@AllArgsConstructor
 public abstract class HttpClient {
     private static final String BASE_URL = "https://api.modrinth.com/v2";
 
     private String apiKey;
 
-    public CompletableFuture<Connection> connect(String url) {
+    private OkHttpClient client;
+
+    public HttpClient(String apiKey){
+        this.apiKey = apiKey;
+        this.client = new OkHttpClient();
+    }
+
+    public CompletableFuture<Request.Builder> connect(String url) {
+        return connect(url, null);
+    }
+
+    public CompletableFuture<Request.Builder> connect(String url, Map<String, String> queryParams) {
         return nextRequest().thenApply(v -> {
-            Connection connection = Jsoup.connect(BASE_URL + url);
+            HttpUrl parsedUrl = null;
+            if (queryParams != null && !queryParams.isEmpty()) {
+                HttpUrl.Builder builder = HttpUrl.parse(BASE_URL + url).newBuilder();
+                for (Map.Entry<String, String> entry : queryParams.entrySet()) {
+                    builder.addQueryParameter(entry.getKey(), entry.getValue());
+                }
+                parsedUrl = builder.build();
+            } else {
+                parsedUrl = HttpUrl.parse(BASE_URL + url);
+            }
+
+            Request.Builder connection = new Request.Builder().url(parsedUrl);
             if (apiKey != null)
                 connection.header("Authorization", apiKey);
             return connection;
         });
+    }
+
+    public Response execute(Request.Builder connection) throws IOException {
+        return client.newCall(connection.build()).execute();
     }
 
     public abstract CompletableFuture<Void> nextRequest();

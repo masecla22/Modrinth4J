@@ -1,7 +1,5 @@
 package masecla.modrinth4j.endpoints.version;
 
-import org.jsoup.Connection.Method;
-
 import com.google.gson.Gson;
 
 import lombok.AllArgsConstructor;
@@ -60,7 +58,7 @@ public class ModifyVersion extends Endpoint<ProjectVersion, ModifyVersionRequest
     }
 
     @Override
-    public Method getMethod() {
-        return Method.PATCH;
+    public String getMethod() {
+        return "PATCH";
     }
 }
