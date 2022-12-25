@@ -1,5 +1,6 @@
 package masecla.modrinth4j.endpoints.project;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -10,6 +11,7 @@ import lombok.AllArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyRequest;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
+import masecla.modrinth4j.endpoints.project.ChangeProjectIcon.ChangeProjectIconRequest;
 import masecla.modrinth4j.endpoints.project.CreateProject.CreateProjectRequest;
 import masecla.modrinth4j.endpoints.project.GetMultipleProjects.GetMultipleProjectsRequest;
 import masecla.modrinth4j.endpoints.project.GetProjectDependencies.GetProjectDependenciesResponse;
@@ -17,10 +19,10 @@ import masecla.modrinth4j.endpoints.project.ModifyProject.ModifyProjectRequest;
 import masecla.modrinth4j.endpoints.project.follow.FollowProject;
 import masecla.modrinth4j.endpoints.project.follow.UnfollowProject;
 import masecla.modrinth4j.endpoints.project.gallery.CreateGalleryImage;
-import masecla.modrinth4j.endpoints.project.gallery.DeleteGalleryImage;
-import masecla.modrinth4j.endpoints.project.gallery.ModifyGalleryImage;
 import masecla.modrinth4j.endpoints.project.gallery.CreateGalleryImage.CreateGalleryImageRequest;
+import masecla.modrinth4j.endpoints.project.gallery.DeleteGalleryImage;
 import masecla.modrinth4j.endpoints.project.gallery.DeleteGalleryImage.DeleteGalleryImageRequest;
+import masecla.modrinth4j.endpoints.project.gallery.ModifyGalleryImage;
 import masecla.modrinth4j.endpoints.project.gallery.ModifyGalleryImage.ModifyGalleryImageRequest;
 import masecla.modrinth4j.model.project.Project;
 
@@ -101,5 +103,12 @@ public class ProjectEndpoints {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", slug);
         return new UnfollowProject(client, gson).sendRequest(new EmptyRequest(), parameters);
+    }
+
+    public CompletableFuture<EmptyResponse> changeProjectIcon(String projectId, File file){
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", projectId);
+        
+        return new ChangeProjectIcon(client, gson).sendRequest(new ChangeProjectIconRequest(file), parameters);
     }
 }
