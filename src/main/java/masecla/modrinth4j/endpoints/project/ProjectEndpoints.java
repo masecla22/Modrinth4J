@@ -81,10 +81,10 @@ public class ProjectEndpoints {
         return new ModifyGalleryImage(client, gson).sendRequest(request, parameters);
     }
 
-    public CompletableFuture<EmptyResponse> deleteGalleryImage(String slug, DeleteGalleryImageRequest request) {
+    public CompletableFuture<EmptyResponse> deleteGalleryImage(String slug, String imageUrl) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", slug);
-        return new DeleteGalleryImage(client, gson).sendRequest(request, parameters);
+        return new DeleteGalleryImage(client, gson).sendRequest(new DeleteGalleryImageRequest(imageUrl), parameters);
     }
 
     public CompletableFuture<GetProjectDependenciesResponse> getProjectDependencies(String slug) {
