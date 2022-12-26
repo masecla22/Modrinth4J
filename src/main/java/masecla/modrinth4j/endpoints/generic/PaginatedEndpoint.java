@@ -2,6 +2,7 @@ package masecla.modrinth4j.endpoints.generic;
 
 import com.google.gson.Gson;
 
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import masecla.modrinth4j.client.HttpClient;
@@ -13,8 +14,10 @@ public abstract class PaginatedEndpoint<T, O extends PaginatedResponse<T>, I ext
     @Data
     @SuperBuilder
     public static class PaginatedRequest {
-        private int offset;
-        private int limit;
+        @Default
+        private int offset = 0;
+        @Default
+        private int limit = 10;
     }
 
     @Data
