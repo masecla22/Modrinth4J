@@ -56,7 +56,7 @@ public class CreateGalleryImage extends Endpoint<EmptyResponse, CreateGalleryIma
         queryParams.put("title", parameters.getTitle());
         queryParams.put("description", parameters.getDescription());
 
-        return getClient().connect(url, urlParams).thenApply(c -> {
+        return getClient().connect(url, queryParams).thenApply(c -> {
             try {
                 c.method(getMethod(), RequestBody.create(readFile(parameters.getFile())));
                 c.header("Content-Type", "image/*");
