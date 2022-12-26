@@ -95,8 +95,7 @@ public class UserEndpoints {
         return new GetUserNotifications(client, gson).sendRequest(new EmptyRequest(), parameters);
     }
 
-    public CompletableFuture<ReportProjectUserOrVersionResponse> reportProjectUserOrVersion(String id,
-            ReportProjectUserOrVersionRequest request) {
+    public CompletableFuture<ReportProjectUserOrVersionResponse> reportProjectUserOrVersion(ReportProjectUserOrVersionRequest request) {
         return new ReportProjectUserOrVersion(client, gson).sendRequest(request);
     }
 }
