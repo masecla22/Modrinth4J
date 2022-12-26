@@ -42,6 +42,14 @@ public class ModrinthAPI {
         return result;
     }
 
+    public static ModrinthAPI unlimited(String url, String apiKey) {
+        HttpClient client = new UnlimitedHttpClient(url, apiKey);
+        ModrinthAPI result = new ModrinthAPI(client, apiKey);
+
+        result.initializeGson();
+        return result;
+    }
+
     private void initializeGson() {
         this.gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .registerTypeAdapter(FacetCollection.class, new FacetAdapter())

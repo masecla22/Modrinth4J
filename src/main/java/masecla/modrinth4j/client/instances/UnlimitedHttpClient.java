@@ -10,6 +10,10 @@ public class UnlimitedHttpClient extends HttpClient {
         super(apiKey);
     }
 
+    public UnlimitedHttpClient(String baseUrl, String apiKey) {
+        super(baseUrl, apiKey);
+    }
+
     @Override
     public CompletableFuture<Void> nextRequest() {
         return CompletableFuture.completedFuture(null);

@@ -10,7 +10,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public abstract class HttpClient {
-    private static final String BASE_URL = "https://api.modrinth.com/v2";
+    private String baseUrl = "https://api.modrinth.com/v2";
 
     private String apiKey;
 
@@ -21,6 +21,11 @@ public abstract class HttpClient {
         this.client = new OkHttpClient();
     }
 
+    public HttpClient(String baseUrl, String apiKey){
+        this(apiKey);
+        this.baseUrl = baseUrl;
+    }
+
     public CompletableFuture<Request.Builder> connect(String url) {
         return connect(url, null);
     }
@@ -29,13 +34,13 @@ public abstract class HttpClient {
         return nextRequest().thenApply(v -> {
             HttpUrl parsedUrl = null;
             if (queryParams != null && !queryParams.isEmpty()) {
-                HttpUrl.Builder builder = HttpUrl.parse(BASE_URL + url).newBuilder();
+                HttpUrl.Builder builder = HttpUrl.parse(baseUrl + url).newBuilder();
                 for (Map.Entry<String, String> entry : queryParams.entrySet()) {
                     builder.addQueryParameter(entry.getKey(), entry.getValue());
                 }
                 parsedUrl = builder.build();
             } else {
-                parsedUrl = HttpUrl.parse(BASE_URL + url);
+                parsedUrl = HttpUrl.parse(baseUrl + url);
             }
 
             Request.Builder connection = new Request.Builder().url(parsedUrl);
