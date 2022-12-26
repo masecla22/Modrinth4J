@@ -1,5 +1,6 @@
 package masecla.modrinth4j.endpoints.version;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -62,10 +63,10 @@ public class VersionEndpoints {
         return new CreateVersion(httpClient, gson).sendRequest(request);
     }
 
-    public CompletableFuture<EmptyResponse> addFilesToVersion(String versionId, AddFilesToVersionRequest request) {
+    public CompletableFuture<EmptyResponse> addFilesToVersion(String versionId, File[] files) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", versionId);
 
-        return new AddFilesToVersion(httpClient, gson).sendRequest(request, parameters);
+        return new AddFilesToVersion(httpClient, gson).sendRequest(new AddFilesToVersionRequest(files), parameters);
     }
 }
