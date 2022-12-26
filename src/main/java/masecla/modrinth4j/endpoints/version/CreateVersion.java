@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.version.CreateVersion.CreateVersionRequest;
@@ -29,21 +30,31 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
     @AllArgsConstructor
     @NoArgsConstructor
     public static class CreateVersionRequest {
+        @NonNull
         private String name;
+        
+        @NonNull
         private String versionNumber;
+        
+        @NonNull
         private String changelog;
 
         @Default
         private ProjectDependency[] dependencies = new ProjectDependency[0];
         private String[] gameVersions;
         private VersionType versionType;
+        
+        @NonNull
         private String[] loaders;
+        
         private boolean featured;
-
+        
+        @NonNull
         private String projectId;
-
+        
         private String primaryFile;
-
+        
+        @NonNull
         private transient File[] files;
     }
 
@@ -80,8 +91,9 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
                     .addFormDataPart("data", getGson().toJson(jsonObject));
 
             try {
-                for (File file : request.getFiles()) 
+                for (File file : request.getFiles())
                     body.addFormDataPart(file.getName(), file.getName(), RequestBody.create(this.readFile(file)));
+                c.post(body.build());
 
                 Response response = this.getClient().execute(c);
 
