@@ -22,7 +22,7 @@ import masecla.modrinth4j.model.project.ProjectDonationPlatform;
 import masecla.modrinth4j.model.project.ProjectGalleryImage;
 import masecla.modrinth4j.model.project.SupportStatus;
 
-public class ProjectEndpoints {
+public class ProjectEndpointsTests {
     private ModrinthAPI client;
 
     @Before
