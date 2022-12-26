@@ -40,7 +40,7 @@ public class VersionEndpoints {
         return new GetVersion(httpClient, gson).sendRequest(null, parameters);
     }
 
-    public CompletableFuture<ProjectVersion[]> getVersions(String... versionIds) {
+    public CompletableFuture<ProjectVersion[]> getVersion(String... versionIds) {
         return new GetVersions(httpClient, gson).sendRequest(new GetVersionsRequest(versionIds));
     }
 
