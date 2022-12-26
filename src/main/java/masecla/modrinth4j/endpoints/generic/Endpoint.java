@@ -14,7 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyRequest;
-import masecla.modrinth4j.exception.EndpointError;
+import masecla.modrinth4j.exception.EndpointException;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -97,9 +97,6 @@ public abstract class Endpoint<O, I> {
                 e.printStackTrace();
                 return null;
             }
-        }).exceptionally(c -> {
-            c.printStackTrace();
-            return null;
         });
     }
 
@@ -116,7 +113,7 @@ public abstract class Endpoint<O, I> {
             try {
                 unparsedObject = this.gson.fromJson(bodySrc, JsonElement.class);
             } catch (Exception e) {
-                throw new EndpointError("invalid-json",
+                throw new EndpointException("invalid-json",
                         "Expected JSON response from endpoint, received: " + bodySrc + "");
             }
             if (unparsedObject != null) {
@@ -125,7 +122,7 @@ public abstract class Endpoint<O, I> {
                         String error = unparsedObject.getAsJsonObject().get("error").getAsString();
                         String description = unparsedObject.getAsJsonObject().get("description").getAsString();
 
-                        throw new EndpointError(error, description);
+                        throw new EndpointException(error, description);
                     }
                 O object = this.gson.fromJson(unparsedObject, getResponseClass());
                 return object;
