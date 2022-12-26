@@ -16,9 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FacetCollection {
-    @Builder.Default
-    private List<List<Facet>> facets = new ArrayList<>();
-
+    private List<List<Facet>> facets;
 
     /**
      * This method will add a block which will be OR'd. If you want to use AND,
@@ -58,11 +56,12 @@ public class FacetCollection {
     public static class FacetAdapter extends TypeAdapter<FacetCollection> {
         @Override
         public void write(JsonWriter out, FacetCollection value) throws java.io.IOException {
-            out.beginArray();
-            if (value == null) {
-                out.endArray();
+            if(value == null){
+                out.nullValue();
                 return;
             }
+
+            out.beginArray();
             for (List<Facet> list : value.facets) {
                 out.beginArray();
                 for (Facet f : list) {
