@@ -19,6 +19,7 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okhttp3.internal.http.HttpMethod;
 
 @AllArgsConstructor
 public abstract class Endpoint<O, I> {
@@ -75,7 +76,11 @@ public abstract class Endpoint<O, I> {
 
         return client.connect(url, queryParameters).thenApply(c -> {
             try {
-                c.method(getMethod(), null);
+                if (HttpMethod.permitsRequestBody(getMethod()))
+                    c.method(getMethod(), RequestBody.create("", MediaType.parse("application/json; charset=utf-8")));
+                else
+                    c.method(getMethod(), null);
+
                 if (this.requiresBody() && !getRequestClass().equals(EmptyRequest.class)) {
                     JsonElement jsonBody = gson.toJsonTree(request, getRequestClass());
                     if (isJsonBody()) {
@@ -98,7 +103,7 @@ public abstract class Endpoint<O, I> {
         });
     }
 
-    protected O checkBodyForErrors(ResponseBody body){
+    protected O checkBodyForErrors(ResponseBody body) {
         if (body.contentLength() != 0) {
             String bodySrc = "UNAVAILABLE";
             try {
@@ -106,7 +111,7 @@ public abstract class Endpoint<O, I> {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-            
+
             JsonElement unparsedObject = null;
             try {
                 unparsedObject = this.gson.fromJson(bodySrc, JsonElement.class);
@@ -114,7 +119,7 @@ public abstract class Endpoint<O, I> {
                 throw new EndpointError("invalid-json",
                         "Expected JSON response from endpoint, received: " + bodySrc + "");
             }
-            if (unparsedObject != null) { 
+            if (unparsedObject != null) {
                 if (unparsedObject.isJsonObject())
                     if (unparsedObject.getAsJsonObject().has("error")) {
                         String error = unparsedObject.getAsJsonObject().get("error").getAsString();
