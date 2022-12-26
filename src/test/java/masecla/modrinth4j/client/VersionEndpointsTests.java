@@ -122,12 +122,12 @@ public class VersionEndpointsTests {
         assertTrue(version.getVersionType().equals(VersionType.RELEASE));
     }
 
-     @Test
-     public void testAddFilesToVersion() {
-         Project prj = DataUtil.fetchSampleProject(client);
-         ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
-         client.versions().addFilesToVersion(version.getId(), new File[] { DataUtil.getAnotherJar() }).join();
+    @Test
+    public void testAddFilesToVersion() {
+        Project prj = DataUtil.fetchSampleProject(client);
+        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+        client.versions().addFilesToVersion(version.getId(), new File[] { DataUtil.getAnotherJar() }).join();
 
-         assertTrue(client.versions().getVersion(version.getId()).join().getFiles().length == 2);
-     }
+        assertTrue(client.versions().getVersion(version.getId()).join().getFiles().length == 2);
+    }
 }
