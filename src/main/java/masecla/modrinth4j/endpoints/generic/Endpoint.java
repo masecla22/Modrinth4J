@@ -100,12 +100,19 @@ public abstract class Endpoint<O, I> {
 
     protected O checkBodyForErrors(ResponseBody body){
         if (body.contentLength() != 0) {
+            String bodySrc = "UNAVAILABLE";
+            try {
+                bodySrc = body.string();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            
             JsonElement unparsedObject = null;
             try {
-                unparsedObject = this.gson.fromJson(body.charStream(), JsonElement.class);
+                unparsedObject = this.gson.fromJson(bodySrc, JsonElement.class);
             } catch (Exception e) {
                 throw new EndpointError("invalid-json",
-                        "Expected JSON response from endpoint, received: " + body + "");
+                        "Expected JSON response from endpoint, received: " + bodySrc + "");
             }
             if (unparsedObject != null) { 
                 if (unparsedObject.isJsonObject())
