@@ -78,10 +78,10 @@ public class TeamsEndpoints {
     }
 
     public CompletableFuture<EmptyResponse> transferOwnership(String teamId,
-            TransferOwnershipRequest request) {
+            String newOwnerId) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", teamId);
 
-        return new TransferOwnership(client, gson).sendRequest(request, parameters);
+        return new TransferOwnership(client, gson).sendRequest(new TransferOwnershipRequest(newOwnerId), parameters);
     }
 }
