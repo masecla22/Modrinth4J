@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class EndpointError extends RuntimeException {
+public class EndpointException extends RuntimeException {
     private String error;
     private String description;
 }
