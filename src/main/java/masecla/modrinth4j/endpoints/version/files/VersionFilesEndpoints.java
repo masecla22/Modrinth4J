@@ -42,10 +42,12 @@ public class VersionFilesEndpoints {
         return new DeleteFileByHash(client, gson).sendRequest(new DeleteFileByHashRequest(algorithm), parameters);
     }
 
-    public CompletableFuture<ProjectVersion> getLatestVersionByHash(String hash,
+    public CompletableFuture<ProjectVersion> getLatestVersionByHash(
+            FileHash algorithm, String hash,
             GetProjectLatestVersionFromHashRequest request) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("hash", hash);
+        parameters.put("algorithm", algorithm.name().toLowerCase());
 
         return new GetProjectLatestVersionFromHash(client, gson).sendRequest(request, parameters);
     }
