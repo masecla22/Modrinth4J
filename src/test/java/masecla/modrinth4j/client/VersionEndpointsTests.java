@@ -213,6 +213,6 @@ public class VersionEndpointsTests {
                 .join();
 
         assertTrue(vers.size() == 1);
-        assertTrue(vers.values().stream().findAny().orElseThrow().getId().equals(version.getId()));
+        assertTrue(vers.values().stream().findAny().orElse(null).getId().equals(version.getId()));
     }
 }
