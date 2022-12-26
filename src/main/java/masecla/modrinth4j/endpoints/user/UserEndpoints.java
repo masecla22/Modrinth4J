@@ -45,7 +45,7 @@ public class UserEndpoints {
      * @param ids - The IDs of the users
      * @return - The users
      */
-    public CompletableFuture<ModrinthUser[]> getUsers(String... ids) {
+    public CompletableFuture<ModrinthUser[]> getUser(String... ids) {
         return new GetUsers(client, gson).sendRequest(new GetUsersRequest(ids));
     }
 
