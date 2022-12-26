@@ -8,6 +8,7 @@ import lombok.experimental.SuperBuilder;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.project.ModifyProject.ModifyProjectRequest;
+import masecla.modrinth4j.model.project.ProjectDonationPlatform;
 import masecla.modrinth4j.model.project.ProjectStatus;
 import masecla.modrinth4j.model.project.SupportStatus;
 
@@ -34,7 +35,7 @@ public class ModifyProject extends Endpoint<ModifyProjectRequest, ModifyProjectR
         private String sourceUrl;
         private String wikiUrl;
         private String discordUrl;
-        private String[] donationUrls;
+        private ProjectDonationPlatform[] donationUrls;
 
         private String licenseId;
         private String licenseUrl;
