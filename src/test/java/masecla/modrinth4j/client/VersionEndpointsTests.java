@@ -12,11 +12,15 @@ import masecla.modrinth4j.data.DataUtil;
 import masecla.modrinth4j.endpoints.version.CreateVersion.CreateVersionRequest;
 import masecla.modrinth4j.endpoints.version.GetProjectVersions.GetProjectVersionsRequest;
 import masecla.modrinth4j.endpoints.version.ModifyVersion.ModifyVersionRequest;
+import masecla.modrinth4j.endpoints.version.files.GetProjectLatestVersionFromHash.GetProjectLatestVersionFromHashRequest;
+import masecla.modrinth4j.endpoints.version.files.GetProjectLatestVersionsFromHashes.GetProjectLatestVersionsFromHashesRequest;
 import masecla.modrinth4j.environment.EnvReader;
 import masecla.modrinth4j.main.ModrinthAPI;
 import masecla.modrinth4j.model.project.Project;
+import masecla.modrinth4j.model.version.FileHash;
 import masecla.modrinth4j.model.version.ProjectVersion;
 import masecla.modrinth4j.model.version.ProjectVersion.VersionType;
+import masecla.modrinth4j.model.version.files.HashProjectVersionMap;
 
 public class VersionEndpointsTests {
     private ModrinthAPI client;
@@ -129,5 +133,86 @@ public class VersionEndpointsTests {
         client.versions().addFilesToVersion(version.getId(), new File[] { DataUtil.getAnotherJar() }).join();
 
         assertTrue(client.versions().getVersion(version.getId()).join().getFiles().length == 2);
+    }
+
+    @Test
+    public void testGetVersionByHash() {
+        Project prj = DataUtil.fetchSampleProject(client);
+        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+
+        ProjectVersion vers = client.versions().files()
+                .getVersionByHash(FileHash.SHA1, version.getFiles()[0].getHashes().getSha1()).join();
+
+        assertTrue(vers.getId().equals(version.getId()));
+    }
+
+    @Test
+    public void testGetVersionsByHash() {
+        Project prj = DataUtil.fetchSampleProject(client);
+        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+
+        // Add a file
+        client.versions().addFilesToVersion(version.getId(), new File[] { DataUtil.getAnotherJar() }).join();
+
+        version = client.versions().getVersion(version.getId()).join();
+
+        HashProjectVersionMap vers = client.versions().files()
+                .getVersionByHash(FileHash.SHA1, version.getFiles()[0].getHashes().getSha1(),
+                        version.getFiles()[1].getHashes().getSha1())
+                .join();
+
+        assertTrue(vers.size() == 2);
+        assertTrue(vers.get(version.getFiles()[0].getHashes().getSha1()).getId().equals(version.getId()));
+        assertTrue(vers.get(version.getFiles()[1].getHashes().getSha1()).getId().equals(version.getId()));
+    }
+
+    @Test
+    public void testDeleteFileByHash() {
+        Project prj = DataUtil.fetchSampleProject(client);
+        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+
+        // Add file
+        client.versions().addFilesToVersion(version.getId(), new File[] { DataUtil.getAnotherJar() }).join();
+        version = client.versions().getVersion(version.getId()).join();
+
+        client.versions().files().deleteFileByHash(FileHash.SHA1, version.getFiles()[0].getHashes().getSha1()).join();
+
+        assertTrue(client.versions().getVersion(version.getId()).join().getFiles().length == 1);
+    }
+
+    @Test
+    public void testGetLatestVersionByHash() {
+        Project prj = DataUtil.fetchSampleProject(client);
+        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+
+        ProjectVersion vers = client.versions().files()
+                .getLatestVersionByHash(FileHash.SHA1, version.getFiles()[0].getHashes().getSha1(),
+                        GetProjectLatestVersionFromHashRequest.builder().build())
+                .join();
+
+        assertTrue(vers.getId().equals(version.getId()));
+    }
+
+    @Test
+    public void testGetLatestVersionsByHash() {
+        Project prj = DataUtil.fetchSampleProject(client);
+        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+
+        // Add a file
+        client.versions().addFilesToVersion(version.getId(), new File[] { DataUtil.getAnotherJar() }).join();
+
+        version = client.versions().getVersion(version.getId()).join();
+
+        HashProjectVersionMap vers = client.versions().files()
+                .getLatestVersionsByHash(GetProjectLatestVersionsFromHashesRequest.builder()
+                        .algorithm(FileHash.SHA1)
+                        .hashes(new String[] { 
+                                version.getFiles()[0].getHashes().getSha1(),
+                                version.getFiles()[1].getHashes().getSha1() })
+                        .build())
+                .join();
+
+        assertTrue(vers.size() == 1);
+        assertTrue(vers.values().stream().findAny().orElseThrow().getId().equals(version.getId()));
     }
 }
