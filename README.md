@@ -5,7 +5,9 @@
   <img alt="github" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/available/github_vector.svg">
   <img alt="java8" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/built-with/java8_vector.svg">
   <img alt="maven" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/built-with/maven_vector.svg">
-  <img alt="discord-plural" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/social/discord-plural_vector.svg">
+  <a href="https://discord.gg/G8XMHF8Xxa">
+     <img alt="discord-plural" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/social/discord-plural_vector.svg">
+  </a>
 </div>
 
 
