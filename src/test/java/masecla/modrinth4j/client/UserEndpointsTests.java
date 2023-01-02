@@ -9,6 +9,7 @@ import java.util.concurrent.CompletionException;
 import org.junit.Before;
 import org.junit.Test;
 
+import lombok.SneakyThrows;
 import masecla.modrinth4j.data.DataUtil;
 import masecla.modrinth4j.endpoints.user.ModifyUser.ModifyUserRequest;
 import masecla.modrinth4j.endpoints.user.ReportProjectUserOrVersion.ReportProjectUserOrVersionRequest;
@@ -85,6 +86,7 @@ public class UserEndpointsTests {
     }
 
     @Test
+    @SneakyThrows
     public void testChangeProfilePicture() {
         ModrinthUser self = client.users().getSelf().join();
         client.users().changeProfilePicture(self.getId(), DataUtil.getImage()).join();
