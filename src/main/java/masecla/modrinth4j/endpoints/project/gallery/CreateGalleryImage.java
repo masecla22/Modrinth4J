@@ -1,5 +1,8 @@
 package masecla.modrinth4j.endpoints.project.gallery;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -27,6 +30,19 @@ public class CreateGalleryImage extends Endpoint<EmptyResponse, CreateGalleryIma
         private boolean featured;
         private String title;
         private String description;
+
+        public static class CreateGalleryImageRequestBuilder {
+            public CreateGalleryImageRequestBuilder file(File file) {
+                try {
+                    this.filename = file.getName();
+                    this.image = new FileInputStream(file);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                return this;
+            }
+        }
     }
 
     public CreateGalleryImage(HttpClient client, Gson gson) {
