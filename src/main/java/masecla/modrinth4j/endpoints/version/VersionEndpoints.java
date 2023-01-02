@@ -1,6 +1,9 @@
 package masecla.modrinth4j.endpoints.version;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -63,10 +66,24 @@ public class VersionEndpoints {
         return new CreateVersion(httpClient, gson).sendRequest(request);
     }
 
-    public CompletableFuture<EmptyResponse> addFilesToVersion(String versionId, File[] files) {
+    public CompletableFuture<EmptyResponse> addFilesToVersion(String versionId, InputStream[] files,
+            String[] fileNames) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", versionId);
 
-        return new AddFilesToVersion(httpClient, gson).sendRequest(new AddFilesToVersionRequest(files), parameters);
+        return new AddFilesToVersion(httpClient, gson).sendRequest(new AddFilesToVersionRequest(
+                fileNames, files), parameters);
+    }
+
+    public CompletableFuture<EmptyResponse> addFilesToVersion(String versionId, File[] files) throws FileNotFoundException{
+        InputStream[] streams = new InputStream[files.length];
+        String[] names = new String[files.length];
+
+        for (int i = 0; i < files.length; i++) {
+            streams[i] = new FileInputStream(files[i]);
+            names[i] = files[i].getName();
+        }
+
+        return addFilesToVersion(versionId, streams, names);
     }
 }
