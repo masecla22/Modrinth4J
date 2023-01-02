@@ -1,5 +1,7 @@
 package masecla.modrinth4j.endpoints.version;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -59,6 +61,22 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
 
         @NonNull
         private transient InputStream[] fileStreams;
+
+        public static class CreateVersionRequestBuilder {
+            public CreateVersionRequestBuilder files(File[] files) {
+                try {
+                    this.fileNames = new String[files.length];
+                    this.fileStreams = new InputStream[files.length];
+                    for (int i = 0; i < files.length; i++) {
+                        this.fileNames[i] = files[i].getName();
+                        this.fileStreams[i] = new FileInputStream(files[i]);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return this;
+            }
+        }
     }
 
     public CreateVersion(HttpClient client, Gson gson) {
