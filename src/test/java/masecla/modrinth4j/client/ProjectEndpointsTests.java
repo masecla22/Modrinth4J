@@ -9,6 +9,7 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
+import lombok.SneakyThrows;
 import masecla.modrinth4j.data.DataUtil;
 import masecla.modrinth4j.endpoints.SearchEndpoint.SearchRequest;
 import masecla.modrinth4j.endpoints.SearchEndpoint.SearchResponse;
@@ -41,6 +42,7 @@ public class ProjectEndpointsTests {
     }
 
     @Test
+    @SneakyThrows
     public void testIconChange() {
         Project prj = DataUtil.createSampleProject(client);
 

@@ -1,6 +1,9 @@
 package masecla.modrinth4j.endpoints.project;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -105,10 +108,16 @@ public class ProjectEndpoints {
         return new UnfollowProject(client, gson).sendRequest(new EmptyRequest(), parameters);
     }
 
-    public CompletableFuture<EmptyResponse> changeProjectIcon(String projectId, File file){
+    public CompletableFuture<EmptyResponse> changeProjectIcon(String projectId, File file)
+            throws FileNotFoundException {
+        return changeProjectIcon(projectId, new FileInputStream(file), file.getName());
+    }
+
+    public CompletableFuture<EmptyResponse> changeProjectIcon(String projectId, InputStream stream, String fileName) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", projectId);
-        
-        return new ChangeProjectIcon(client, gson).sendRequest(new ChangeProjectIconRequest(file), parameters);
+
+        return new ChangeProjectIcon(client, gson).sendRequest(new ChangeProjectIconRequest(stream, fileName),
+                parameters);
     }
 }

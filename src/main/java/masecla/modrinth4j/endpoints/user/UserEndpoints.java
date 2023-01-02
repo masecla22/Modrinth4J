@@ -1,6 +1,9 @@
 package masecla.modrinth4j.endpoints.user;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -67,11 +70,15 @@ public class UserEndpoints {
         return new GetSelf(client, gson).sendRequest(new EmptyRequest(), new HashMap<>());
     }
 
-    public CompletableFuture<EmptyResponse> changeProfilePicture(String id, File file) {
+    public CompletableFuture<EmptyResponse> changeProfilePicture(String id, File file) throws FileNotFoundException {
+        return changeProfilePicture(id, new FileInputStream(file), file.getName());
+    }
+
+    public CompletableFuture<EmptyResponse> changeProfilePicture(String id, InputStream stream, String filename) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", id);
 
-        return new ChangeUserIcon(client, gson).sendRequest(new ChangeUserIconRequest(file), parameters);
+        return new ChangeUserIcon(client, gson).sendRequest(new ChangeUserIconRequest(filename, stream), parameters);
     }
 
     public CompletableFuture<Project[]> getUserProjects(String id) {
@@ -95,7 +102,8 @@ public class UserEndpoints {
         return new GetUserNotifications(client, gson).sendRequest(new EmptyRequest(), parameters);
     }
 
-    public CompletableFuture<ReportProjectUserOrVersionResponse> reportProjectUserOrVersion(ReportProjectUserOrVersionRequest request) {
+    public CompletableFuture<ReportProjectUserOrVersionResponse> reportProjectUserOrVersion(
+            ReportProjectUserOrVersionRequest request) {
         return new ReportProjectUserOrVersion(client, gson).sendRequest(request);
     }
 }

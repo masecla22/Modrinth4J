@@ -1,7 +1,7 @@
 package masecla.modrinth4j.endpoints.project;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -71,7 +71,8 @@ public class CreateProject extends Endpoint<Project, CreateProjectRequest> {
     public static class CreateProjectRequest {
         private ProjectData data;
 
-        private File icon;
+        private String iconFilename;
+        private InputStream iconData;
     }
 
     @Override
@@ -105,9 +106,9 @@ public class CreateProject extends Endpoint<Project, CreateProjectRequest> {
                 obj.addProperty("is_draft", true);
 
                 bodyBuilder.addFormDataPart("data", getGson().toJson(obj));
-                if (parameters.getIcon() != null)
-                    bodyBuilder.addFormDataPart("icon", parameters.getIcon().getName(),
-                            RequestBody.create(readFile(parameters.getIcon())));
+                if (parameters.getIconData() != null)
+                    bodyBuilder.addFormDataPart("icon", parameters.getIconFilename(),
+                            RequestBody.create(readStream(parameters.getIconData())));
 
                 c.method(getMethod(), bodyBuilder.build());
 

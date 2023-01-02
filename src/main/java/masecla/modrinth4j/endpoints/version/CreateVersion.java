@@ -1,6 +1,8 @@
 package masecla.modrinth4j.endpoints.version;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -32,10 +34,10 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
     public static class CreateVersionRequest {
         @NonNull
         private String name;
-        
+
         @NonNull
         private String versionNumber;
-        
+
         @NonNull
         private String changelog;
 
@@ -43,19 +45,38 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
         private ProjectDependency[] dependencies = new ProjectDependency[0];
         private String[] gameVersions;
         private VersionType versionType;
-        
+
         @NonNull
         private String[] loaders;
-        
+
         private boolean featured;
-        
+
         @NonNull
         private String projectId;
-        
+
         private String primaryFile;
-        
+
         @NonNull
-        private transient File[] files;
+        private transient String[] fileNames;
+
+        @NonNull
+        private transient InputStream[] fileStreams;
+
+        public static class CreateVersionRequestBuilder {
+            public CreateVersionRequestBuilder files(File[] files) {
+                try {
+                    this.fileNames = new String[files.length];
+                    this.fileStreams = new InputStream[files.length];
+                    for (int i = 0; i < files.length; i++) {
+                        this.fileNames[i] = files[i].getName();
+                        this.fileStreams[i] = new FileInputStream(files[i]);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return this;
+            }
+        }
     }
 
     public CreateVersion(HttpClient client, Gson gson) {
@@ -73,17 +94,17 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
         return getClient().connect(url).thenApply(c -> {
             JsonObject jsonObject = getGson().toJsonTree(request).getAsJsonObject();
 
-            if (request.getFiles().length > 1) {
+            if (request.getFileNames().length > 1) {
                 String primaryFile = request.getPrimaryFile();
                 if (primaryFile == null || primaryFile.isEmpty()) {
-                    primaryFile = request.getFiles()[0].getName();
+                    primaryFile = request.getFileNames()[0];
                 }
                 jsonObject.addProperty("primary_file", primaryFile);
             }
 
             JsonArray array = new JsonArray();
-            for (File file : request.getFiles()) {
-                array.add(file.getName());
+            for (String filename : request.getFileNames()) {
+                array.add(filename);
             }
             jsonObject.add("file_parts", array);
 
@@ -91,8 +112,11 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
                     .addFormDataPart("data", getGson().toJson(jsonObject));
 
             try {
-                for (File file : request.getFiles())
-                    body.addFormDataPart(file.getName(), file.getName(), RequestBody.create(this.readFile(file)));
+                for (int i = 0; i < request.getFileNames().length; i++) {
+                    body.addFormDataPart(request.getFileNames()[i], request.getFileNames()[i],
+                            RequestBody.create(this.readStream(request.getFileStreams()[i])));
+                }
+
                 c.post(body.build());
 
                 Response response = this.getClient().execute(c);

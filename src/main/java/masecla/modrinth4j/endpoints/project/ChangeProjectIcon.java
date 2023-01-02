@@ -1,7 +1,7 @@
 package masecla.modrinth4j.endpoints.project;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -29,7 +29,8 @@ public class ChangeProjectIcon extends Endpoint<EmptyResponse, ChangeProjectIcon
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ChangeProjectIconRequest {
-        public File icon;
+        public InputStream icon;
+        public String iconName;
     }
 
     @Override
@@ -52,8 +53,7 @@ public class ChangeProjectIcon extends Endpoint<EmptyResponse, ChangeProjectIcon
         // Once again, Modrinth is a bit weird with their API. They use query parameters
         // to determine the file extension of the icon in a PATCH request.
         // Also, this whole endpoint is undocumented
-
-        String ext = request.getIcon().getName().substring(request.getIcon().getName().lastIndexOf(".") + 1);
+        String ext = request.getIconName().substring(request.getIconName().lastIndexOf(".") + 1);
         return super.getReplacedUrl(request, parameters) + "?ext=" + ext;
     }
 
@@ -62,9 +62,8 @@ public class ChangeProjectIcon extends Endpoint<EmptyResponse, ChangeProjectIcon
         String url = getReplacedUrl(request, urlParams);
         return getClient().connect(url).thenApply(c -> {
             try {
-                File f = request.getIcon();
-
-                c.method(getMethod(), RequestBody.create(readFile(f)));
+                InputStream stream = request.getIcon();
+                c.method(getMethod(), RequestBody.create(readStream(stream)));
                 
                 Response response = getClient().execute(c);
                 checkBodyForErrors(response.body());

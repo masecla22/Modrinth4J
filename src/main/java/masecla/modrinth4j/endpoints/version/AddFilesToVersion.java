@@ -1,6 +1,6 @@
 package masecla.modrinth4j.endpoints.version;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -24,7 +24,8 @@ public class AddFilesToVersion extends Endpoint<EmptyResponse, AddFilesToVersion
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AddFilesToVersionRequest {
-        public File[] files;
+        private String[] fileNames;
+        private InputStream[] fileStreams;
     }
 
     public AddFilesToVersion(HttpClient client, Gson gson) {
@@ -46,9 +47,9 @@ public class AddFilesToVersion extends Endpoint<EmptyResponse, AddFilesToVersion
             builder.addFormDataPart("data", "{}"); // Not sure what this is for, but it's required
 
             try {
-                for (File f : request.getFiles()) {
-                    builder.addFormDataPart(f.getName(), f.getName(), 
-                        RequestBody.create(this.readFile(f)));
+                for(int i = 0; i < request.getFileNames().length; i++) {
+                    builder.addFormDataPart(request.getFileNames()[i], request.getFileNames()[i], 
+                        RequestBody.create(this.readStream(request.getFileStreams()[i])));
                 }
 
                 c.post(builder.build());
