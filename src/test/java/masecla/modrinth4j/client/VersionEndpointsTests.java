@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import lombok.SneakyThrows;
 import masecla.modrinth4j.data.DataUtil;
 import masecla.modrinth4j.endpoints.version.CreateVersion.CreateVersionRequest;
 import masecla.modrinth4j.endpoints.version.GetProjectVersions.GetProjectVersionsRequest;
@@ -127,6 +128,7 @@ public class VersionEndpointsTests {
     }
 
     @Test
+    @SneakyThrows
     public void testAddFilesToVersion() {
         Project prj = DataUtil.fetchSampleProject(client);
         ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
@@ -147,6 +149,7 @@ public class VersionEndpointsTests {
     }
 
     @Test
+    @SneakyThrows
     public void testGetVersionsByHash() {
         Project prj = DataUtil.fetchSampleProject(client);
         ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
@@ -167,6 +170,7 @@ public class VersionEndpointsTests {
     }
 
     @Test
+    @SneakyThrows
     public void testDeleteFileByHash() {
         Project prj = DataUtil.fetchSampleProject(client);
         ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
@@ -194,6 +198,7 @@ public class VersionEndpointsTests {
     }
 
     @Test
+    @SneakyThrows
     public void testGetLatestVersionsByHash() {
         Project prj = DataUtil.fetchSampleProject(client);
         ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
