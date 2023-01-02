@@ -30,7 +30,7 @@ public class ChangeProjectIcon extends Endpoint<EmptyResponse, ChangeProjectIcon
     @AllArgsConstructor
     public static class ChangeProjectIconRequest {
         public InputStream icon;
-        public String ext;
+        public String iconName;
     }
 
     @Override
@@ -53,8 +53,7 @@ public class ChangeProjectIcon extends Endpoint<EmptyResponse, ChangeProjectIcon
         // Once again, Modrinth is a bit weird with their API. They use query parameters
         // to determine the file extension of the icon in a PATCH request.
         // Also, this whole endpoint is undocumented
-
-        String ext = request.getExt();
+        String ext = request.getIconName().substring(request.getIconName().lastIndexOf(".") + 1);
         return super.getReplacedUrl(request, parameters) + "?ext=" + ext;
     }
 
