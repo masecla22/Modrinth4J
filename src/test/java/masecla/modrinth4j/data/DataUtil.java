@@ -21,11 +21,18 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class DataUtil {
+    @SneakyThrows
     public static Project createSampleProject(ModrinthAPI api) {
         License randomLicense = api.tags().getLicenses().join()[0];
 
+        File icon = getAnotherImage();
+        FileInputStream fis = new FileInputStream(icon);
+
+
         if (api.projects().checkSlugAvailability("modrinth4j-test-project").join())
             return api.projects().create(CreateProjectRequest.builder()
+                    .iconData(fis)
+                    .iconFilename(icon.getName())
                     .data(ProjectData.builder()
                             .body("This nifty builder")
                             .categories(new String[] { "utility" })
@@ -38,6 +45,7 @@ public class DataUtil {
                             .title("bruh")
                             .build())
                     .build()).join();
+        fis.close();
         return fetchSampleProject(api);
     }
 
