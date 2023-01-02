@@ -1,7 +1,7 @@
 package masecla.modrinth4j.endpoints.user;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -29,7 +29,8 @@ public class ChangeUserIcon extends Endpoint<EmptyResponse, ChangeUserIconReques
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ChangeUserIconRequest {
-        public File icon;
+        private String filename;
+        private InputStream iconData;
     }
 
     @Override
@@ -53,7 +54,7 @@ public class ChangeUserIcon extends Endpoint<EmptyResponse, ChangeUserIconReques
         // to determine the file extension of the icon in a PATCH request.
         // Also, this behaviour is completely undocumented.
 
-        String ext = request.getIcon().getName().substring(request.getIcon().getName().lastIndexOf(".") + 1);
+        String ext = request.getFilename().substring(request.getFilename().lastIndexOf(".") + 1);
         return super.getReplacedUrl(request, parameters) + "?ext=" + ext;
     }
 
@@ -62,9 +63,8 @@ public class ChangeUserIcon extends Endpoint<EmptyResponse, ChangeUserIconReques
         String url = getReplacedUrl(request, urlParams);
         return getClient().connect(url).thenApply(c -> {
             try {
-                File f = request.getIcon();
-
-                c.method(getMethod(), RequestBody.create(readFile(f)));
+                InputStream stream = request.getIconData();
+                c.method(getMethod(), RequestBody.create(readStream(stream)));
                 
                 Response response = getClient().execute(c);
                 checkBodyForErrors(response.body());
