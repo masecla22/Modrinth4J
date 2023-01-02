@@ -1,8 +1,11 @@
 package masecla.modrinth4j.endpoints.generic;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -133,15 +136,26 @@ public abstract class Endpoint<O, I> {
         }
     }
 
+    protected byte[] readStream(InputStream stream){
+        try {
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            int nRead;
+            byte[] data = new byte[16384];
+            while ((nRead = stream.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+            buffer.flush();
+            return buffer.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     protected byte[] readFile(File file) {
         try {
-            FileInputStream fis = new FileInputStream(file);
-            byte[] data = new byte[(int) file.length()];
-            fis.read(data);
-            fis.close();
-
-            return data;
-        } catch (IOException e) {
+            return readStream(new FileInputStream(file));
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
             return null;
         }
