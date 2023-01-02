@@ -1,7 +1,7 @@
 package masecla.modrinth4j.endpoints.project.gallery;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -21,7 +21,8 @@ public class CreateGalleryImage extends Endpoint<EmptyResponse, CreateGalleryIma
     @Data
     @Builder
     public static class CreateGalleryImageRequest {
-        private File file;
+        private String filename;
+        private InputStream image;
 
         private boolean featured;
         private String title;
@@ -47,8 +48,8 @@ public class CreateGalleryImage extends Endpoint<EmptyResponse, CreateGalleryIma
             Map<String, String> urlParams) {
         String url = getReplacedUrl(parameters, urlParams);
 
-        String extension = parameters.getFile().getName()
-                .substring(parameters.getFile().getName().lastIndexOf(".") + 1);
+        String extension = parameters.getFilename()
+                .substring(parameters.getFilename().lastIndexOf(".") + 1);
 
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("ext", extension);
@@ -58,7 +59,7 @@ public class CreateGalleryImage extends Endpoint<EmptyResponse, CreateGalleryIma
 
         return getClient().connect(url, queryParams).thenApply(c -> {
             try {
-                c.method(getMethod(), RequestBody.create(readFile(parameters.getFile())));
+                c.method(getMethod(), RequestBody.create(readStream(parameters.getImage())));
                 c.header("Content-Type", "image/*");
 
                 Response response = getClient().execute(c);
