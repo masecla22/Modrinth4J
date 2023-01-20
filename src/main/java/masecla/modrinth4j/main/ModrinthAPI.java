@@ -11,6 +11,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.client.agent.UserAgent;
+import masecla.modrinth4j.client.instances.RatelimitedHttpClient;
 import masecla.modrinth4j.client.instances.UnlimitedHttpClient;
 import masecla.modrinth4j.endpoints.SearchEndpoint;
 import masecla.modrinth4j.endpoints.SearchEndpoint.SearchRequest;
@@ -35,6 +36,12 @@ public class ModrinthAPI {
 
     private Gson gson;
 
+    /**
+     * Returns a client which will send unlimited requests.
+     * 
+     * @deprecated - Use {@link #rateLimited(UserAgent, String)} instead.
+     */
+    @Deprecated
     public static ModrinthAPI unlimited(UserAgent agent, String apiKey) {
         HttpClient client = new UnlimitedHttpClient(agent, apiKey);
         ModrinthAPI result = new ModrinthAPI(client, apiKey);
@@ -43,8 +50,47 @@ public class ModrinthAPI {
         return result;
     }
 
+    /**
+     * Returns a client which will send unlimited requests.
+     * 
+     * @deprecated - Use {@link #rateLimited(UserAgent, String, String)} instead.
+     */
+    @Deprecated
     public static ModrinthAPI unlimited(UserAgent agent, String url, String apiKey) {
         HttpClient client = new UnlimitedHttpClient(agent, url, apiKey);
+        ModrinthAPI result = new ModrinthAPI(client, apiKey);
+
+        result.initializeGson();
+        return result;
+    }
+
+    /**
+     * Returns a client which will send requests and adjust speed based on rate limits
+     * 
+     * @param agent  - The user agent to use
+     * @param apiKey - The API key to use
+     * 
+     * @return - A client which will send requests and adjust speed based on rate
+     */
+    public static ModrinthAPI rateLimited(UserAgent agent, String apiKey) {
+        HttpClient client = new RatelimitedHttpClient(agent, apiKey);
+        ModrinthAPI result = new ModrinthAPI(client, apiKey);
+
+        result.initializeGson();
+        return result;
+    }
+
+    /**
+     * Returns a client which will send requests and adjust speed based on rate limits
+     * 
+     * @param agent  - The user agent to use
+     * @param url    - The base URL to use
+     * @param apiKey - The API key to use
+     * 
+     * @return - A client which will send requests and adjust speed based on rate
+     */
+    public static ModrinthAPI rateLimited(UserAgent agent, String url, String apiKey) {
+        HttpClient client = new RatelimitedHttpClient(agent, url, apiKey);
         ModrinthAPI result = new ModrinthAPI(client, apiKey);
 
         result.initializeGson();

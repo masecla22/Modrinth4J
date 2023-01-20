@@ -59,8 +59,14 @@ public abstract class HttpClient {
     }
 
     public Response execute(Request.Builder connection) throws IOException {
-        return client.newCall(connection.build()).execute();
+        nextRequest().join();
+        Response response = client.newCall(connection.build()).execute();
+        interceptResponse(response);
+        return response;
     }
 
     public abstract CompletableFuture<Void> nextRequest();
+
+    public void interceptResponse(Response response) {
+    }
 }
