@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
+import masecla.modrinth4j.client.agent.UserAgent;
 import masecla.modrinth4j.client.instances.UnlimitedHttpClient;
 import masecla.modrinth4j.endpoints.SearchEndpoint;
 import masecla.modrinth4j.endpoints.SearchEndpoint.SearchRequest;
@@ -34,16 +35,16 @@ public class ModrinthAPI {
 
     private Gson gson;
 
-    public static ModrinthAPI unlimited(String apiKey) {
-        HttpClient client = new UnlimitedHttpClient(apiKey);
+    public static ModrinthAPI unlimited(UserAgent agent, String apiKey) {
+        HttpClient client = new UnlimitedHttpClient(agent, apiKey);
         ModrinthAPI result = new ModrinthAPI(client, apiKey);
 
         result.initializeGson();
         return result;
     }
 
-    public static ModrinthAPI unlimited(String url, String apiKey) {
-        HttpClient client = new UnlimitedHttpClient(url, apiKey);
+    public static ModrinthAPI unlimited(UserAgent agent, String url, String apiKey) {
+        HttpClient client = new UnlimitedHttpClient(agent, url, apiKey);
         ModrinthAPI result = new ModrinthAPI(client, apiKey);
 
         result.initializeGson();

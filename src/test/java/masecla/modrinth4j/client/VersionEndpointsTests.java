@@ -29,7 +29,7 @@ public class VersionEndpointsTests {
     @Before
     public void setupClient() {
         EnvReader env = new EnvReader();
-        this.client = ModrinthAPI.unlimited(env.getStagingUrl(), env.getApiKey());
+        this.client = ModrinthAPI.unlimited(env.getAgent(), env.getStagingUrl(), env.getApiKey());
 
         DataUtil.createSampleProject(client);
     }

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+import lombok.NonNull;
+import masecla.modrinth4j.client.agent.UserAgent;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -12,17 +14,21 @@ import okhttp3.Response;
 public abstract class HttpClient {
     private String baseUrl = "https://api.modrinth.com/v2";
 
+    @NonNull
+    private UserAgent userAgent;
+
     private String apiKey;
 
     private OkHttpClient client;
 
-    public HttpClient(String apiKey){
+    public HttpClient(UserAgent userAgent, String apiKey) {
+        this.userAgent = userAgent;
         this.apiKey = apiKey;
         this.client = new OkHttpClient();
     }
 
-    public HttpClient(String baseUrl, String apiKey){
-        this(apiKey);
+    public HttpClient(UserAgent userAgent, String baseUrl, String apiKey) {
+        this(userAgent, apiKey);
         this.baseUrl = baseUrl;
     }
 
@@ -44,6 +50,8 @@ public abstract class HttpClient {
             }
 
             Request.Builder connection = new Request.Builder().url(parsedUrl);
+            if (userAgent != null)
+                connection.header("User-Agent", userAgent.toString());
             if (apiKey != null)
                 connection.header("Authorization", apiKey);
             return connection;

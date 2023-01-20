@@ -25,7 +25,7 @@ public class TeamEndpointsTests {
     @Before
     public void setupClient() {
         EnvReader env = new EnvReader();
-        this.client = ModrinthAPI.unlimited(env.getStagingUrl(), env.getApiKey());
+        this.client = ModrinthAPI.unlimited(env.getAgent(), env.getStagingUrl(), env.getApiKey());
 
         sampleProject = DataUtil.createSampleProject(client);
     }
