@@ -1,5 +1,6 @@
 package masecla.modrinth4j.client;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -61,6 +62,18 @@ public class ProjectEndpointsTests {
     }
 
     @Test
+    public void testGetIdBySlug() {
+        Project prj = DataUtil.createSampleProject(client);
+        Project fetched = client.projects().get(prj.getSlug()).join();
+
+        assertEquals(fetched.getId(),
+                client.projects().getProjectIdBySlug(fetched.getSlug()).join());
+
+        DataUtil.deleteSampleProject(client);
+
+    }
+
+    @Test
     public void testCreate() {
         Project prj = DataUtil.createSampleProject(client);
         assertTrue("The project was not created!", prj != null);
@@ -118,7 +131,7 @@ public class ProjectEndpointsTests {
                 .join();
         prj = DataUtil.fetchSampleProject(client);
 
-        client.projects().modifyGalleryImage(prj.getSlug(), 
+        client.projects().modifyGalleryImage(prj.getSlug(),
                 ModifyGalleryImageRequest.builder().featured(false)
                         .title("Test Image 2").description("This is a test image 2")
                         .url(prj.getGallery()[0].getUrl()).build())
@@ -132,7 +145,7 @@ public class ProjectEndpointsTests {
         assertTrue("The image did not have the correct description!",
                 img.getDescription().equals("This is a test image 2"));
         assertTrue("The image is not the one provided", DataUtil.verifyIdentical(img.getUrl(), DataUtil.getImage()));
-    
+
         DataUtil.deleteSampleProject(client);
     }
 
@@ -183,24 +196,24 @@ public class ProjectEndpointsTests {
         Project prj = DataUtil.createSampleProject(client);
 
         client.projects().modify(prj.getId(), ModifyProjectRequest.builder()
-            .additionalCategories(new String[] { "cursed" })
-            .body("Different body")
-            .categories(new String[] { "adventure" })
-            .clientSide(SupportStatus.UNSUPPORTED)
-            .description("Different description")
-            .discordUrl("https://discord.gg/1234")
-            .donationUrls(new ProjectDonationPlatform[]{
-                ProjectDonationPlatform.builder().id("other")
-                    .url("https://example.com/donate").platform("other")
-                    .build()
-            })
-            .issuesUrl("https://example.com/issues")
-            .serverSide(SupportStatus.UNSUPPORTED)
-            .slug("diff-slug-too")
-            .sourceUrl("https://example.com/source")
-            .title("Different title")
-            .wikiUrl("https://example.com/wiki")
-            .build()).join();
+                .additionalCategories(new String[] { "cursed" })
+                .body("Different body")
+                .categories(new String[] { "adventure" })
+                .clientSide(SupportStatus.UNSUPPORTED)
+                .description("Different description")
+                .discordUrl("https://discord.gg/1234")
+                .donationUrls(new ProjectDonationPlatform[] {
+                        ProjectDonationPlatform.builder().id("other")
+                                .url("https://example.com/donate").platform("other")
+                                .build()
+                })
+                .issuesUrl("https://example.com/issues")
+                .serverSide(SupportStatus.UNSUPPORTED)
+                .slug("diff-slug-too")
+                .sourceUrl("https://example.com/source")
+                .title("Different title")
+                .wikiUrl("https://example.com/wiki")
+                .build()).join();
 
         prj = client.projects().get("diff-slug-too").join();
 
@@ -211,7 +224,8 @@ public class ProjectEndpointsTests {
                 Arrays.stream(prj.getCategories()).anyMatch(c -> c.equals("adventure")));
         assertTrue("The project did not have the correct client side support status!",
                 prj.getClientSide() == SupportStatus.UNSUPPORTED);
-        assertTrue("The project did not have the correct description!", prj.getDescription().equals("Different description"));
+        assertTrue("The project did not have the correct description!",
+                prj.getDescription().equals("Different description"));
         assertTrue("The project did not have the correct discord url!",
                 prj.getDiscordUrl().equals("https://discord.gg/1234"));
         assertTrue("The project did not have the correct donation urls!",

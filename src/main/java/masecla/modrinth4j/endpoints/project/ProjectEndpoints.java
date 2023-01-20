@@ -72,6 +72,16 @@ public class ProjectEndpoints {
                 });
     }
 
+    public CompletableFuture<String> getProjectIdBySlug(String slug) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", slug);
+        return new GetProjectIdBySlug(client, gson).sendRequest(new EmptyRequest(), parameters).thenApply(c -> {
+            if (c == null)
+                return null;
+            return c.getId();
+        });
+    }
+
     public CompletableFuture<EmptyResponse> createGalleryImage(String slug, CreateGalleryImageRequest request) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", slug);
