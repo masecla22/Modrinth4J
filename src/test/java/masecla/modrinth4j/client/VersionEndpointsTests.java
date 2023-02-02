@@ -65,6 +65,7 @@ public class VersionEndpointsTests {
 
         // For some reason datePublished isn't consistent, so wipe it for both before
         // comparison
+        // https://github.com/modrinth/labrinth/issues/532
         version.setDatePublished(null);
         vers.get(0).setDatePublished(null);
 
