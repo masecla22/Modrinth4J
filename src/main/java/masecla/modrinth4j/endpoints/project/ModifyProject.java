@@ -1,6 +1,9 @@
 package masecla.modrinth4j.endpoints.project;
 
+import java.util.List;
+
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,20 +25,20 @@ public class ModifyProject extends Endpoint<ModifyProjectRequest, ModifyProjectR
         private String title;
         private String description;
 
-        private String[] categories;
+        private List<String> categories;
 
         private SupportStatus clientSide;
         private SupportStatus serverSide;
 
         private String body;
 
-        private String[] additionalCategories;
+        private List<String> additionalCategories;
 
         private String issuesUrl;
         private String sourceUrl;
         private String wikiUrl;
         private String discordUrl;
-        private ProjectDonationPlatform[] donationUrls;
+        private List<ProjectDonationPlatform> donationUrls;
 
         private String licenseId;
         private String licenseUrl;
@@ -65,12 +68,12 @@ public class ModifyProject extends Endpoint<ModifyProjectRequest, ModifyProjectR
     }
 
     @Override
-    public Class<ModifyProjectRequest> getRequestClass() {
-        return ModifyProjectRequest.class;
+    public TypeToken<ModifyProjectRequest> getRequestClass() {
+        return TypeToken.get(ModifyProjectRequest.class);
     }
 
     @Override
-    public Class<ModifyProjectRequest> getResponseClass() {
-        return ModifyProjectRequest.class;
+    public TypeToken<ModifyProjectRequest> getResponseClass() {
+        return TypeToken.get(ModifyProjectRequest.class);
     }
 }

@@ -1,6 +1,7 @@
 package masecla.modrinth4j.endpoints.project.gallery;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,13 +32,13 @@ public class DeleteGalleryImage extends Endpoint<EmptyResponse, DeleteGalleryIma
     }
 
     @Override
-    public Class<DeleteGalleryImageRequest> getRequestClass() {
-        return DeleteGalleryImageRequest.class;
+    public TypeToken<DeleteGalleryImageRequest> getRequestClass() {
+        return TypeToken.get(DeleteGalleryImageRequest.class);
     }
 
     @Override
-    public Class<EmptyResponse> getResponseClass() {
-        return EmptyResponse.class;
+    public TypeToken<EmptyResponse> getResponseClass() {
+        return TypeToken.get(EmptyResponse.class);
     }
 
     @Override

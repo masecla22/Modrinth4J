@@ -1,6 +1,7 @@
 package masecla.modrinth4j.endpoints.user;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
@@ -19,12 +20,12 @@ public class GetUser extends Endpoint<ModrinthUser, EmptyRequest> {
     }
 
     @Override
-    public Class<EmptyRequest> getRequestClass() {
-        return EmptyRequest.class;
+    public TypeToken<EmptyRequest> getRequestClass() {
+        return TypeToken.get(EmptyRequest.class);
     }
 
     @Override
-    public Class<ModrinthUser> getResponseClass() {
-        return ModrinthUser.class;
+    public TypeToken<ModrinthUser> getResponseClass() {
+        return TypeToken.get(ModrinthUser.class);
     }
 }

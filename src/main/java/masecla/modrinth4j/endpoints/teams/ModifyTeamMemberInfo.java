@@ -1,6 +1,7 @@
 package masecla.modrinth4j.endpoints.teams;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,13 +35,13 @@ public class ModifyTeamMemberInfo extends Endpoint<EmptyResponse, ModifyTeamMemb
     }
 
     @Override
-    public Class<ModifyTeamMemberInfoRequest> getRequestClass() {
-        return ModifyTeamMemberInfoRequest.class;
+    public TypeToken<ModifyTeamMemberInfoRequest> getRequestClass() {
+        return TypeToken.get(ModifyTeamMemberInfoRequest.class);
     }
 
     @Override
-    public Class<EmptyResponse> getResponseClass() {
-        return EmptyResponse.class;
+    public TypeToken<EmptyResponse> getResponseClass() {
+        return TypeToken.get(EmptyResponse.class);
     }
 
     @Override

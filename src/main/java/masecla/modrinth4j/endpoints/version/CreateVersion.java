@@ -3,12 +3,15 @@ package masecla.modrinth4j.endpoints.version;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,12 +45,12 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
         private String changelog;
 
         @Default
-        private ProjectDependency[] dependencies = new ProjectDependency[0];
-        private String[] gameVersions;
+        private List<ProjectDependency> dependencies = new ArrayList<>();
+        private List<String> gameVersions;
         private VersionType versionType;
 
         @NonNull
-        private String[] loaders;
+        private List<String> loaders;
 
         private boolean featured;
 
@@ -57,24 +60,30 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
         private String primaryFile;
 
         @NonNull
-        private transient String[] fileNames;
+        private transient List<String> fileNames;
 
         @NonNull
-        private transient InputStream[] fileStreams;
+        private transient List<InputStream> fileStreams;
 
         public static class CreateVersionRequestBuilder {
-            public CreateVersionRequestBuilder files(File[] files) {
+
+            public CreateVersionRequestBuilder files(File... files) {
                 try {
-                    this.fileNames = new String[files.length];
-                    this.fileStreams = new InputStream[files.length];
+                    this.fileNames = new ArrayList<>();
+                    this.fileStreams = new ArrayList<>();
+
                     for (int i = 0; i < files.length; i++) {
-                        this.fileNames[i] = files[i].getName();
-                        this.fileStreams[i] = new FileInputStream(files[i]);
+                        this.fileNames.add(files[i].getName());
+                        this.fileStreams.add(new FileInputStream(files[i]));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 return this;
+            }
+
+            public CreateVersionRequestBuilder files(List<File> files) {
+                return this.files(files.toArray(new File[files.size()]));
             }
         }
     }
@@ -94,10 +103,10 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
         return getClient().connect(url).thenApply(c -> {
             JsonObject jsonObject = getGson().toJsonTree(request).getAsJsonObject();
 
-            if (request.getFileNames().length > 1) {
+            if (request.getFileNames().size() > 1) {
                 String primaryFile = request.getPrimaryFile();
                 if (primaryFile == null || primaryFile.isEmpty()) {
-                    primaryFile = request.getFileNames()[0];
+                    primaryFile = request.getFileNames().get(0);
                 }
                 jsonObject.addProperty("primary_file", primaryFile);
             }
@@ -112,9 +121,9 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
                     .addFormDataPart("data", getGson().toJson(jsonObject));
 
             try {
-                for (int i = 0; i < request.getFileNames().length; i++) {
-                    body.addFormDataPart(request.getFileNames()[i], request.getFileNames()[i],
-                            RequestBody.create(this.readStream(request.getFileStreams()[i])));
+                for (int i = 0; i < request.getFileNames().size(); i++) {
+                    body.addFormDataPart(request.getFileNames().get(i), request.getFileNames().get(i),
+                            RequestBody.create(this.readStream(request.getFileStreams().get(i))));
                 }
 
                 c.post(body.build());
@@ -131,13 +140,13 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
     }
 
     @Override
-    public Class<CreateVersionRequest> getRequestClass() {
-        return CreateVersionRequest.class;
+    public TypeToken<CreateVersionRequest> getRequestClass() {
+        return TypeToken.get(CreateVersionRequest.class);
     }
 
     @Override
-    public Class<ProjectVersion> getResponseClass() {
-        return ProjectVersion.class;
+    public TypeToken<ProjectVersion> getResponseClass() {
+        return TypeToken.get(ProjectVersion.class);
     }
 
     @Override

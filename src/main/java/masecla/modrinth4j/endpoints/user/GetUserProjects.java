@@ -1,13 +1,16 @@
 package masecla.modrinth4j.endpoints.user;
 
+import java.util.List;
+
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyRequest;
 import masecla.modrinth4j.model.project.Project;
 
-public class GetUserProjects extends Endpoint<Project[], EmptyRequest> {
+public class GetUserProjects extends Endpoint<List<Project>, EmptyRequest> {
 
     public GetUserProjects(HttpClient client, Gson gson) {
         super(client, gson);
@@ -19,12 +22,13 @@ public class GetUserProjects extends Endpoint<Project[], EmptyRequest> {
     }
 
     @Override
-    public Class<EmptyRequest> getRequestClass() {
-        return EmptyRequest.class;
+    public TypeToken<EmptyRequest> getRequestClass() {
+        return TypeToken.get(EmptyRequest.class);
     }
 
     @Override
-    public Class<Project[]> getResponseClass() {
-        return Project[].class;
+    public TypeToken<List<Project>> getResponseClass() {
+        return new TypeToken<List<Project>>() {
+        };
     }
 }

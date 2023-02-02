@@ -1,6 +1,7 @@
 package masecla.modrinth4j.endpoints.user;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,13 +34,13 @@ public class ModifyUser extends Endpoint<EmptyResponse, ModifyUserRequest> {
     }
 
     @Override
-    public Class<ModifyUserRequest> getRequestClass() {
-        return ModifyUserRequest.class;
+    public TypeToken<ModifyUserRequest> getRequestClass() {
+        return TypeToken.get(ModifyUserRequest.class);
     }
 
     @Override
-    public Class<EmptyResponse> getResponseClass() {
-        return EmptyResponse.class;
+    public TypeToken<EmptyResponse> getResponseClass() {
+        return TypeToken.get(EmptyResponse.class);
     }
 
     @Override

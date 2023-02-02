@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.Builder;
 import lombok.Data;
@@ -92,12 +93,12 @@ public class CreateGalleryImage extends Endpoint<EmptyResponse, CreateGalleryIma
     }
 
     @Override
-    public Class<CreateGalleryImageRequest> getRequestClass() {
-        return CreateGalleryImageRequest.class;
+    public TypeToken<CreateGalleryImageRequest> getRequestClass() {
+        return TypeToken.get(CreateGalleryImageRequest.class);
     }
 
     @Override
-    public Class<EmptyResponse> getResponseClass() {
-        return EmptyResponse.class;
+    public TypeToken<EmptyResponse> getResponseClass() {
+        return TypeToken.get(EmptyResponse.class);
     }
 }

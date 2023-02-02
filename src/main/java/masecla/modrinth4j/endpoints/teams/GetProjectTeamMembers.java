@@ -1,13 +1,16 @@
 package masecla.modrinth4j.endpoints.teams;
 
+import java.util.List;
+
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyRequest;
 import masecla.modrinth4j.model.team.ModrinthTeamMember;
 
-public class GetProjectTeamMembers extends Endpoint<ModrinthTeamMember[], EmptyRequest> {
+public class GetProjectTeamMembers extends Endpoint<List<ModrinthTeamMember>, EmptyRequest> {
 
     public GetProjectTeamMembers(HttpClient client, Gson gson) {
         super(client, gson);
@@ -19,12 +22,13 @@ public class GetProjectTeamMembers extends Endpoint<ModrinthTeamMember[], EmptyR
     }
 
     @Override
-    public Class<EmptyRequest> getRequestClass() {
-        return EmptyRequest.class;
+    public TypeToken<EmptyRequest> getRequestClass() {
+        return TypeToken.get(EmptyRequest.class);
     }
 
     @Override
-    public Class<ModrinthTeamMember[]> getResponseClass() {
-        return ModrinthTeamMember[].class;
+    public TypeToken<List<ModrinthTeamMember>> getResponseClass() {
+        return new TypeToken<List<ModrinthTeamMember>>() {
+        };
     }
 }

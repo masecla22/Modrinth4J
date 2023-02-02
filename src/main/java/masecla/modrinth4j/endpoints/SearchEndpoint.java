@@ -1,7 +1,10 @@
 package masecla.modrinth4j.endpoints;
 
+import java.util.List;
+
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,7 +40,7 @@ public class SearchEndpoint extends PaginatedEndpoint<SearchResult, SearchRespon
         private String title;
         private String description;
 
-        private String[] categories;
+        private List<String> categories;
 
         private SupportStatus clientSide;
 
@@ -53,9 +56,9 @@ public class SearchEndpoint extends PaginatedEndpoint<SearchResult, SearchRespon
 
         private String author;
 
-        private String[] displayCategories;
+        private List<String> displayCategories;
 
-        private String[] versions;
+        private List<String> versions;
 
         private int follows;
 
@@ -70,7 +73,7 @@ public class SearchEndpoint extends PaginatedEndpoint<SearchResult, SearchRespon
         private String license;
 
         /** This is a list of URL's */
-        private String[] gallery;
+        private List<String> gallery;
     }
 
     @Data
@@ -97,13 +100,13 @@ public class SearchEndpoint extends PaginatedEndpoint<SearchResult, SearchRespon
     }
 
     @Override
-    public Class<SearchRequest> getRequestClass() {
-        return SearchRequest.class;
+    public TypeToken<SearchRequest> getRequestClass() {
+        return TypeToken.get(SearchRequest.class);
     }
 
     @Override
-    public Class<SearchResponse> getResponseClass() {
-        return SearchResponse.class;
+    public TypeToken<SearchResponse> getResponseClass() {
+        return TypeToken.get(SearchResponse.class);
     }
 
     @Override

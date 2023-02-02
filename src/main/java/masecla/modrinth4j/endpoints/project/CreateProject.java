@@ -2,12 +2,14 @@ package masecla.modrinth4j.endpoints.project;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,20 +42,20 @@ public class CreateProject extends Endpoint<Project, CreateProjectRequest> {
         private String title;
         private String description;
 
-        private String[] categories;
+        private List<String> categories;
 
         private SupportStatus clientSide;
         private SupportStatus serverSide;
 
         private String body;
 
-        private String[] additionalCategories;
+        private List<String> additionalCategories;
 
         private String issuesUrl;
         private String sourceUrl;
         private String wikiUrl;
         private String discordUrl;
-        private ProjectDonationPlatform[] donationUrls;
+        private List<ProjectDonationPlatform> donationUrls;
 
         private String licenseId;
         private String licenseUrl;
@@ -86,13 +88,13 @@ public class CreateProject extends Endpoint<Project, CreateProjectRequest> {
     }
 
     @Override
-    public Class<CreateProjectRequest> getRequestClass() {
-        return CreateProjectRequest.class;
+    public TypeToken<CreateProjectRequest> getRequestClass() {
+        return TypeToken.get(CreateProjectRequest.class);
     }
 
     @Override
-    public Class<Project> getResponseClass() {
-        return Project.class;
+    public TypeToken<Project> getResponseClass() {
+        return TypeToken.get(Project.class);
     }
 
     @Override

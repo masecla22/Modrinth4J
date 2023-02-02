@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -17,6 +18,7 @@ import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
 import masecla.modrinth4j.endpoints.project.ChangeProjectIcon.ChangeProjectIconRequest;
 import masecla.modrinth4j.endpoints.project.CreateProject.CreateProjectRequest;
 import masecla.modrinth4j.endpoints.project.GetMultipleProjects.GetMultipleProjectsRequest;
+import masecla.modrinth4j.endpoints.project.GetMultipleProjects.GetMultipleProjectsResponse;
 import masecla.modrinth4j.endpoints.project.GetProjectDependencies.GetProjectDependenciesResponse;
 import masecla.modrinth4j.endpoints.project.ModifyProject.ModifyProjectRequest;
 import masecla.modrinth4j.endpoints.project.follow.FollowProject;
@@ -40,9 +42,9 @@ public class ProjectEndpoints {
         return new GetProject(client, gson).sendRequest(new EmptyRequest(), parameters);
     }
 
-    public CompletableFuture<Project[]> get(String... project) {
+    public CompletableFuture<GetMultipleProjectsResponse> get(List<String> projects) {
         return new GetMultipleProjects(client, gson)
-                .sendRequest(new GetMultipleProjectsRequest(project));
+                .sendRequest(new GetMultipleProjectsRequest(projects));
     }
 
     public CompletableFuture<ModifyProjectRequest> modify(String project, ModifyProjectRequest request) {

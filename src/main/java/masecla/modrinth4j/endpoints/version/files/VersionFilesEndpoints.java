@@ -1,6 +1,8 @@
 package masecla.modrinth4j.endpoints.version.files;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -30,9 +32,13 @@ public class VersionFilesEndpoints {
         return new GetVersionByHash(client, gson).sendRequest(new GetVersionByHashRequest(algorithm), parameters);
     }
 
-    public CompletableFuture<HashProjectVersionMap> getVersionByHash(FileHash algorithm, String... hashes) {
+    public CompletableFuture<HashProjectVersionMap> getVersionByHash(FileHash algorithm, List<String> hashes) {
         return new GetVersionsFromHashes(client, gson)
                 .sendRequest(new GetVersionsFromHashesRequest(algorithm, hashes));
+    }
+
+    public CompletableFuture<HashProjectVersionMap> getVersionByHash(FileHash algorithm, String... hashes) {
+        return this.getVersionByHash(algorithm, Arrays.asList(hashes));
     }
 
     public CompletableFuture<EmptyResponse> deleteFileByHash(FileHash algorithm, String hash) {

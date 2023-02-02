@@ -1,6 +1,9 @@
 package masecla.modrinth4j.endpoints.version.files;
 
+import java.util.List;
+
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +22,7 @@ public class GetVersionsFromHashes extends Endpoint<HashProjectVersionMap, GetVe
     @AllArgsConstructor
     public static class GetVersionsFromHashesRequest {
         private FileHash algorithm;
-        private String[] hashes;
+        private List<String> hashes;
     }
 
     public GetVersionsFromHashes(HttpClient client, Gson gson) {
@@ -32,13 +35,13 @@ public class GetVersionsFromHashes extends Endpoint<HashProjectVersionMap, GetVe
     }
 
     @Override
-    public Class<GetVersionsFromHashesRequest> getRequestClass() {
-        return GetVersionsFromHashesRequest.class;
+    public TypeToken<GetVersionsFromHashesRequest> getRequestClass() {
+        return TypeToken.get(GetVersionsFromHashesRequest.class);
     }
 
     @Override
-    public Class<HashProjectVersionMap> getResponseClass() {
-        return HashProjectVersionMap.class;
+    public TypeToken<HashProjectVersionMap> getResponseClass() {
+        return TypeToken.get(HashProjectVersionMap.class);
     }
 
     @Override

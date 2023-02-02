@@ -1,5 +1,7 @@
 package masecla.modrinth4j.model.version;
 
+import java.util.List;
+
 import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
@@ -14,12 +16,12 @@ public class ProjectVersion {
     private String versionNumber;
     private String changelog;
 
-    private ProjectDependency[] dependencies;
+    private List<ProjectDependency> dependencies;
 
-    private String[] gameVersions;
+    private List<String> gameVersions;
 
     private VersionType versionType;
-    private String[] loaders;
+    private List<String> loaders;
 
     private boolean featured;
 
@@ -30,7 +32,7 @@ public class ProjectVersion {
 
     private int downloads;
 
-    private ProjectFile[] files;
+    private List<ProjectFile> files;
 
     public static enum VersionType {
         @SerializedName("release")

@@ -1,6 +1,7 @@
 package masecla.modrinth4j.endpoints.teams;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,13 +31,13 @@ public class TransferOwnership extends Endpoint<EmptyResponse, TransferOwnership
     }
 
     @Override
-    public Class<TransferOwnershipRequest> getRequestClass() {
-        return TransferOwnershipRequest.class;
+    public TypeToken<TransferOwnershipRequest> getRequestClass() {
+        return TypeToken.get(TransferOwnershipRequest.class);
     }
 
     @Override
-    public Class<EmptyResponse> getResponseClass() {
-        return EmptyResponse.class;
+    public TypeToken<EmptyResponse> getResponseClass() {
+        return TypeToken.get(EmptyResponse.class);
     }
 
     @Override

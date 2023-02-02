@@ -1,5 +1,6 @@
 package masecla.modrinth4j.endpoints.tags;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import com.google.gson.Gson;
@@ -18,27 +19,27 @@ public class TagsEndpoints {
     private Gson gson;
     private HttpClient client;
 
-    public CompletableFuture<Category[]> getCategories() {
+    public CompletableFuture<List<Category>> getCategories() {
         return new GetCategories(client, gson).sendRequest(new EmptyRequest());
     }
 
-    public CompletableFuture<DonationPlatform[]> getDonationPlatforms() {
+    public CompletableFuture<List<DonationPlatform>> getDonationPlatforms() {
         return new GetDonationPlatforms(client, gson).sendRequest(new EmptyRequest());
     }
 
-    public CompletableFuture<Loader[]> getLoaders() {
+    public CompletableFuture<List<Loader>> getLoaders() {
         return new GetLoaders(client, gson).sendRequest(new EmptyRequest());
     }
 
-    public CompletableFuture<GameVersion[]> getGameVersions() {
+    public CompletableFuture<List<GameVersion>> getGameVersions() {
         return new GetGameVersions(client, gson).sendRequest(new EmptyRequest());
     }
 
-    public CompletableFuture<License[]> getLicenses() {
+    public CompletableFuture<List<License>> getLicenses() {
         return new GetLicenses(client, gson).sendRequest(new EmptyRequest());
     }
 
-    public CompletableFuture<String[]> getReportTypes() {
+    public CompletableFuture<List<String>> getReportTypes() {
         return new GetReportTypes(client, gson).sendRequest(new EmptyRequest());
     }
 }

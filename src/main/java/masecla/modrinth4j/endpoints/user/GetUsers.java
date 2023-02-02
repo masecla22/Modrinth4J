@@ -1,6 +1,9 @@
 package masecla.modrinth4j.endpoints.user;
 
+import java.util.List;
+
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,14 +14,14 @@ import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.user.GetUsers.GetUsersRequest;
 import masecla.modrinth4j.model.user.ModrinthUser;
 
-public class GetUsers extends Endpoint<ModrinthUser[], GetUsersRequest> {
+public class GetUsers extends Endpoint<List<ModrinthUser>, GetUsersRequest> {
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class GetUsersRequest {
-        public String[] ids;
+        public List<String> ids;
     }
 
     public GetUsers(HttpClient client, Gson gson) {
@@ -31,13 +34,14 @@ public class GetUsers extends Endpoint<ModrinthUser[], GetUsersRequest> {
     }
 
     @Override
-    public Class<GetUsersRequest> getRequestClass() {
-        return GetUsersRequest.class;
+    public TypeToken<GetUsersRequest> getRequestClass() {
+        return TypeToken.get(GetUsersRequest.class);
     }
 
     @Override
-    public Class<ModrinthUser[]> getResponseClass() {
-        return ModrinthUser[].class;
+    public TypeToken<List<ModrinthUser>> getResponseClass() {
+        return new TypeToken<List<ModrinthUser>>() {
+        };
     }
 
     @Override

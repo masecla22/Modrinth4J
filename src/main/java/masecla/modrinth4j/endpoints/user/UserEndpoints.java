@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -48,9 +50,20 @@ public class UserEndpoints {
      * @param ids - The IDs of the users
      * @return - The users
      */
-    public CompletableFuture<ModrinthUser[]> getUser(String... ids) {
-        return new GetUsers(client, gson).sendRequest(new GetUsersRequest(ids));
+    public CompletableFuture<List<ModrinthUser>> getUser(String... ids) {
+        return this.getUser(Arrays.asList(ids));
     }
+
+    /**
+     * Gets multiple users by their IDs. <b> Note: This will only work with IDs, not
+     * usernames. </b> unlike {@link #getUser(String)}
+     * 
+     * @param ids - The IDs of the users
+     * @return - The users
+     */
+    public CompletableFuture<List<ModrinthUser>> getUser(List<String> ids) {
+        return new GetUsers(client, gson).sendRequest(new GetUsersRequest(ids));
+    };
 
     public CompletableFuture<EmptyResponse> modifyUser(String id, ModifyUserRequest request) {
         Map<String, String> parameters = new HashMap<>();
@@ -81,21 +94,21 @@ public class UserEndpoints {
         return new ChangeUserIcon(client, gson).sendRequest(new ChangeUserIconRequest(filename, stream), parameters);
     }
 
-    public CompletableFuture<Project[]> getUserProjects(String id) {
+    public CompletableFuture<List<Project>> getUserProjects(String id) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", id);
 
         return new GetUserProjects(client, gson).sendRequest(new EmptyRequest(), parameters);
     }
 
-    public CompletableFuture<Project[]> getUserFollowedProjects(String id) {
+    public CompletableFuture<List<Project>> getUserFollowedProjects(String id) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", id);
 
         return new GetUserFollowedProjects(client, gson).sendRequest(new EmptyRequest(), parameters);
     }
 
-    public CompletableFuture<ModrinthUserNotification[]> getNotifications(String id) {
+    public CompletableFuture<List<ModrinthUserNotification>> getNotifications(String id) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", id);
 

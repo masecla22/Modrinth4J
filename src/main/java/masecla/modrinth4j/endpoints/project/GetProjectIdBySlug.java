@@ -1,6 +1,7 @@
 package masecla.modrinth4j.endpoints.project;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,13 +29,13 @@ public class GetProjectIdBySlug extends Endpoint<GetProjectIdBySlugResponse, Emp
     }
 
     @Override
-    public Class<EmptyRequest> getRequestClass() {
-        return EmptyRequest.class;
+    public TypeToken<EmptyRequest> getRequestClass() {
+        return TypeToken.get(EmptyRequest.class);
     }
 
     @Override
-    public Class<GetProjectIdBySlugResponse> getResponseClass() {
-        return GetProjectIdBySlugResponse.class;
+    public TypeToken<GetProjectIdBySlugResponse> getResponseClass() {
+        return TypeToken.get(GetProjectIdBySlugResponse.class);
     }
 
     @Override

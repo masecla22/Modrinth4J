@@ -2,6 +2,7 @@ package masecla.modrinth4j.endpoints.user;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -75,13 +76,13 @@ public class ReportProjectUserOrVersion
     }
 
     @Override
-    public Class<ReportProjectUserOrVersionRequest> getRequestClass() {
-        return ReportProjectUserOrVersionRequest.class;
+    public TypeToken<ReportProjectUserOrVersionRequest> getRequestClass() {
+        return TypeToken.get(ReportProjectUserOrVersionRequest.class);
     }
 
     @Override
-    public Class<ReportProjectUserOrVersionResponse> getResponseClass() {
-        return ReportProjectUserOrVersionResponse.class;
+    public TypeToken<ReportProjectUserOrVersionResponse> getResponseClass() {
+        return TypeToken.get(ReportProjectUserOrVersionResponse.class);
     }
 
     @Override

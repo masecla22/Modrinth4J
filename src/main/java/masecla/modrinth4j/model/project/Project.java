@@ -1,5 +1,7 @@
 package masecla.modrinth4j.model.project;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,20 +14,20 @@ public class Project {
 
     private String title;
     private String description;
-    private String[] categories;
+    private List<String> categories;
 
     private SupportStatus clientSide;
     private SupportStatus serverSide;
 
     private String body;
 
-    private String[] additionalCategories;
+    private List<String> additionalCategories;
 
     private String issuesUrl;
     private String sourceUrl;
     private String wikiUrl;
     private String discordUrl;
-    private ProjectDonationPlatform[] donationUrls;
+    private List<ProjectDonationPlatform> donationUrls;
 
     private ProjectType projectType;
 
@@ -53,7 +55,7 @@ public class Project {
 
     private ProjectLicense license;
 
-    private String[] versions;
+    private List<String> versions;
 
-    private ProjectGalleryImage[] gallery;
+    private List<ProjectGalleryImage> gallery;
 }

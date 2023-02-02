@@ -1,6 +1,7 @@
 package masecla.modrinth4j.endpoints.project;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,13 +29,13 @@ public class CheckSlugAvailability extends Endpoint<CheckSlugAvailabilityRespons
     }
 
     @Override
-    public Class<EmptyRequest> getRequestClass() {
-        return EmptyRequest.class;
+    public TypeToken<EmptyRequest> getRequestClass() {
+        return TypeToken.get(EmptyRequest.class);
     }
 
     @Override
-    public Class<CheckSlugAvailabilityResponse> getResponseClass() {
-        return CheckSlugAvailabilityResponse.class;
+    public TypeToken<CheckSlugAvailabilityResponse> getResponseClass() {
+        return TypeToken.get(CheckSlugAvailabilityResponse.class);
     }
 
     @Override

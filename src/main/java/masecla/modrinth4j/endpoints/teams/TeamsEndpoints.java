@@ -1,6 +1,8 @@
 package masecla.modrinth4j.endpoints.teams;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -21,22 +23,26 @@ public class TeamsEndpoints {
     private Gson gson;
     private HttpClient client;
 
-    public CompletableFuture<ModrinthTeamMember[]> getProjectTeamMembers(String projectId) {
+    public CompletableFuture<List<ModrinthTeamMember>> getProjectTeamMembers(String projectId) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", projectId);
 
         return new GetProjectTeamMembers(client, gson).sendRequest(new EmptyRequest(), parameters);
     }
 
-    public CompletableFuture<ModrinthTeamMember[]> getTeamMembers(String teamId) {
+    public CompletableFuture<List<ModrinthTeamMember>> getTeamMembers(String teamId) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", teamId);
 
         return new GetTeamMembers(client, gson).sendRequest(new EmptyRequest(), parameters);
     }
 
-    public CompletableFuture<ModrinthTeamMember[][]> getTeamMembers(String... teamIds) {
+    public CompletableFuture<List<List<ModrinthTeamMember>>> getTeamMembers(List<String> teamIds) {
         return new GetTeamsMembers(client, gson).sendRequest(new GetTeamsMembersRequest(teamIds));
+    }
+
+    public CompletableFuture<List<List<ModrinthTeamMember>>> getTeamMembers(String... teamIds) {
+        return this.getTeamMembers(Arrays.asList(teamIds));
     }
 
     /**

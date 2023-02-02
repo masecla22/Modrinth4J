@@ -1,6 +1,9 @@
 package masecla.modrinth4j.endpoints.version;
 
+import java.util.List;
+
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +12,7 @@ import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.version.GetProjectVersions.GetProjectVersionsRequest;
 import masecla.modrinth4j.model.version.ProjectVersion;
 
-public class GetProjectVersions extends Endpoint<ProjectVersion[], GetProjectVersionsRequest> {
+public class GetProjectVersions extends Endpoint<List<ProjectVersion>, GetProjectVersionsRequest> {
     public GetProjectVersions(HttpClient httpClient, Gson gson) {
         super(httpClient, gson);
     }
@@ -17,8 +20,8 @@ public class GetProjectVersions extends Endpoint<ProjectVersion[], GetProjectVer
     @Data
     @Builder
     public static class GetProjectVersionsRequest {
-        private String[] loaders;
-        private String[] gameVersions;
+        private List<String> loaders;
+        private List<String> gameVersions;
         private boolean featured;
     }
 
@@ -28,13 +31,14 @@ public class GetProjectVersions extends Endpoint<ProjectVersion[], GetProjectVer
     }
 
     @Override
-    public Class<ProjectVersion[]> getResponseClass() {
-        return ProjectVersion[].class;
+    public TypeToken<List<ProjectVersion>> getResponseClass() {
+        return new TypeToken<List<ProjectVersion>>() {
+        };
     }
 
     @Override
-    public Class<GetProjectVersionsRequest> getRequestClass() {
-        return GetProjectVersionsRequest.class;
+    public TypeToken<GetProjectVersionsRequest> getRequestClass() {
+        return TypeToken.get(GetProjectVersionsRequest.class);
     }
 
     @Override

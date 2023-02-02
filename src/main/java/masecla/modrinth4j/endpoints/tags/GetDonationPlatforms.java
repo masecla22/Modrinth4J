@@ -1,13 +1,16 @@
 package masecla.modrinth4j.endpoints.tags;
 
+import java.util.List;
+
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyRequest;
 import masecla.modrinth4j.model.tags.DonationPlatform;
 
-public class GetDonationPlatforms extends Endpoint<DonationPlatform[], EmptyRequest> {
+public class GetDonationPlatforms extends Endpoint<List<DonationPlatform>, EmptyRequest> {
 
     public GetDonationPlatforms(HttpClient client, Gson gson) {
         super(client, gson);
@@ -19,12 +22,13 @@ public class GetDonationPlatforms extends Endpoint<DonationPlatform[], EmptyRequ
     }
 
     @Override
-    public Class<EmptyRequest> getRequestClass() {
-        return EmptyRequest.class;
+    public TypeToken<EmptyRequest> getRequestClass() {
+        return TypeToken.get(EmptyRequest.class);
     }
 
     @Override
-    public Class<DonationPlatform[]> getResponseClass() {
-        return DonationPlatform[].class;
+    public TypeToken<List<DonationPlatform>> getResponseClass() {
+        return new TypeToken<List<DonationPlatform>>() {
+        };
     }
 }

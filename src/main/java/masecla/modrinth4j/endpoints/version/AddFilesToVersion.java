@@ -5,28 +5,16 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
-import masecla.modrinth4j.endpoints.version.AddFilesToVersion.AddFilesToVersionRequest;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class AddFilesToVersion extends Endpoint<EmptyResponse, AddFilesToVersionRequest> {
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class AddFilesToVersionRequest {
-        private String[] fileNames;
-        private InputStream[] fileStreams;
-    }
+public class AddFilesToVersion extends Endpoint<EmptyResponse, Map<String, InputStream>> {
 
     public AddFilesToVersion(HttpClient client, Gson gson) {
         super(client, gson);
@@ -38,7 +26,7 @@ public class AddFilesToVersion extends Endpoint<EmptyResponse, AddFilesToVersion
     }
 
     @Override
-    public CompletableFuture<EmptyResponse> sendRequest(AddFilesToVersionRequest request,
+    public CompletableFuture<EmptyResponse> sendRequest(Map<String, InputStream> request,
             Map<String, String> urlParams) {
         String url = getReplacedUrl(request, urlParams);
         return getClient().connect(url).thenApply(c -> {
@@ -47,10 +35,8 @@ public class AddFilesToVersion extends Endpoint<EmptyResponse, AddFilesToVersion
             builder.addFormDataPart("data", "{}"); // Not sure what this is for, but it's required
 
             try {
-                for(int i = 0; i < request.getFileNames().length; i++) {
-                    builder.addFormDataPart(request.getFileNames()[i], request.getFileNames()[i], 
-                        RequestBody.create(this.readStream(request.getFileStreams()[i])));
-                }
+                for (String key : request.keySet())
+                    builder.addFormDataPart(key, key, RequestBody.create(this.readStream(request.get(key))));
 
                 c.post(builder.build());
 
@@ -64,13 +50,14 @@ public class AddFilesToVersion extends Endpoint<EmptyResponse, AddFilesToVersion
     }
 
     @Override
-    public Class<AddFilesToVersionRequest> getRequestClass() {
-        return AddFilesToVersionRequest.class;
+    public TypeToken<Map<String, InputStream>> getRequestClass() {
+        return new TypeToken<Map<String, InputStream>>() {
+        };
     }
 
     @Override
-    public Class<EmptyResponse> getResponseClass() {
-        return EmptyResponse.class;
+    public TypeToken<EmptyResponse> getResponseClass() {
+        return TypeToken.get(EmptyResponse.class);
     }
 
     @Override

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,13 +40,13 @@ public class ChangeUserIcon extends Endpoint<EmptyResponse, ChangeUserIconReques
     }
 
     @Override
-    public Class<ChangeUserIconRequest> getRequestClass() {
-        return ChangeUserIconRequest.class;
+    public TypeToken<ChangeUserIconRequest> getRequestClass() {
+        return TypeToken.get(ChangeUserIconRequest.class);
     }
 
     @Override
-    public Class<EmptyResponse> getResponseClass() {
-        return EmptyResponse.class;
+    public TypeToken<EmptyResponse> getResponseClass() {
+        return TypeToken.get(EmptyResponse.class);
     }
 
     @Override

@@ -1,6 +1,9 @@
 package masecla.modrinth4j.endpoints.version;
 
+import java.util.List;
+
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,18 +25,18 @@ public class ModifyVersion extends Endpoint<ProjectVersion, ModifyVersionRequest
         private String name;
         private String versionNumber;
         private String changelog;
-        private ProjectDependency[] dependencies;
+        private List<ProjectDependency> dependencies;
 
-        private String[] gameVersions;
+        private List<String> gameVersions;
         private VersionType versionType;
 
-        private String[] loaders;
+        private List<String> loaders;
         private boolean featured;
 
         /**
          * This is expected to be a length 2 array, where the first one is expected to
          * contains a hash type (such as SHA1) and the second one is meant to contain
-         * the hash itself
+         * the hash itself. This should be refactored into a class in the future.
          */
         private String[] primaryFile;
     }
@@ -48,13 +51,13 @@ public class ModifyVersion extends Endpoint<ProjectVersion, ModifyVersionRequest
     }
 
     @Override
-    public Class<ModifyVersionRequest> getRequestClass() {
-        return ModifyVersionRequest.class;
+    public TypeToken<ModifyVersionRequest> getRequestClass() {
+        return TypeToken.get(ModifyVersionRequest.class);
     }
 
     @Override
-    public Class<ProjectVersion> getResponseClass() {
-        return ProjectVersion.class;
+    public TypeToken<ProjectVersion> getResponseClass() {
+        return TypeToken.get(ProjectVersion.class);
     }
 
     @Override

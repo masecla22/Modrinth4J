@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -13,8 +15,8 @@ import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
-import masecla.modrinth4j.endpoints.version.AddFilesToVersion.AddFilesToVersionRequest;
 import masecla.modrinth4j.endpoints.version.CreateVersion.CreateVersionRequest;
+import masecla.modrinth4j.endpoints.version.GetProjectVersions.GetProjectVersionsRequest;
 import masecla.modrinth4j.endpoints.version.GetVersions.GetVersionsRequest;
 import masecla.modrinth4j.endpoints.version.ModifyVersion.ModifyVersionRequest;
 import masecla.modrinth4j.endpoints.version.files.VersionFilesEndpoints;
@@ -29,8 +31,8 @@ public class VersionEndpoints {
         return new VersionFilesEndpoints(gson, httpClient);
     }
 
-    public CompletableFuture<ProjectVersion[]> getProjectVersions(String slug,
-            GetProjectVersions.GetProjectVersionsRequest requestObject) {
+    public CompletableFuture<List<ProjectVersion>> getProjectVersions(String slug,
+            GetProjectVersionsRequest requestObject) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", slug);
 
@@ -44,8 +46,12 @@ public class VersionEndpoints {
         return new GetVersion(httpClient, gson).sendRequest(null, parameters);
     }
 
-    public CompletableFuture<ProjectVersion[]> getVersion(String... versionIds) {
+    public CompletableFuture<List<ProjectVersion>> getVersion(List<String> versionIds) {
         return new GetVersions(httpClient, gson).sendRequest(new GetVersionsRequest(versionIds));
+    }
+
+    public CompletableFuture<List<ProjectVersion>> getVersion(String... versionIds) {
+        return this.getVersion(Arrays.asList(versionIds));
     }
 
     public CompletableFuture<ProjectVersion> modifyProjectVersion(String versionId, ModifyVersionRequest request) {
@@ -66,24 +72,20 @@ public class VersionEndpoints {
         return new CreateVersion(httpClient, gson).sendRequest(request);
     }
 
-    public CompletableFuture<EmptyResponse> addFilesToVersion(String versionId, InputStream[] files,
-            String[] fileNames) {
+    public CompletableFuture<EmptyResponse> addFilesToVersion(String versionId, Map<String, InputStream> files) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("id", versionId);
 
-        return new AddFilesToVersion(httpClient, gson).sendRequest(new AddFilesToVersionRequest(
-                fileNames, files), parameters);
+        return new AddFilesToVersion(httpClient, gson).sendRequest(files, parameters);
     }
 
-    public CompletableFuture<EmptyResponse> addFilesToVersion(String versionId, File[] files) throws FileNotFoundException{
-        InputStream[] streams = new InputStream[files.length];
-        String[] names = new String[files.length];
-
-        for (int i = 0; i < files.length; i++) {
-            streams[i] = new FileInputStream(files[i]);
-            names[i] = files[i].getName();
+    public CompletableFuture<EmptyResponse> addFilesToVersion(String versionId, List<File> files)
+            throws FileNotFoundException {
+        Map<String, InputStream> fileMap = new HashMap<>();
+        for (File file : files) {
+            fileMap.put(file.getName(), new FileInputStream(file));
         }
 
-        return addFilesToVersion(versionId, streams, names);
+        return addFilesToVersion(versionId, fileMap);
     }
 }

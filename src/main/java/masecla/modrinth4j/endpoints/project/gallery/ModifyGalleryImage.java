@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -64,13 +65,13 @@ public class ModifyGalleryImage extends Endpoint<EmptyResponse, ModifyGalleryIma
     }
 
     @Override
-    public Class<ModifyGalleryImageRequest> getRequestClass() {
-        return ModifyGalleryImageRequest.class;
+    public TypeToken<ModifyGalleryImageRequest> getRequestClass() {
+        return TypeToken.get(ModifyGalleryImageRequest.class);
     }
 
     @Override
-    public Class<EmptyResponse> getResponseClass() {
-        return EmptyResponse.class;
+    public TypeToken<EmptyResponse> getResponseClass() {
+        return TypeToken.get(EmptyResponse.class);
     }
 
     @Override

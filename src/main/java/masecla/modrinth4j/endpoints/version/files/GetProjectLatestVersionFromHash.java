@@ -1,6 +1,10 @@
 package masecla.modrinth4j.endpoints.version.files;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,10 +25,10 @@ public class GetProjectLatestVersionFromHash
     @AllArgsConstructor
     public static class GetProjectLatestVersionFromHashRequest {
         @Default
-        private String[] loaders = new String[0];
+        private List<String> loaders = new ArrayList<>();
 
         @Default
-        private String[] gameVersions = new String[0];
+        private List<String> gameVersions = new ArrayList<>();
     }
 
     public GetProjectLatestVersionFromHash(HttpClient client, Gson gson) {
@@ -39,13 +43,13 @@ public class GetProjectLatestVersionFromHash
     }
 
     @Override
-    public Class<GetProjectLatestVersionFromHashRequest> getRequestClass() {
-        return GetProjectLatestVersionFromHashRequest.class;
+    public TypeToken<GetProjectLatestVersionFromHashRequest> getRequestClass() {
+        return TypeToken.get(GetProjectLatestVersionFromHashRequest.class);
     }
 
     @Override
-    public Class<ProjectVersion> getResponseClass() {
-        return ProjectVersion.class;
+    public TypeToken<ProjectVersion> getResponseClass() {
+        return TypeToken.get(ProjectVersion.class);
     }
 
     @Override

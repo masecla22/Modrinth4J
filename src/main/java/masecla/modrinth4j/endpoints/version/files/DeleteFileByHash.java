@@ -1,6 +1,7 @@
 package masecla.modrinth4j.endpoints.version.files;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,13 +32,13 @@ public class DeleteFileByHash extends Endpoint<EmptyResponse, DeleteFileByHashRe
     }
 
     @Override
-    public Class<DeleteFileByHashRequest> getRequestClass() {
-        return DeleteFileByHashRequest.class;
+    public TypeToken<DeleteFileByHashRequest> getRequestClass() {
+        return TypeToken.get(DeleteFileByHashRequest.class);
     }
 
     @Override
-    public Class<EmptyResponse> getResponseClass() {
-        return EmptyResponse.class;
+    public TypeToken<EmptyResponse> getResponseClass() {
+        return TypeToken.get(EmptyResponse.class);
     }
 
     @Override
