@@ -1,8 +1,10 @@
 package masecla.modrinth4j.client;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -49,23 +51,24 @@ public class VersionEndpointsTests {
     public void testGetVersions() {
         String projectId = DataUtil.fetchSampleProject(client).getId();
         ProjectVersion version = DataUtil.appendVersion(client, projectId);
-        assertTrue(client.versions().getVersion("NlIrj4dz", version.getId()).join().length == 2);
+        assertTrue(client.versions().getVersion("NlIrj4dz", version.getId()).join().size() == 2);
     }
 
     @Test
     public void testProjectVersions() {
         Project prj = DataUtil.fetchSampleProject(client);
         ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
-        ProjectVersion[] vers = client.versions().getProjectVersions(prj.getSlug(),
+        List<ProjectVersion> vers = client.versions().getProjectVersions(prj.getSlug(),
                 GetProjectVersionsRequest.builder().build()).join();
-        assertTrue(vers.length == 1);
+
+        assertEquals("There should only be one version!", vers.size(), 1);
 
         // For some reason datePublished isn't consistent, so wipe it for both before
         // comparison
         version.setDatePublished(null);
-        vers[0].setDatePublished(null);
+        vers.get(0).setDatePublished(null);
 
-        assertTrue("Versions were not identical!", version.equals(vers[0]));
+        assertTrue("Versions were not identical!", version.equals(vers.get(0)));
     }
 
     @Test
@@ -76,8 +79,8 @@ public class VersionEndpointsTests {
         client.versions().modifyProjectVersion(version.getId(), ModifyVersionRequest.builder()
                 .changelog("This is a DIFFERENT changelog")
                 .featured(false)
-                .gameVersions(new String[] { "1.12.2" })
-                .loaders(new String[] { "paper" })
+                .gameVersions(Arrays.asList("1.12.2"))
+                .loaders(Arrays.asList("paper"))
                 .name("diff name")
                 .versionNumber("1.0.1")
                 .versionType(VersionType.BETA)
@@ -87,8 +90,8 @@ public class VersionEndpointsTests {
 
         assertTrue("Changelog was not modified!", modified.getChangelog().equals("This is a DIFFERENT changelog"));
         assertTrue("Featured was not modified!", modified.isFeatured() == false);
-        assertTrue("Game versions was not modified!", modified.getGameVersions()[0].equals("1.12.2"));
-        assertTrue("Loaders was not modified!", modified.getLoaders()[0].equals("paper"));
+        assertTrue("Game versions was not modified!", modified.getGameVersions().get(0).equals("1.12.2"));
+        assertTrue("Loaders was not modified!", modified.getLoaders().get(0).equals("paper"));
         assertTrue("Name was not modified!", modified.getName().equals("diff name"));
         assertTrue("Version number was not modified!", modified.getVersionNumber().equals("1.0.1"));
         assertTrue("Version type was not modified!", modified.getVersionType().equals(VersionType.BETA));
@@ -100,7 +103,7 @@ public class VersionEndpointsTests {
         ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
         client.versions().deleteProjectVersion(version.getId()).join();
         assertTrue(client.versions().getProjectVersions(prj.getSlug(), GetProjectVersionsRequest.builder().build())
-                .join().length == 0);
+                .join().size() == 0);
     }
 
     @Test
@@ -110,18 +113,18 @@ public class VersionEndpointsTests {
                 .changelog("This is a changelog")
                 .featured(true)
                 .projectId(prj.getId())
-                .gameVersions(new String[] { "1.12.2" })
-                .loaders(new String[] { "paper" })
+                .gameVersions(Arrays.asList("1.12.2"))
+                .loaders(Arrays.asList("paper"))
                 .name("name")
                 .versionNumber("1.0.0")
-                .files(new File[] { DataUtil.getJar() })
+                .files(Arrays.asList(DataUtil.getJar()))
                 .versionType(VersionType.RELEASE)
                 .build()).join();
 
         assertTrue(version.getChangelog().equals("This is a changelog"));
         assertTrue(version.isFeatured() == true);
-        assertTrue(version.getGameVersions()[0].equals("1.12.2"));
-        assertTrue(version.getLoaders()[0].equals("paper"));
+        assertTrue(version.getGameVersions().get(0).equals("1.12.2"));
+        assertTrue(version.getLoaders().get(0).equals("paper"));
         assertTrue(version.getName().equals("name"));
         assertTrue(version.getVersionNumber().equals("1.0.0"));
         assertTrue(version.getVersionType().equals(VersionType.RELEASE));
@@ -132,9 +135,9 @@ public class VersionEndpointsTests {
     public void testAddFilesToVersion() {
         Project prj = DataUtil.fetchSampleProject(client);
         ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
-        client.versions().addFilesToVersion(version.getId(), new File[] { DataUtil.getAnotherJar() }).join();
+        client.versions().addFilesToVersion(version.getId(), Arrays.asList(DataUtil.getAnotherJar())).join();
 
-        assertTrue(client.versions().getVersion(version.getId()).join().getFiles().length == 2);
+        assertTrue(client.versions().getVersion(version.getId()).join().getFiles().size() == 2);
     }
 
     @Test
@@ -143,7 +146,7 @@ public class VersionEndpointsTests {
         ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
 
         ProjectVersion vers = client.versions().files()
-                .getVersionByHash(FileHash.SHA1, version.getFiles()[0].getHashes().getSha1()).join();
+                .getVersionByHash(FileHash.SHA1, version.getFiles().get(0).getHashes().getSha1()).join();
 
         assertTrue(vers.getId().equals(version.getId()));
     }
@@ -155,18 +158,18 @@ public class VersionEndpointsTests {
         ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
 
         // Add a file
-        client.versions().addFilesToVersion(version.getId(), new File[] { DataUtil.getAnotherJar() }).join();
+        client.versions().addFilesToVersion(version.getId(), Arrays.asList(DataUtil.getAnotherJar())).join();
 
         version = client.versions().getVersion(version.getId()).join();
 
         HashProjectVersionMap vers = client.versions().files()
-                .getVersionByHash(FileHash.SHA1, version.getFiles()[0].getHashes().getSha1(),
-                        version.getFiles()[1].getHashes().getSha1())
+                .getVersionByHash(FileHash.SHA1, version.getFiles().get(0).getHashes().getSha1(),
+                        version.getFiles().get(1).getHashes().getSha1())
                 .join();
 
         assertTrue(vers.size() == 2);
-        assertTrue(vers.get(version.getFiles()[0].getHashes().getSha1()).getId().equals(version.getId()));
-        assertTrue(vers.get(version.getFiles()[1].getHashes().getSha1()).getId().equals(version.getId()));
+        assertTrue(vers.get(version.getFiles().get(0).getHashes().getSha1()).getId().equals(version.getId()));
+        assertTrue(vers.get(version.getFiles().get(1).getHashes().getSha1()).getId().equals(version.getId()));
     }
 
     @Test
@@ -176,12 +179,13 @@ public class VersionEndpointsTests {
         ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
 
         // Add file
-        client.versions().addFilesToVersion(version.getId(), new File[] { DataUtil.getAnotherJar() }).join();
+        client.versions().addFilesToVersion(version.getId(), Arrays.asList(DataUtil.getAnotherJar())).join();
         version = client.versions().getVersion(version.getId()).join();
 
-        client.versions().files().deleteFileByHash(FileHash.SHA1, version.getFiles()[0].getHashes().getSha1()).join();
+        client.versions().files().deleteFileByHash(FileHash.SHA1, version.getFiles().get(0).getHashes().getSha1())
+                .join();
 
-        assertTrue(client.versions().getVersion(version.getId()).join().getFiles().length == 1);
+        assertTrue(client.versions().getVersion(version.getId()).join().getFiles().size() == 1);
     }
 
     @Test
@@ -190,7 +194,7 @@ public class VersionEndpointsTests {
         ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
 
         ProjectVersion vers = client.versions().files()
-                .getLatestVersionByHash(FileHash.SHA1, version.getFiles()[0].getHashes().getSha1(),
+                .getLatestVersionByHash(FileHash.SHA1, version.getFiles().get(0).getHashes().getSha1(),
                         GetProjectLatestVersionFromHashRequest.builder().build())
                 .join();
 
@@ -204,16 +208,16 @@ public class VersionEndpointsTests {
         ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
 
         // Add a file
-        client.versions().addFilesToVersion(version.getId(), new File[] { DataUtil.getAnotherJar() }).join();
+        client.versions().addFilesToVersion(version.getId(), Arrays.asList(DataUtil.getAnotherJar())).join();
 
         version = client.versions().getVersion(version.getId()).join();
 
         HashProjectVersionMap vers = client.versions().files()
                 .getLatestVersionsByHash(GetProjectLatestVersionsFromHashesRequest.builder()
                         .algorithm(FileHash.SHA1)
-                        .hashes(new String[] { 
-                                version.getFiles()[0].getHashes().getSha1(),
-                                version.getFiles()[1].getHashes().getSha1() })
+                        .hashes(Arrays.asList(
+                                version.getFiles().get(0).getHashes().getSha1(),
+                                version.getFiles().get(1).getHashes().getSha1()))
                         .build())
                 .join();
 

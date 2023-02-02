@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -91,8 +92,8 @@ public class ProjectEndpointsTests {
 
         prj = DataUtil.fetchSampleProject(client);
 
-        assertTrue("The project did not have any gallery images!", prj.getGallery().length > 0);
-        ProjectGalleryImage img = prj.getGallery()[0];
+        assertTrue("The project did not have any gallery images!", prj.getGallery().size() > 0);
+        ProjectGalleryImage img = prj.getGallery().get(0);
 
         assertTrue("The image was not featured!", img.isFeatured());
         assertTrue("The image did not have the correct title!", img.getTitle().equals("Test Image"));
@@ -113,10 +114,10 @@ public class ProjectEndpointsTests {
                 .join();
         prj = DataUtil.fetchSampleProject(client);
 
-        client.projects().deleteGalleryImage(prj.getSlug(), prj.getGallery()[0].getUrl()).join();
+        client.projects().deleteGalleryImage(prj.getSlug(), prj.getGallery().get(0).getUrl()).join();
 
         prj = DataUtil.fetchSampleProject(client);
-        assertTrue("The project still has gallery images!", prj.getGallery().length == 0);
+        assertTrue("The project still has gallery images!", prj.getGallery().size() == 0);
 
         DataUtil.deleteSampleProject(client);
     }
@@ -134,11 +135,11 @@ public class ProjectEndpointsTests {
         client.projects().modifyGalleryImage(prj.getSlug(),
                 ModifyGalleryImageRequest.builder().featured(false)
                         .title("Test Image 2").description("This is a test image 2")
-                        .url(prj.getGallery()[0].getUrl()).build())
+                        .url(prj.getGallery().get(0).getUrl()).build())
                 .join();
 
         prj = DataUtil.fetchSampleProject(client);
-        ProjectGalleryImage img = prj.getGallery()[0];
+        ProjectGalleryImage img = prj.getGallery().get(0);
 
         assertFalse("The image was still featured!", img.isFeatured());
         assertTrue("The image did not have the correct title!", img.getTitle().equals("Test Image 2"));
@@ -167,8 +168,8 @@ public class ProjectEndpointsTests {
     @Test
     public void testGetMultiple() {
         Project prj = DataUtil.createSampleProject(client);
-        Project[] fetched = client.projects().get(prj.getId(), "AULzIar5").join();
-        assertTrue("The project was not fetched!", fetched.length == 2);
+        List<Project> fetched = client.projects().get(Arrays.asList(prj.getId(), "AULzIar5")).join();
+        assertEquals("The project was not fetched!", 2, fetched.size());
         DataUtil.deleteSampleProject(client);
     }
 
@@ -176,13 +177,13 @@ public class ProjectEndpointsTests {
     public void testFollowUnfollow() {
         String id = "AULzIar5";
         client.projects().followProject(id).join();
-        Project[] follows = client.users().getUserFollowedProjects(client.users().getSelf().join().getId()).join();
+        List<Project> follows = client.users().getUserFollowedProjects(client.users().getSelf().join().getId()).join();
 
-        assertTrue("The project was not followed!", Arrays.stream(follows).anyMatch(c -> c.getId().equals(id)));
+        assertTrue("The project was not followed!", follows.stream().anyMatch(c -> c.getId().equals(id)));
         client.projects().unfollowProject(id).join();
 
         follows = client.users().getUserFollowedProjects(client.users().getSelf().join().getId()).join();
-        assertFalse("The project was not unfollowed!", Arrays.stream(follows).anyMatch(c -> c.getId().equals(id)));
+        assertFalse("The project was not unfollowed!", follows.stream().anyMatch(c -> c.getId().equals(id)));
     }
 
     @Test
@@ -196,17 +197,16 @@ public class ProjectEndpointsTests {
         Project prj = DataUtil.createSampleProject(client);
 
         client.projects().modify(prj.getId(), ModifyProjectRequest.builder()
-                .additionalCategories(new String[] { "cursed" })
+                .additionalCategories(Arrays.asList("cursed"))
                 .body("Different body")
-                .categories(new String[] { "adventure" })
+                .categories(Arrays.asList("adventure"))
                 .clientSide(SupportStatus.UNSUPPORTED)
                 .description("Different description")
                 .discordUrl("https://discord.gg/1234")
-                .donationUrls(new ProjectDonationPlatform[] {
+                .donationUrls(Arrays.asList(
                         ProjectDonationPlatform.builder().id("other")
                                 .url("https://example.com/donate").platform("other")
-                                .build()
-                })
+                                .build()))
                 .issuesUrl("https://example.com/issues")
                 .serverSide(SupportStatus.UNSUPPORTED)
                 .slug("diff-slug-too")
@@ -218,10 +218,10 @@ public class ProjectEndpointsTests {
         prj = client.projects().get("diff-slug-too").join();
 
         assertTrue("The project did not have the correct additional categories!",
-                Arrays.stream(prj.getAdditionalCategories()).anyMatch(c -> c.equals("cursed")));
+                prj.getAdditionalCategories().stream().anyMatch(c -> c.equals("cursed")));
         assertTrue("The project did not have the correct body!", prj.getBody().equals("Different body"));
         assertTrue("The project did not have the correct categories!",
-                Arrays.stream(prj.getCategories()).anyMatch(c -> c.equals("adventure")));
+                prj.getCategories().stream().anyMatch(c -> c.equals("adventure")));
         assertTrue("The project did not have the correct client side support status!",
                 prj.getClientSide() == SupportStatus.UNSUPPORTED);
         assertTrue("The project did not have the correct description!",
@@ -229,7 +229,7 @@ public class ProjectEndpointsTests {
         assertTrue("The project did not have the correct discord url!",
                 prj.getDiscordUrl().equals("https://discord.gg/1234"));
         assertTrue("The project did not have the correct donation urls!",
-                Arrays.stream(prj.getDonationUrls()).anyMatch(c -> c.getUrl().equals("https://example.com/donate")));
+                prj.getDonationUrls().stream().anyMatch(c -> c.getUrl().equals("https://example.com/donate")));
         assertTrue("The project did not have the correct issues url!",
                 prj.getIssuesUrl().equals("https://example.com/issues"));
         assertTrue("The project did not have the correct server side support status!",

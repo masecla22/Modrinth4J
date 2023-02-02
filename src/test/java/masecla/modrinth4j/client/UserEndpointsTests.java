@@ -39,7 +39,7 @@ public class UserEndpointsTests {
 
     @Test
     public void testGetUsers() {
-        assertTrue(client.users().getUser("5XoMa0C4", "g97WV39V").join().length == 2);
+        assertTrue(client.users().getUser("5XoMa0C4", "g97WV39V").join().size() == 2);
     }
 
     @Test
@@ -75,7 +75,7 @@ public class UserEndpointsTests {
     public void testGetUserProjects() {
         DataUtil.createSampleProject(client);
         ModrinthUser self = client.users().getSelf().join();
-        assertTrue(client.users().getUserProjects(self.getId()).join().length > 0);
+        assertTrue(client.users().getUserProjects(self.getId()).join().size() > 0);
         DataUtil.deleteSampleProject(client);
     }
 
@@ -102,7 +102,7 @@ public class UserEndpointsTests {
         Project prj = DataUtil.createSampleProject(client);
         client.projects().followProject(prj.getId()).join();
 
-        assertTrue(client.users().getUserFollowedProjects(self.getId()).join().length > 0);
+        assertTrue(client.users().getUserFollowedProjects(self.getId()).join().size() > 0);
         DataUtil.deleteSampleProject(client);
     }
 

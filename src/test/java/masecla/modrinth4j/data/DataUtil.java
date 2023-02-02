@@ -3,6 +3,7 @@ package masecla.modrinth4j.data;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Arrays;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -23,11 +24,10 @@ import okhttp3.Response;
 public class DataUtil {
     @SneakyThrows
     public static Project createSampleProject(ModrinthAPI api) {
-        License randomLicense = api.tags().getLicenses().join()[0];
+        License randomLicense = api.tags().getLicenses().join().get(0);
 
         File icon = getAnotherImage();
         FileInputStream fis = new FileInputStream(icon);
-
 
         if (api.projects().checkSlugAvailability("modrinth4j-test-project").join())
             return api.projects().create(CreateProjectRequest.builder()
@@ -35,7 +35,7 @@ public class DataUtil {
                     .iconFilename(icon.getName())
                     .data(ProjectData.builder()
                             .body("This nifty builder")
-                            .categories(new String[] { "utility" })
+                            .categories(Arrays.asList("utility"))
                             .clientSide(SupportStatus.REQUIRED)
                             .serverSide(SupportStatus.REQUIRED)
                             .description("this is a test project")
@@ -61,12 +61,12 @@ public class DataUtil {
         return api.versions().createProjectVersion(CreateVersionRequest.builder()
                 .projectId(projectId)
                 .changelog("This is a changelog")
-                .gameVersions(new String[] { "1.16.5" })
+                .gameVersions(Arrays.asList("1.16.5"))
                 .versionNumber("1.0.0")
                 .name("Version Name!")
                 .versionType(VersionType.RELEASE)
-                .loaders(new String[] { "spigot" })
-                .files(new File[] { getJar() })
+                .loaders(Arrays.asList("spigot"))
+                .files(getJar())
                 .build()).join();
     }
 
