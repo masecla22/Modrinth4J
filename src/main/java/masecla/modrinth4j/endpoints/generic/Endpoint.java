@@ -12,6 +12,7 @@ import java.util.concurrent.CompletableFuture;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -66,8 +67,8 @@ public abstract class Endpoint<O, I> {
 
         Map<String, String> queryParameters = new HashMap<>();
 
-        if (this.requiresBody() && !getRequestClass().equals(EmptyRequest.class) && !isJsonBody()) {
-            JsonElement jsonBody = gson.toJsonTree(request, getRequestClass());
+        if (this.requiresBody() && !getRequestClass().getType().equals(EmptyRequest.class) && !isJsonBody()) {
+            JsonElement jsonBody = gson.toJsonTree(request, getRequestClass().getType());
             for (Map.Entry<String, JsonElement> entry : jsonBody.getAsJsonObject().entrySet()) {
                 if (entry.getValue().isJsonPrimitive()) {
                     queryParameters.put(entry.getKey(), entry.getValue().getAsString());
@@ -84,8 +85,8 @@ public abstract class Endpoint<O, I> {
                 else
                     c.method(getMethod(), null);
 
-                if (this.requiresBody() && !getRequestClass().equals(EmptyRequest.class)) {
-                    JsonElement jsonBody = gson.toJsonTree(request, getRequestClass());
+                if (this.requiresBody() && !getRequestClass().getType().equals(EmptyRequest.class)) {
+                    JsonElement jsonBody = gson.toJsonTree(request, getRequestClass().getType());
                     if (isJsonBody()) {
                         c.method(getMethod(), RequestBody.create(gson.toJson(jsonBody),
                                 MediaType.parse("application/json; charset=utf-8")));
@@ -136,7 +137,7 @@ public abstract class Endpoint<O, I> {
         }
     }
 
-    protected byte[] readStream(InputStream stream){
+    protected byte[] readStream(InputStream stream) {
         try {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             int nRead;
@@ -165,8 +166,8 @@ public abstract class Endpoint<O, I> {
         return "GET";
     }
 
-    public abstract Class<O> getResponseClass();
+    public abstract TypeToken<O> getResponseClass();
 
-    public abstract Class<I> getRequestClass();
+    public abstract TypeToken<I> getRequestClass();
 
 }
