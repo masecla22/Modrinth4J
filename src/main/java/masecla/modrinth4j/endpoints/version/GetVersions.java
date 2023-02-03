@@ -48,6 +48,8 @@ public class GetVersions extends Endpoint<List<ProjectVersion>, GetVersionsReque
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<GetVersionsRequest> getRequestClass() {
@@ -56,6 +58,8 @@ public class GetVersions extends Endpoint<List<ProjectVersion>, GetVersionsReque
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<List<ProjectVersion>> getResponseClass() {

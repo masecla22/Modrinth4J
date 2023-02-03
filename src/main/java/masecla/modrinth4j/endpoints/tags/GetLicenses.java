@@ -35,6 +35,8 @@ public class GetLicenses extends Endpoint<List<License>, EmptyRequest> {
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<EmptyRequest> getRequestClass() {
@@ -43,6 +45,8 @@ public class GetLicenses extends Endpoint<List<License>, EmptyRequest> {
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<List<License>> getResponseClass() {

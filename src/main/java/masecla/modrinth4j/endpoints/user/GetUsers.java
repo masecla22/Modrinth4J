@@ -50,6 +50,8 @@ public class GetUsers extends Endpoint<List<ModrinthUser>, GetUsersRequest> {
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<GetUsersRequest> getRequestClass() {
@@ -58,6 +60,8 @@ public class GetUsers extends Endpoint<List<ModrinthUser>, GetUsersRequest> {
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<List<ModrinthUser>> getResponseClass() {

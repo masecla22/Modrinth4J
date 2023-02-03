@@ -61,6 +61,8 @@ public class GetProjectLatestVersionFromHash
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<GetProjectLatestVersionFromHashRequest> getRequestClass() {
@@ -69,6 +71,8 @@ public class GetProjectLatestVersionFromHash
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<ProjectVersion> getResponseClass() {

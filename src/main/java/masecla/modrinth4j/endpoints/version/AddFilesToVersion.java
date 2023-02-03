@@ -66,6 +66,8 @@ public class AddFilesToVersion extends Endpoint<EmptyResponse, Map<String, Input
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<Map<String, InputStream>> getRequestClass() {
@@ -75,6 +77,8 @@ public class AddFilesToVersion extends Endpoint<EmptyResponse, Map<String, Input
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<EmptyResponse> getResponseClass() {

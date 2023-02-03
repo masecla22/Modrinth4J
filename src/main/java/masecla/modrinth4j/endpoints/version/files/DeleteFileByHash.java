@@ -49,6 +49,8 @@ public class DeleteFileByHash extends Endpoint<EmptyResponse, DeleteFileByHashRe
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<DeleteFileByHashRequest> getRequestClass() {
@@ -57,6 +59,8 @@ public class DeleteFileByHash extends Endpoint<EmptyResponse, DeleteFileByHashRe
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<EmptyResponse> getResponseClass() {

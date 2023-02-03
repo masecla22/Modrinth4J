@@ -33,6 +33,8 @@ public class UnfollowProject extends Endpoint<EmptyResponse, EmptyRequest> {
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<EmptyRequest> getRequestClass() {
@@ -41,6 +43,8 @@ public class UnfollowProject extends Endpoint<EmptyResponse, EmptyRequest> {
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<EmptyResponse> getResponseClass() {

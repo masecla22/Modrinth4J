@@ -48,6 +48,8 @@ public class DeleteGalleryImage extends Endpoint<EmptyResponse, DeleteGalleryIma
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<DeleteGalleryImageRequest> getRequestClass() {
@@ -56,6 +58,8 @@ public class DeleteGalleryImage extends Endpoint<EmptyResponse, DeleteGalleryIma
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<EmptyResponse> getResponseClass() {

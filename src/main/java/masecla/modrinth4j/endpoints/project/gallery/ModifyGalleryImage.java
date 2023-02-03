@@ -93,6 +93,8 @@ public class ModifyGalleryImage extends Endpoint<EmptyResponse, ModifyGalleryIma
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<ModifyGalleryImageRequest> getRequestClass() {
@@ -101,6 +103,8 @@ public class ModifyGalleryImage extends Endpoint<EmptyResponse, ModifyGalleryIma
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<EmptyResponse> getResponseClass() {

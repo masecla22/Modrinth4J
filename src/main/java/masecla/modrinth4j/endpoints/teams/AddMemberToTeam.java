@@ -48,6 +48,8 @@ public class AddMemberToTeam extends Endpoint<EmptyResponse, AddMemberToTeamRequ
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<AddMemberToTeamRequest> getRequestClass() {
@@ -56,6 +58,8 @@ public class AddMemberToTeam extends Endpoint<EmptyResponse, AddMemberToTeamRequ
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<EmptyResponse> getResponseClass() {

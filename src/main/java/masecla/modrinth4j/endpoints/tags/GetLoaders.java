@@ -35,6 +35,8 @@ public class GetLoaders extends Endpoint<List<Loader>, EmptyRequest> {
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<EmptyRequest> getRequestClass() {
@@ -43,6 +45,8 @@ public class GetLoaders extends Endpoint<List<Loader>, EmptyRequest> {
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<List<Loader>> getResponseClass() {

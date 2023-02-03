@@ -33,6 +33,8 @@ public class GetUser extends Endpoint<ModrinthUser, EmptyRequest> {
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<EmptyRequest> getRequestClass() {
@@ -41,6 +43,8 @@ public class GetUser extends Endpoint<ModrinthUser, EmptyRequest> {
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<ModrinthUser> getResponseClass() {

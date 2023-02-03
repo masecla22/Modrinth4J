@@ -35,6 +35,8 @@ public class GetUserFollowedProjects extends Endpoint<List<Project>, EmptyReques
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<EmptyRequest> getRequestClass() {
@@ -43,6 +45,8 @@ public class GetUserFollowedProjects extends Endpoint<List<Project>, EmptyReques
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<List<Project>> getResponseClass() {

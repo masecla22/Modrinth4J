@@ -58,6 +58,8 @@ public class ChangeUserIcon extends Endpoint<EmptyResponse, ChangeUserIconReques
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<ChangeUserIconRequest> getRequestClass() {
@@ -66,6 +68,8 @@ public class ChangeUserIcon extends Endpoint<EmptyResponse, ChangeUserIconReques
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<EmptyResponse> getResponseClass() {

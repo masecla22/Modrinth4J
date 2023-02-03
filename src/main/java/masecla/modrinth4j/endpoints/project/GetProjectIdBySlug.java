@@ -45,6 +45,8 @@ public class GetProjectIdBySlug extends Endpoint<GetProjectIdBySlugResponse, Emp
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<EmptyRequest> getRequestClass() {
@@ -53,6 +55,8 @@ public class GetProjectIdBySlug extends Endpoint<GetProjectIdBySlugResponse, Emp
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<GetProjectIdBySlugResponse> getResponseClass() {

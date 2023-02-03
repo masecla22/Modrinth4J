@@ -54,6 +54,8 @@ public class ModifyUser extends Endpoint<EmptyResponse, ModifyUserRequest> {
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<ModifyUserRequest> getRequestClass() {
@@ -62,6 +64,8 @@ public class ModifyUser extends Endpoint<EmptyResponse, ModifyUserRequest> {
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<EmptyResponse> getResponseClass() {

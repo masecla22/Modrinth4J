@@ -47,6 +47,8 @@ public class TransferOwnership extends Endpoint<EmptyResponse, TransferOwnership
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<TransferOwnershipRequest> getRequestClass() {
@@ -55,6 +57,8 @@ public class TransferOwnership extends Endpoint<EmptyResponse, TransferOwnership
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<EmptyResponse> getResponseClass() {

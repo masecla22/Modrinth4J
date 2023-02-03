@@ -48,6 +48,8 @@ public class GetMultipleProjects extends Endpoint<List<Project>, GetMultipleProj
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<GetMultipleProjectsRequest> getRequestClass() {
@@ -56,6 +58,8 @@ public class GetMultipleProjects extends Endpoint<List<Project>, GetMultipleProj
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<List<Project>> getResponseClass() {

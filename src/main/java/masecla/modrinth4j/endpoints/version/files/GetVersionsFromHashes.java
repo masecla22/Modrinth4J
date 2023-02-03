@@ -51,6 +51,8 @@ public class GetVersionsFromHashes extends Endpoint<HashProjectVersionMap, GetVe
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<GetVersionsFromHashesRequest> getRequestClass() {
@@ -59,6 +61,8 @@ public class GetVersionsFromHashes extends Endpoint<HashProjectVersionMap, GetVe
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<HashProjectVersionMap> getResponseClass() {

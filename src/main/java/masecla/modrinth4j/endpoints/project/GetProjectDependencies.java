@@ -49,6 +49,8 @@ public class GetProjectDependencies extends Endpoint<GetProjectDependenciesRespo
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<EmptyRequest> getRequestClass() {
@@ -57,6 +59,8 @@ public class GetProjectDependencies extends Endpoint<GetProjectDependenciesRespo
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<GetProjectDependenciesResponse> getResponseClass() {

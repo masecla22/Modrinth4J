@@ -60,6 +60,8 @@ public class ChangeProjectIcon extends Endpoint<EmptyResponse, ChangeProjectIcon
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<ChangeProjectIconRequest> getRequestClass() {
@@ -68,6 +70,8 @@ public class ChangeProjectIcon extends Endpoint<EmptyResponse, ChangeProjectIcon
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<EmptyResponse> getResponseClass() {

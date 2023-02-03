@@ -68,6 +68,8 @@ public class GetProjectLatestVersionsFromHashes
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<GetProjectLatestVersionsFromHashesRequest> getRequestClass() {
@@ -76,6 +78,8 @@ public class GetProjectLatestVersionsFromHashes
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<HashProjectVersionMap> getResponseClass() {

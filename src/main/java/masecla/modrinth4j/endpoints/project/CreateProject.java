@@ -132,6 +132,8 @@ public class CreateProject extends Endpoint<Project, CreateProjectRequest> {
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<CreateProjectRequest> getRequestClass() {
@@ -140,6 +142,8 @@ public class CreateProject extends Endpoint<Project, CreateProjectRequest> {
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<Project> getResponseClass() {

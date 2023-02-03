@@ -50,6 +50,8 @@ public class GetTeamsMembers extends Endpoint<List<List<ModrinthTeamMember>>, Ge
 
     /**
      * Returns the request class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<GetTeamsMembersRequest> getRequestClass() {
@@ -58,6 +60,8 @@ public class GetTeamsMembers extends Endpoint<List<List<ModrinthTeamMember>>, Ge
 
     /**
      * Returns the response class.
+     *
+     * @return - The {@link TypeToken} for the response.
      */
     @Override
     public TypeToken<List<List<ModrinthTeamMember>>> getResponseClass() {
