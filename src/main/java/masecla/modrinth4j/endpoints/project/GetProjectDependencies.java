@@ -14,8 +14,14 @@ import masecla.modrinth4j.endpoints.project.GetProjectDependencies.GetProjectDep
 import masecla.modrinth4j.model.project.Project;
 import masecla.modrinth4j.model.version.ProjectVersion;
 
+/**
+ * This endpoint is used to get a project's dependencies.
+ */
 public class GetProjectDependencies extends Endpoint<GetProjectDependenciesResponse, EmptyRequest> {
 
+    /**
+     * Represents the response from the endpoint.
+     */
     @Data
     @AllArgsConstructor
     public static class GetProjectDependenciesResponse {
@@ -23,20 +29,35 @@ public class GetProjectDependencies extends Endpoint<GetProjectDependenciesRespo
         private List<ProjectVersion> versions;
     }
 
+    /**
+     * Creates a new instance of the endpoint.
+     * 
+     * @param client The client to use.
+     * @param gson   The gson instance to use.
+     */
     public GetProjectDependencies(HttpClient client, Gson gson) {
         super(client, gson);
     }
 
+    /**
+     * Returns the endpoint.
+     */
     @Override
     public String getEndpoint() {
         return "/project/{id}/dependencies";
     }
 
+    /**
+     * Returns the request class.
+     */
     @Override
     public TypeToken<EmptyRequest> getRequestClass() {
         return TypeToken.get(EmptyRequest.class);
     }
 
+    /**
+     * Returns the response class.
+     */
     @Override
     public TypeToken<GetProjectDependenciesResponse> getResponseClass() {
         return TypeToken.get(GetProjectDependenciesResponse.class);
