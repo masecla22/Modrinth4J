@@ -21,7 +21,16 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/**
+ * This class is used to create sample data for testing.
+ */
 public class DataUtil {
+    /**
+     * Create a sample project for testing.
+     * 
+     * @param api - The API to use.
+     * @return - The created project.
+     */
     @SneakyThrows
     public static Project createSampleProject(ModrinthAPI api) {
         License randomLicense = api.tags().getLicenses().join().get(0);
@@ -49,14 +58,32 @@ public class DataUtil {
         return fetchSampleProject(api);
     }
 
+    /**
+     * Fetches the sample project.
+     * 
+     * @param api - The API to use.
+     * @return - The fetched project.
+     */
     public static Project fetchSampleProject(ModrinthAPI api) {
         return api.projects().get("modrinth4j-test-project").join();
     }
 
+    /**
+     * Deletes the sample project.
+     * 
+     * @param api - The API to use.
+     */
     public static void deleteSampleProject(ModrinthAPI api) {
         api.projects().delete("modrinth4j-test-project").join();
     }
 
+    /**
+     * This will append a version to the sample project.
+     * 
+     * @param api       - The API to use.
+     * @param projectId - The ID of the project to append the version to.
+     * @return - The created version.
+     */
     public static ProjectVersion appendVersion(ModrinthAPI api, String projectId) {
         return api.versions().createProjectVersion(CreateVersionRequest.builder()
                 .projectId(projectId)
@@ -70,18 +97,38 @@ public class DataUtil {
                 .build()).join();
     }
 
+    /**
+     * This will return a sample image to be used in testing.
+     * 
+     * @return - The sample image.
+     */
     public static File getImage() {
         return new File(DataUtil.class.getClassLoader().getResource("icon.png").getFile());
     }
 
+    /**
+     * This will return a different sample image to be used in testing.
+     * 
+     * @return - The sample image.
+     */
     public static File getAnotherImage() {
         return new File(DataUtil.class.getClassLoader().getResource("icon2.png").getFile());
     }
 
+    /**
+     * This will return a sample jar to be used in testing.
+     * 
+     * @return - The sample jar.
+     */
     public static File getJar() {
         return new File(DataUtil.class.getClassLoader().getResource("AntiCaps.jar").getFile());
     }
 
+    /**
+     * This will return a different sample jar to be used in testing.
+     * 
+     * @return - The sample jar.
+     */
     public static File getAnotherJar() {
         return new File(DataUtil.class.getClassLoader().getResource("AntiCaps2.jar").getFile());
     }
