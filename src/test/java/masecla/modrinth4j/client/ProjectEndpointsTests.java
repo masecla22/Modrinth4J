@@ -15,7 +15,7 @@ import lombok.SneakyThrows;
 import masecla.modrinth4j.data.DataUtil;
 import masecla.modrinth4j.endpoints.SearchEndpoint.SearchRequest;
 import masecla.modrinth4j.endpoints.SearchEndpoint.SearchResponse;
-import masecla.modrinth4j.endpoints.project.ModifyProject.ModifyProjectRequest;
+import masecla.modrinth4j.endpoints.project.ModifyProject.ProjectModifications;
 import masecla.modrinth4j.endpoints.project.gallery.CreateGalleryImage.CreateGalleryImageRequest;
 import masecla.modrinth4j.endpoints.project.gallery.ModifyGalleryImage.ModifyGalleryImageRequest;
 import masecla.modrinth4j.environment.EnvReader;
@@ -245,7 +245,7 @@ public class ProjectEndpointsTests {
     public void testModifyProject() {
         Project prj = DataUtil.createSampleProject(client);
 
-        client.projects().modify(prj.getId(), ModifyProjectRequest.builder()
+        client.projects().modify(prj.getId(), ProjectModifications.builder()
                 .additionalCategories(Arrays.asList("cursed"))
                 .body("Different body")
                 .categories(Arrays.asList("adventure"))
