@@ -4,3 +4,5 @@ target/
 .vscode
 src/main/java/masecla/modrinth4j/main/Testing.java
 .env
+
+deploy.sh
