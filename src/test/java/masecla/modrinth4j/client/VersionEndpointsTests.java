@@ -25,9 +25,16 @@ import masecla.modrinth4j.model.version.ProjectVersion;
 import masecla.modrinth4j.model.version.ProjectVersion.VersionType;
 import masecla.modrinth4j.model.version.files.HashProjectVersionMap;
 
+/**
+ * This class tests the version endpoints.
+ */
 public class VersionEndpointsTests {
+    /** The API used for testing */
     private ModrinthAPI client;
 
+    /**
+     * This method sets up the client for testing.
+     */
     @Before
     public void setupClient() {
         EnvReader env = new EnvReader();
@@ -36,17 +43,26 @@ public class VersionEndpointsTests {
         DataUtil.createSampleProject(client);
     }
 
+    /**
+     * This method wipes the project after testing.
+     */
     @After
     public void wipeProject() {
         DataUtil.deleteSampleProject(client);
     }
 
+    /**
+     * This method tests the fecthing of a version.
+     */
     @Test
     public void testGetVersion() {
         assertTrue(
                 client.versions().getVersion("NlIrj4dz").join().getProjectId().equals("AULzIar5"));
     }
 
+    /**
+     * This method tests the fecthing of multiple versions.
+     */
     @Test
     public void testGetVersions() {
         String projectId = DataUtil.fetchSampleProject(client).getId();
@@ -54,6 +70,9 @@ public class VersionEndpointsTests {
         assertTrue(client.versions().getVersion("NlIrj4dz", version.getId()).join().size() == 2);
     }
 
+    /**
+     * This method tests the creation and fetching of a version.
+     */
     @Test
     public void testProjectVersions() {
         Project prj = DataUtil.fetchSampleProject(client);
@@ -72,6 +91,9 @@ public class VersionEndpointsTests {
         assertTrue("Versions were not identical!", version.equals(vers.get(0)));
     }
 
+    /**
+     * This method tests the modification of a version.
+     */
     @Test
     public void testModifyProjectVersion() {
         Project prj = DataUtil.fetchSampleProject(client);
@@ -98,6 +120,9 @@ public class VersionEndpointsTests {
         assertTrue("Version type was not modified!", modified.getVersionType().equals(VersionType.BETA));
     }
 
+    /**
+     * This method tests the deletion of a version.
+     */
     @Test
     public void testDeleteProjectVersion() {
         Project prj = DataUtil.fetchSampleProject(client);
@@ -107,6 +132,9 @@ public class VersionEndpointsTests {
                 .join().size() == 0);
     }
 
+    /**
+     * This method tests the creation of a version and asserts all properties
+     */
     @Test
     public void testCreateProject() {
         Project prj = DataUtil.fetchSampleProject(client);
@@ -131,6 +159,9 @@ public class VersionEndpointsTests {
         assertTrue(version.getVersionType().equals(VersionType.RELEASE));
     }
 
+    /**
+     * This method tests adding files to a version
+     */
     @Test
     @SneakyThrows
     public void testAddFilesToVersion() {
@@ -141,6 +172,9 @@ public class VersionEndpointsTests {
         assertTrue(client.versions().getVersion(version.getId()).join().getFiles().size() == 2);
     }
 
+    /**
+     * This method tests getting a version by hash
+     */
     @Test
     public void testGetVersionByHash() {
         Project prj = DataUtil.fetchSampleProject(client);
@@ -152,6 +186,9 @@ public class VersionEndpointsTests {
         assertTrue(vers.getId().equals(version.getId()));
     }
 
+    /**
+     * This method tests getting multiple versions by hash
+     */
     @Test
     @SneakyThrows
     public void testGetVersionsByHash() {
@@ -173,6 +210,9 @@ public class VersionEndpointsTests {
         assertTrue(vers.get(version.getFiles().get(1).getHashes().getSha1()).getId().equals(version.getId()));
     }
 
+    /**
+     * This method tests the deletion of a file by hash
+     */
     @Test
     @SneakyThrows
     public void testDeleteFileByHash() {
@@ -189,6 +229,9 @@ public class VersionEndpointsTests {
         assertTrue(client.versions().getVersion(version.getId()).join().getFiles().size() == 1);
     }
 
+    /**
+     * This method tests getting the latest version by hash
+     */
     @Test
     public void testGetLatestVersionByHash() {
         Project prj = DataUtil.fetchSampleProject(client);
@@ -202,6 +245,9 @@ public class VersionEndpointsTests {
         assertTrue(vers.getId().equals(version.getId()));
     }
 
+    /**
+     * This method tests getting the latest versions by hash
+     */
     @Test
     @SneakyThrows
     public void testGetLatestVersionsByHash() {
