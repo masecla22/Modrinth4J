@@ -27,76 +27,126 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * This endpoint is used to create a new project.
+ */
 public class CreateProject extends Endpoint<Project, CreateProjectRequest> {
 
+    /**
+     * Creates a new instance of the endpoint.
+     * 
+     * @param client The client to use.
+     * @param gson   The gson instance to use.
+     */
     public CreateProject(HttpClient client, Gson gson) {
         super(client, gson);
     }
 
+    /**
+     * Represents the data for a project.
+     */
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ProjectData {
+        /** The slug of the project. */
         private String slug;
+        /** The title of the project. */
         private String title;
+        /** The description of the project. */
         private String description;
 
+        /** The categories of the project. */
         private List<String> categories;
 
+        /** The client-side support status of the project. */
         private SupportStatus clientSide;
+        /** The server-side support status of the project. */
         private SupportStatus serverSide;
 
+        /** The body of the project. */
         private String body;
 
+        /** The additional categories of the project. */
         private List<String> additionalCategories;
 
+        /** The issues URL */
         private String issuesUrl;
+        /** The source URL */
         private String sourceUrl;
+        /** The wiki URL */
         private String wikiUrl;
+        /** The discord URL */
         private String discordUrl;
+        /** The donation URLs */
         private List<ProjectDonationPlatform> donationUrls;
 
+        /** The license ID */
         private String licenseId;
+        /** The license URL */
         private String licenseUrl;
 
+        /** The project type */
         private ProjectType projectType;
 
+        /** If the project is a draft */
         @Default
         private boolean isDraft = true;
     }
 
+    /**
+     * Represents the request to create a project.
+     */
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CreateProjectRequest {
+        /** The data for the project. */
         private ProjectData data;
 
+        /** The icon filename. */
         private String iconFilename;
+        /** The icon data. */
         private InputStream iconData;
     }
 
+    /**
+     * Returns the endpoint.
+     */
     @Override
     public String getEndpoint() {
         return "/project";
     }
 
+    /**
+     * Returns the method.
+     */
     @Override
     public String getMethod() {
         return "POST";
     }
 
+    /**
+     * Returns the request class.
+     */
     @Override
     public TypeToken<CreateProjectRequest> getRequestClass() {
         return TypeToken.get(CreateProjectRequest.class);
     }
 
+    /**
+     * Returns the response class.
+     */
     @Override
     public TypeToken<Project> getResponseClass() {
         return TypeToken.get(Project.class);
     }
 
+    /**
+     * Sends the request.
+     */
     @Override
     public CompletableFuture<Project> sendRequest(CreateProjectRequest parameters, Map<String, String> urlParams) {
         return getClient().connect(getEndpoint()).thenApply(c -> {
@@ -115,7 +165,7 @@ public class CreateProject extends Endpoint<Project, CreateProjectRequest> {
                 c.method(getMethod(), bodyBuilder.build());
 
                 Response response = getClient().execute(c);
-                
+
                 return checkBodyForErrors(response.body());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -126,5 +176,4 @@ public class CreateProject extends Endpoint<Project, CreateProjectRequest> {
             return null;
         });
     }
-
 }
