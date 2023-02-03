@@ -6,11 +6,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents a license.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class License {
+    /** The license short name */
     @SerializedName("short")
     private String shortName;
+
+    /** The license full name */
     private String name;
 }
