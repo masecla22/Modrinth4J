@@ -64,6 +64,8 @@ public class AddMemberToTeam extends Endpoint<EmptyResponse, AddMemberToTeamRequ
 
     /**
      * Returns the method.
+     *
+     * @return - The HTTP method being used
      */
     @Override
     public String getMethod() {

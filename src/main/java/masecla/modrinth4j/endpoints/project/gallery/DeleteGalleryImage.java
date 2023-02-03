@@ -72,6 +72,8 @@ public class DeleteGalleryImage extends Endpoint<EmptyResponse, DeleteGalleryIma
     
     /**
      * Returns the method.
+     *
+     * @return - The HTTP method being used
      */
     @Override
     public String getMethod() {

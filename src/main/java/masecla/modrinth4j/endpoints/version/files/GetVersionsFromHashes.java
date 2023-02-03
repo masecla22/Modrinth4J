@@ -67,6 +67,8 @@ public class GetVersionsFromHashes extends Endpoint<HashProjectVersionMap, GetVe
 
     /**
      * Returns the method.
+     *
+     * @return - The HTTP method being used
      */
     @Override
     public String getMethod() {

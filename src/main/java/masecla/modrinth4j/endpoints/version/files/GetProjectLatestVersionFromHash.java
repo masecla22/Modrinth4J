@@ -77,6 +77,8 @@ public class GetProjectLatestVersionFromHash
 
     /**
      * Returns the method.
+     *
+     * @return - The HTTP method being used
      */
     @Override
     public String getMethod() {

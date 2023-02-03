@@ -63,6 +63,8 @@ public class TransferOwnership extends Endpoint<EmptyResponse, TransferOwnership
 
     /**
      * Returns the method.
+     *
+     * @return - The HTTP method being used
      */
     @Override
     public String getMethod() {

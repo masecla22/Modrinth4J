@@ -70,6 +70,8 @@ public class ModifyUser extends Endpoint<EmptyResponse, ModifyUserRequest> {
 
     /**
      * Returns the method.
+     *
+     * @return - The HTTP method being used
      */
     @Override
     public String getMethod() {

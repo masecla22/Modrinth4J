@@ -109,6 +109,8 @@ public class ChangeUserIcon extends Endpoint<EmptyResponse, ChangeUserIconReques
 
     /**
      * Returns the method.
+     *
+     * @return - The HTTP method being used
      */
     @Override
     public String getMethod() {

@@ -83,6 +83,8 @@ public class ModifyGalleryImage extends Endpoint<EmptyResponse, ModifyGalleryIma
 
     /**
      * Returns the method.
+     *
+     * @return - The HTTP method being used
      */
     @Override
     public String getMethod() {

@@ -70,6 +70,8 @@ public class ModifyTeamMemberInfo extends Endpoint<EmptyResponse, ModifyTeamMemb
 
     /**
      * Returns the method.
+     *
+     * @return - The HTTP method being used
      */
     @Override
     public String getMethod() {

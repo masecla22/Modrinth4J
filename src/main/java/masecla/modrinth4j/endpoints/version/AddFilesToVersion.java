@@ -83,6 +83,8 @@ public class AddFilesToVersion extends Endpoint<EmptyResponse, Map<String, Input
 
     /**
      * Returns the method.
+     *
+     * @return - The HTTP method being used
      */
     @Override
     public String getMethod() {

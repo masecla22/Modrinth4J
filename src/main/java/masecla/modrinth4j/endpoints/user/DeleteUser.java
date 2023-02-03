@@ -49,6 +49,8 @@ public class DeleteUser extends Endpoint<EmptyResponse, EmptyRequest> {
 
     /**
      * Returns the method.
+     *
+     * @return - The HTTP method being used
      */
     @Override
     public String getMethod() {

@@ -122,6 +122,8 @@ public class CreateProject extends Endpoint<Project, CreateProjectRequest> {
 
     /**
      * Returns the method.
+     *
+     * @return - The HTTP method being used
      */
     @Override
     public String getMethod() {
