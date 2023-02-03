@@ -10,17 +10,17 @@ import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
-import masecla.modrinth4j.endpoints.project.ModifyProject.ModifyProjectRequest;
+import masecla.modrinth4j.endpoints.project.ModifyProject.ProjectModifications;
 import masecla.modrinth4j.model.project.ProjectDonationPlatform;
 import masecla.modrinth4j.model.project.ProjectStatus;
 import masecla.modrinth4j.model.project.SupportStatus;
 
-public class ModifyProject extends Endpoint<ModifyProjectRequest, ModifyProjectRequest> {
+public class ModifyProject extends Endpoint<ProjectModifications, ProjectModifications> {
 
     @Data
     @AllArgsConstructor
     @SuperBuilder
-    public static class ModifyProjectRequest {
+    public static class ProjectModifications {
         private String slug;
         private String title;
         private String description;
@@ -68,12 +68,12 @@ public class ModifyProject extends Endpoint<ModifyProjectRequest, ModifyProjectR
     }
 
     @Override
-    public TypeToken<ModifyProjectRequest> getRequestClass() {
-        return TypeToken.get(ModifyProjectRequest.class);
+    public TypeToken<ProjectModifications> getRequestClass() {
+        return TypeToken.get(ProjectModifications.class);
     }
 
     @Override
-    public TypeToken<ModifyProjectRequest> getResponseClass() {
-        return TypeToken.get(ModifyProjectRequest.class);
+    public TypeToken<ProjectModifications> getResponseClass() {
+        return TypeToken.get(ProjectModifications.class);
     }
 }
