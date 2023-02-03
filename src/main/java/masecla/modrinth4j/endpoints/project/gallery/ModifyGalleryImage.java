@@ -18,26 +18,48 @@ import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
 import masecla.modrinth4j.endpoints.project.gallery.ModifyGalleryImage.ModifyGalleryImageRequest;
 
+/**
+ * This endpoint is used to modify a gallery image.
+ */
 public class ModifyGalleryImage extends Endpoint<EmptyResponse, ModifyGalleryImageRequest> {
+    /**
+     * Represents the data for a project.
+     */
     @Data
     @Builder
     @AllArgsConstructor
     public static class ModifyGalleryImageRequest {
+        /** The URL of the image. */
         private String url;
+        /** The title of the image. */
         private String title;
+        /** Whether or not the image is featured. */
         private boolean featured;
+        /** The description of the image. */
         private String description;
     }
 
+    /**
+     * Creates a new instance of the endpoint.
+     * 
+     * @param client The client to use.
+     * @param gson   The gson instance to use.
+     */
     public ModifyGalleryImage(HttpClient client, Gson gson) {
         super(client, gson);
     }
 
+    /**
+     * Returns the endpoint.
+     */
     @Override
     public String getEndpoint() {
         return "/project/{id}/gallery";
     }
 
+    /**
+     * Injects the file extension into the URL.
+     */
     @Override
     protected String getReplacedUrl(ModifyGalleryImageRequest request, Map<String, String> parameters) {
         // This is a bit of a hack, but it works.
@@ -59,21 +81,33 @@ public class ModifyGalleryImage extends Endpoint<EmptyResponse, ModifyGalleryIma
 
     }
 
+    /**
+     * Returns the method.
+     */
     @Override
     public String getMethod() {
         return "PATCH";
     }
 
+    /**
+     * Returns the request class.
+     */
     @Override
     public TypeToken<ModifyGalleryImageRequest> getRequestClass() {
         return TypeToken.get(ModifyGalleryImageRequest.class);
     }
 
+    /**
+     * Returns the response class.
+     */
     @Override
     public TypeToken<EmptyResponse> getResponseClass() {
         return TypeToken.get(EmptyResponse.class);
     }
 
+    /**
+     * Returns whether or not the request requires a body.
+     */
     @Override
     public boolean requiresBody() {
         return false;
