@@ -61,7 +61,7 @@ public class VersionEndpoints {
      * Fetches a version based on the version id
      * 
      * @param versionId - The id of the version to fetch
-     * @return CompletableFuture<ProjectVersion> - A {@link CompletableFuture} that
+     * @return CompletableFuture - A {@link CompletableFuture} that
      *         will return a version
      */
     public CompletableFuture<ProjectVersion> getVersion(String versionId) {
@@ -75,7 +75,7 @@ public class VersionEndpoints {
      * Fetches multiple versions based on the version ids
      * 
      * @param versionIds - The ids of the versions to fetch
-     * @return CompletableFuture<List<ProjectVersion>> - A {@link CompletableFuture}
+     * @return CompletableFuture - A {@link CompletableFuture}
      *         that will return a list of versions in the same order as the ids.
      *         Putting the same id multiple times will only return one version, but
      *         the order will be preserved.
@@ -89,7 +89,7 @@ public class VersionEndpoints {
      * Fetches multiple versions based on the version ids
      * 
      * @param versionIds - The ids of the versions to fetch
-     * @return CompletableFuture<List<ProjectVersion>> - A {@link CompletableFuture}
+     * @return CompletableFuture - A {@link CompletableFuture}
      *         that will return a list of versions in the same order as the ids.
      *         Putting the same id multiple times will only return one version, but
      *         the order will be preserved.
@@ -104,7 +104,7 @@ public class VersionEndpoints {
      * 
      * @param versionId - The id of the version to modify
      * @param request   - The request object to use for modifying
-     * @return CompletableFuture<ProjectVersion> - A {@link CompletableFuture} that
+     * @return CompletableFuture - A {@link CompletableFuture} that
      *         will return the modified version object
      */
     public CompletableFuture<ProjectVersion> modifyProjectVersion(String versionId, ModifyVersionRequest request) {
@@ -118,7 +118,7 @@ public class VersionEndpoints {
      * Deletes a version based on the version id
      * 
      * @param versionId - The id of the version to delete
-     * @return CompletableFuture<EmptyResponse> - A {@link CompletableFuture} that
+     * @return CompletableFuture - A {@link CompletableFuture} that
      *         will return an empty response when the version has been deleted
      */
     public CompletableFuture<EmptyResponse> deleteProjectVersion(String versionId) {
@@ -132,7 +132,7 @@ public class VersionEndpoints {
      * Creates a new version for a project.
      * 
      * @param request - The request object to use for creating
-     * @return CompletableFuture<ProjectVersion> - A {@link CompletableFuture} that
+     * @return CompletableFuture - A {@link CompletableFuture} that
      *         will return the created version object once it has been created
      */
     public CompletableFuture<ProjectVersion> createProjectVersion(CreateVersionRequest request) {
@@ -145,7 +145,7 @@ public class VersionEndpoints {
      * @param versionId - The id of the version to add files to
      * @param files     - A {@link Map} of file names to {@link InputStream}s which
      *                  represent the file content.
-     * @return CompletableFuture<EmptyResponse> - A {@link CompletableFuture} that
+     * @return CompletableFuture - A {@link CompletableFuture} that
      *         will return an empty response when the files have been added
      */
     public CompletableFuture<EmptyResponse> addFilesToVersion(String versionId, Map<String, InputStream> files) {
@@ -160,7 +160,7 @@ public class VersionEndpoints {
      * 
      * @param versionId - The id of the version to add files to
      * @param files     - A {@link List} of {@link File}s to add to the version
-     * @return CompletableFuture<EmptyResponse> - A {@link CompletableFuture} that
+     * @return CompletableFuture - A {@link CompletableFuture} that
      * @throws FileNotFoundException - If a file in the list does not exist
      */
     public CompletableFuture<EmptyResponse> addFilesToVersion(String versionId, List<File> files)
