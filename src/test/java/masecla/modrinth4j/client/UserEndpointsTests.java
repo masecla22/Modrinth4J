@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import lombok.SneakyThrows;
 import masecla.modrinth4j.data.DataUtil;
+import masecla.modrinth4j.endpoints.user.UserEndpoints;
 import masecla.modrinth4j.endpoints.user.ModifyUser.ModifyUserRequest;
 import masecla.modrinth4j.endpoints.user.ReportProjectUserOrVersion.ReportProjectUserOrVersionRequest;
 import masecla.modrinth4j.endpoints.user.ReportProjectUserOrVersion.ReportProjectUserOrVersionResponse;
@@ -22,26 +23,42 @@ import masecla.modrinth4j.main.ModrinthAPI;
 import masecla.modrinth4j.model.project.Project;
 import masecla.modrinth4j.model.user.ModrinthUser;
 
+/**
+ * Tests the {@link UserEndpoints} class.
+ */
 public class UserEndpointsTests {
+    /** The client to be used */
     private ModrinthAPI client;
 
+    /**
+     * Sets up the client.
+     */
     @Before
     public void setupClient() {
         EnvReader env = new EnvReader();
         this.client = ModrinthAPI.rateLimited(env.getAgent(), env.getStagingUrl(), env.getApiKey());
     }
 
+    /**
+     * This method tests getting a user.
+     */
     @Test
     public void testGetUser() {
         ModrinthUser user = client.users().getUser("Geometrically").join();
         assertTrue(user != null);
     }
 
+    /**
+     * This method tests getting multiple users.
+     */
     @Test
     public void testGetUsers() {
         assertTrue(client.users().getUser("5XoMa0C4", "g97WV39V").join().size() == 2);
     }
 
+    /**
+     * This method tests modifying a user
+     */
     @Test
     public void testModifyUser() {
         ModrinthUser self = client.users().getSelf().join();
@@ -52,6 +69,9 @@ public class UserEndpointsTests {
         assertTrue(client.users().getSelf().join().getBio().equals(random.toString()));
     }
 
+    /**
+     * This method tests deleting a user.
+     */
     @Test
     public void testDeleteUser() {
         EndpointException error = null;
@@ -65,12 +85,18 @@ public class UserEndpointsTests {
         assertEquals("unauthorized", error.getError());
     }
 
+    /**
+     * This method tests the get self endpoint
+     */
     @Test
     public void testGetSelf() {
         ModrinthUser self = client.users().getSelf().join();
         assertTrue(self != null);
     }
 
+    /**
+     * This method tests getting a user's projects
+     */
     @Test
     public void testGetUserProjects() {
         DataUtil.createSampleProject(client);
@@ -79,12 +105,18 @@ public class UserEndpointsTests {
         DataUtil.deleteSampleProject(client);
     }
 
+    /**
+     * This method tests getting a user's versions
+     */
     @Test
     public void testGetNotifications() {
         ModrinthUser self = client.users().getSelf().join();
         assertTrue(client.users().getNotifications(self.getId()).join() != null);
     }
 
+    /**
+     * This method tests changing a user's profile picture
+     */
     @Test
     @SneakyThrows
     public void testChangeProfilePicture() {
@@ -95,6 +127,9 @@ public class UserEndpointsTests {
         assertTrue(self.getAvatarUrl() != null);
     }
 
+    /**
+     * This method tests getting a user's followed projects
+     */
     @Test
     public void testGetUserFollowedProjects() {
         ModrinthUser self = client.users().getSelf().join();
@@ -106,13 +141,16 @@ public class UserEndpointsTests {
         DataUtil.deleteSampleProject(client);
     }
 
+    /**
+     * This method tests reporting a project, user or version
+     */
     @Test
     public void testReportProjectUserOrVersion() {
         Project prj = DataUtil.createSampleProject(client);
         ReportProjectUserOrVersionResponse response = client.users().reportProjectUserOrVersion(
                 ReportProjectUserOrVersionRequest.builder()
                         .reportType(ReportType.SPAM)
-                        .body("please ignore this report. this is unit testing done for Modrinth4J. If you want this test removed, contact me on discord masecl22#4309")
+                        .body("Please ignore this report. This is unit testing done for Modrinth4J. If you want this test removed, contact me on discord masecl22#4309")
                         .itemId(prj.getId())
                         .itemType(ReportedObjectType.PROJECT)
                         .build())
