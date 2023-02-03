@@ -26,14 +26,21 @@ import masecla.modrinth4j.model.search.FacetCollection.FacetAdapter;
 import masecla.modrinth4j.model.team.ModrinthPermissionMask;
 import masecla.modrinth4j.model.team.ModrinthPermissionMask.ModrinthPermissionMaskAdapter;
 
+/**
+ * The main class for the Modrinth API.
+ */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ModrinthAPI {
 
+    /** The HTTP Client to use */
     @NonNull
     private HttpClient client;
+
+    /** The API key to use */
     @NonNull
     private String apiKey;
 
+    /** The Gson instance to use */
     private Gson gson;
 
     /**
@@ -97,6 +104,9 @@ public class ModrinthAPI {
         return result;
     }
 
+    /**
+     * This method initializes the Gson instance.
+     */
     private void initializeGson() {
         this.gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .registerTypeAdapter(FacetCollection.class, new FacetAdapter())
@@ -104,27 +114,53 @@ public class ModrinthAPI {
                 .create();
     }
 
+    /** 
+     * Executes a search request.
+     * 
+     * @param request - The request to execute
+     * @return - A future which will return the response
+     */
     public CompletableFuture<SearchResponse> search(SearchRequest request) {
         SearchEndpoint endpoint = new SearchEndpoint(client, gson);
         return endpoint.sendRequest(request);
     }
 
+    /**
+     * Returns the project endpoints.
+     * @return - The project endpoints
+     */
     public ProjectEndpoints projects() {
         return new ProjectEndpoints(gson, client);
     }
 
+    /**
+     * Returns the version endpoints.
+     * @return - The version endpoints
+     */
     public VersionEndpoints versions() {
         return new VersionEndpoints(gson, client);
     }
 
+    /**
+     * Returns the user endpoints.
+     * @return - The user endpoints
+     */
     public UserEndpoints users() {
         return new UserEndpoints(gson, client);
     }
 
+    /**
+     * Returns the team endpoints.
+     * @return - The team endpoints
+     */
     public TeamsEndpoints teams() {
         return new TeamsEndpoints(gson, client);
     }
 
+    /**
+     * Returns the tag endpoints.
+     * @return - The tag endpoints
+     */
     public TagsEndpoints tags() {
         return new TagsEndpoints(gson, client);
     }
