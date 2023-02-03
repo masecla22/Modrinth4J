@@ -21,17 +21,31 @@ import masecla.modrinth4j.endpoints.project.gallery.CreateGalleryImage.CreateGal
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * This endpoint is used to create a new image in a project's gallery.
+ */
 public class CreateGalleryImage extends Endpoint<EmptyResponse, CreateGalleryImageRequest> {
+    /**
+     * Represents the request data for this endpoint.
+     */
     @Data
     @Builder
     public static class CreateGalleryImageRequest {
+        /** The file name. */
         private String filename;
+        /** The image. */
         private InputStream image;
 
+        /** Whether the image is featured. */
         private boolean featured;
+        /** The title of the image. */
         private String title;
+        /** The description of the image. */
         private String description;
 
+        /**
+         * Represents the builder for this class.
+         */
         public static class CreateGalleryImageRequestBuilder {
             public CreateGalleryImageRequestBuilder file(File file) {
                 try {
@@ -46,20 +60,41 @@ public class CreateGalleryImage extends Endpoint<EmptyResponse, CreateGalleryIma
         }
     }
 
+    /**
+     * Creates a new instance of the endpoint.
+     * 
+     * @param client - The client to use.
+     * @param gson   - The gson instance to use.
+     */
     public CreateGalleryImage(HttpClient client, Gson gson) {
         super(client, gson);
     }
 
+    /**
+     * Gets the endpoint of the request.
+     * 
+     * @return The endpoint of the request.
+     */
     @Override
     public String getEndpoint() {
         return "/project/{id}/gallery";
     }
 
+    /**
+     * Gets the method of the request.
+     * 
+     * @return The method of the request.
+     */
     @Override
     public String getMethod() {
         return "POST";
     }
 
+    /**
+     * Gets the type token of the response.
+     * 
+     * @return The type token of the response.
+     */
     @Override
     public CompletableFuture<EmptyResponse> sendRequest(CreateGalleryImageRequest parameters,
             Map<String, String> urlParams) {
@@ -92,11 +127,17 @@ public class CreateGalleryImage extends Endpoint<EmptyResponse, CreateGalleryIma
         });
     }
 
+    /**
+     * Returns the class of the request.
+     */
     @Override
     public TypeToken<CreateGalleryImageRequest> getRequestClass() {
         return TypeToken.get(CreateGalleryImageRequest.class);
     }
 
+    /**
+     * Returns the class of the response.
+     */
     @Override
     public TypeToken<EmptyResponse> getResponseClass() {
         return TypeToken.get(EmptyResponse.class);
