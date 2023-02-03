@@ -25,14 +25,27 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.internal.http.HttpMethod;
 
+/**
+ * Represents a generic endpoint.
+ * 
+ * @param <O> The output type.
+ * @param <I> The input type.
+ */
 @AllArgsConstructor
 public abstract class Endpoint<O, I> {
+    /** The HTTP Client to use. */
     @Getter
     private HttpClient client;
 
+    /** The Gson instance to use. */
     @Getter
     private Gson gson;
 
+    /**
+     * Returns the endpoint of the request.
+     * 
+     * @return - The endpoint of the request.
+     */
     public abstract String getEndpoint();
 
     /**
@@ -50,6 +63,13 @@ public abstract class Endpoint<O, I> {
         return true;
     }
 
+    /**
+     * This will replace the URL based on a certain request.
+     * 
+     * @param request    - The request to use.
+     * @param parameters - The parameters to use.
+     * @return - The replaced URL.
+     */
     protected String getReplacedUrl(I request, Map<String, String> parameters) {
         String url = getEndpoint();
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
@@ -58,10 +78,25 @@ public abstract class Endpoint<O, I> {
         return url;
     }
 
-    public CompletableFuture<O> sendRequest(I parameters) {
-        return sendRequest(parameters, new HashMap<>());
+    /**
+     * Sends the request.
+     * 
+     * @param request - The request to use
+     * @return - A {@link CompletableFuture} that will return the response.
+     * @see #sendRequest(Object, Map)
+     */
+    public CompletableFuture<O> sendRequest(I request) {
+        return sendRequest(request, new HashMap<>());
     }
 
+    /**
+     * Sends the request.
+     * 
+     * @param request    - The request to use.
+     * @param urlParams  - The URL parameters to use.
+     * @param bodyParams - The body parameters to use.
+     * @return - A {@link CompletableFuture} that will return the response.
+     */
     public CompletableFuture<O> sendRequest(I request, Map<String, String> urlParams) {
         String url = getReplacedUrl(request, urlParams);
 
@@ -104,6 +139,12 @@ public abstract class Endpoint<O, I> {
         });
     }
 
+    /**
+     * Checks a response body for errors.
+     * 
+     * @param body - The body to check.
+     * @return - The parsed response.
+     */
     protected O checkBodyForErrors(ResponseBody body) {
         if (body.contentLength() != 0) {
             String bodySrc = "UNAVAILABLE";
@@ -137,6 +178,12 @@ public abstract class Endpoint<O, I> {
         }
     }
 
+    /**
+     * Reads a stream into a byte array.
+     * 
+     * @param stream - The stream to read.
+     * @return - The byte array.
+     */
     protected byte[] readStream(InputStream stream) {
         try {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -153,6 +200,12 @@ public abstract class Endpoint<O, I> {
         }
     }
 
+    /**
+     * Reads a file into a byte array.
+     * 
+     * @param file - The file to read.
+     * @return - The byte array.
+     */
     protected byte[] readFile(File file) {
         try {
             return readStream(new FileInputStream(file));
@@ -162,12 +215,27 @@ public abstract class Endpoint<O, I> {
         }
     }
 
+    /**
+     * Returns the method to use.
+     * 
+     * @return - The method to use.
+     */
     public String getMethod() {
         return "GET";
     }
 
+    /**
+     * Returns the {@link TypeToken} of the response;
+     * 
+     * @return - The {@link TypeToken} of the response.
+     */
     public abstract TypeToken<O> getResponseClass();
 
+    /**
+     * Returns the {@link TypeToken} of the request.
+     * 
+     * @return - The {@link TypeToken} of the request.
+     */
     public abstract TypeToken<I> getRequestClass();
 
 }
