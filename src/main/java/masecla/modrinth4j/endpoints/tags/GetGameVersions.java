@@ -32,7 +32,7 @@ public class GetGameVersions extends Endpoint<List<GameVersion>, EmptyRequest> {
     public String getEndpoint() {
         return "/tag/game_version";
     }
-    
+
     /**
      * Returns the request class.
      *

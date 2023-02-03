@@ -76,7 +76,7 @@ public class ChangeUserIcon extends Endpoint<EmptyResponse, ChangeUserIconReques
         return TypeToken.get(EmptyResponse.class);
     }
 
-    /** 
+    /**
      * Injects the file extension into the URL.
      */
     @Override

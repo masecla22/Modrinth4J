@@ -5,7 +5,8 @@ import lombok.Getter;
 import masecla.modrinth4j.client.agent.UserAgent;
 
 /**
- * This class is used to read the environment variables from the .env file during testing.
+ * This class is used to read the environment variables from the .env file
+ * during testing.
  */
 @Getter
 public class EnvReader {
@@ -18,7 +19,7 @@ public class EnvReader {
     /** The UserAgent to identify with */
     private UserAgent agent;
 
-    /** 
+    /**
      * Creates a new EnvReader instance.
      */
     public EnvReader() {
@@ -28,8 +29,8 @@ public class EnvReader {
         this.stagingUrl = env.get("MODRINTH_STAGING_URL");
 
         agent = UserAgent.builder().projectName("Modrinth4J Unit Testing")
-                                .authorUsername("masecla22")
-                                .contact("masecla22#4309")
-                                .projectVersion("1.0.0").build();
+                .authorUsername("masecla22")
+                .contact("masecla22#4309")
+                .projectVersion("1.0.0").build();
     }
 }

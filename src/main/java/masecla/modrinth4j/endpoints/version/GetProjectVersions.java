@@ -41,7 +41,7 @@ public class GetProjectVersions extends Endpoint<List<ProjectVersion>, GetProjec
         /** If the version is featured. */
         private boolean featured;
     }
-    
+
     /**
      * Returns the endpoint.
      */

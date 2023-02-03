@@ -68,7 +68,7 @@ public class FacetCollection {
          */
         @Override
         public void write(JsonWriter out, FacetCollection value) throws java.io.IOException {
-            if(value == null){
+            if (value == null) {
                 out.nullValue();
                 return;
             }

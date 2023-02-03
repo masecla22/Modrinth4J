@@ -38,13 +38,13 @@ public class ModifyProject extends Endpoint<ProjectModifications, ProjectModific
 
         /** The categories of the project */
         private List<String> categories;
-        
+
         /** The client side support status of the project */
         private SupportStatus clientSide;
 
         /** The server side support status of the project */
         private SupportStatus serverSide;
-        
+
         /** The body of the project */
         private String body;
 
@@ -73,7 +73,7 @@ public class ModifyProject extends Endpoint<ProjectModifications, ProjectModific
 
         /** The moderation message */
         private String moderationMessage;
-        
+
         /** The moderation message body */
         private String moderationMessageBody;
     }

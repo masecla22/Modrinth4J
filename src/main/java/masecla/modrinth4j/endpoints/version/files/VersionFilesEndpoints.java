@@ -27,7 +27,7 @@ import masecla.modrinth4j.model.version.files.HashProjectVersionMap;
 public class VersionFilesEndpoints {
     /** The Gson instance to use */
     private Gson gson;
-    
+
     /** The HTTP client to use */
     private HttpClient client;
 
@@ -107,7 +107,7 @@ public class VersionFilesEndpoints {
     /**
      * This endpoint is used to get the latest version of a project from a hash.
      * 
-     * @param request   The request to use
+     * @param request The request to use
      * @return A {@link CompletableFuture} that will return the latest version of
      *         the project with the given hash.
      */

@@ -18,7 +18,7 @@ import masecla.modrinth4j.endpoints.generic.PaginatedEndpoint.PaginatedResponse;
  */
 public abstract class PaginatedEndpoint<T, O extends PaginatedResponse<T>, I extends PaginatedRequest>
         extends Endpoint<O, I> {
-    /** 
+    /**
      * This class is used to represent a paginated request.
      */
     @Data

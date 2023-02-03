@@ -14,7 +14,7 @@ public class ModrinthTeamMember {
     private String teamId;
     /** The underlying ModrinthUser */
     private ModrinthUser user;
-    
+
     /** The role of the user */
     private String role; // This is not an enum!
 

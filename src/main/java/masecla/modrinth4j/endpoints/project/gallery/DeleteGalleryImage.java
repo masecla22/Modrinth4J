@@ -73,7 +73,7 @@ public class DeleteGalleryImage extends Endpoint<EmptyResponse, DeleteGalleryIma
     public boolean isJsonBody() {
         return false;
     }
-    
+
     /**
      * Returns the method.
      *

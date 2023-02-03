@@ -8,10 +8,10 @@ import com.google.gson.annotations.SerializedName;
 public enum ProjectType {
     /** A mod */
     @SerializedName("mod")
-    MOD, 
+    MOD,
     /** A modpack */
     @SerializedName("resourcepack")
-    MODPACK, 
+    MODPACK,
     /** A resourcepack */
     @SerializedName("modpack")
     RESOURCEPACK;

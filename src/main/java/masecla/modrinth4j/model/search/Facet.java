@@ -34,7 +34,6 @@ public class Facet {
     /** The facet value */
     private String value;
 
-
     /**
      * Returns the facet as a string.
      */
@@ -43,7 +42,7 @@ public class Facet {
         return type.toString().toLowerCase() + ":" + value;
     }
 
-    /** 
+    /**
      * Creates a new category facet.
      * 
      * @param value The category value.

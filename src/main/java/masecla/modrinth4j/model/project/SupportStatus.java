@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 public enum SupportStatus {
     /** The project is required to run under this. */
     @SerializedName("required")
-    REQUIRED, 
+    REQUIRED,
     /** The project is optional to run under this. */
     @SerializedName("optional")
     OPTIONAL,

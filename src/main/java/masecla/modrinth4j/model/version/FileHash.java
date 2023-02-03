@@ -2,7 +2,7 @@ package masecla.modrinth4j.model.version;
 
 import com.google.gson.annotations.SerializedName;
 
-/** 
+/**
  * The FileHash enum represents the hash type of a file.
  */
 public enum FileHash {

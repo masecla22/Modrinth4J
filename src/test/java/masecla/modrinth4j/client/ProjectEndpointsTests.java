@@ -124,7 +124,8 @@ public class ProjectEndpointsTests {
         assertTrue("The image did not have the correct title!", img.getTitle().equals("Test Image"));
         assertTrue("The image did not have the correct description!",
                 img.getDescription().equals("This is a test image"));
-        assertTrue("The image is not the one provided", DataUtil.verifyIdentical(img.getUrl(), DataUtil.getImage()));
+        assertTrue("The image is not the one provided",
+                DataUtil.verifyIdentical(img.getUrl(), DataUtil.getImage()));
 
         DataUtil.deleteSampleProject(client);
     }
@@ -176,7 +177,8 @@ public class ProjectEndpointsTests {
         assertTrue("The image did not have the correct title!", img.getTitle().equals("Test Image 2"));
         assertTrue("The image did not have the correct description!",
                 img.getDescription().equals("This is a test image 2"));
-        assertTrue("The image is not the one provided", DataUtil.verifyIdentical(img.getUrl(), DataUtil.getImage()));
+        assertTrue("The image is not the one provided",
+                DataUtil.verifyIdentical(img.getUrl(), DataUtil.getImage()));
 
         DataUtil.deleteSampleProject(client);
     }
@@ -220,7 +222,8 @@ public class ProjectEndpointsTests {
     public void testFollowUnfollow() {
         String id = "AULzIar5";
         client.projects().followProject(id).join();
-        List<Project> follows = client.users().getUserFollowedProjects(client.users().getSelf().join().getId()).join();
+        List<Project> follows = client.users().getUserFollowedProjects(client.users().getSelf().join().getId())
+                .join();
 
         assertTrue("The project was not followed!", follows.stream().anyMatch(c -> c.getId().equals(id)));
         client.projects().unfollowProject(id).join();
@@ -235,7 +238,8 @@ public class ProjectEndpointsTests {
     @Test
     public void testProjectDependencies() {
         assertTrue("The project 'gravestones' has dependencies?",
-                client.projects().getProjectDependencies("gravestones").join().getProjects().size() == 0);
+                client.projects().getProjectDependencies("gravestones").join().getProjects()
+                        .size() == 0);
     }
 
     /**
@@ -278,7 +282,8 @@ public class ProjectEndpointsTests {
         assertTrue("The project did not have the correct discord url!",
                 prj.getDiscordUrl().equals("https://discord.gg/1234"));
         assertTrue("The project did not have the correct donation urls!",
-                prj.getDonationUrls().stream().anyMatch(c -> c.getUrl().equals("https://example.com/donate")));
+                prj.getDonationUrls().stream()
+                        .anyMatch(c -> c.getUrl().equals("https://example.com/donate")));
         assertTrue("The project did not have the correct issues url!",
                 prj.getIssuesUrl().equals("https://example.com/issues"));
         assertTrue("The project did not have the correct server side support status!",

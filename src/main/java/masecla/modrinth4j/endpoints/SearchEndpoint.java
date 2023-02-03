@@ -20,11 +20,11 @@ import masecla.modrinth4j.model.project.ProjectType;
 import masecla.modrinth4j.model.project.SupportStatus;
 import masecla.modrinth4j.model.search.FacetCollection;
 
-/** 
+/**
  * Represents the search endpoint.
  */
 public class SearchEndpoint extends PaginatedEndpoint<SearchResult, SearchResponse, SearchRequest> {
-    /** 
+    /**
      * The IndexType to sort the results by.
      */
     public static enum IndexType {
@@ -121,7 +121,6 @@ public class SearchEndpoint extends PaginatedEndpoint<SearchResult, SearchRespon
         private FacetCollection facets;
     }
 
-
     /**
      * Represents a search response.
      */
@@ -134,7 +133,7 @@ public class SearchEndpoint extends PaginatedEndpoint<SearchResult, SearchRespon
      * Creates a new search endpoint.
      * 
      * @param client - The client to use
-     * @param gson - The gson instance to use
+     * @param gson   - The gson instance to use
      */
     public SearchEndpoint(HttpClient client, Gson gson) {
         super(client, gson);

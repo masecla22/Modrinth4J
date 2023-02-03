@@ -96,8 +96,8 @@ public abstract class Endpoint<O, I> {
     /**
      * Sends the request.
      * 
-     * @param request    - The request to use.
-     * @param urlParams  - The URL parameters to use.
+     * @param request   - The request to use.
+     * @param urlParams - The URL parameters to use.
      * @return - A {@link CompletableFuture} that will return the response.
      */
     public CompletableFuture<O> sendRequest(I request, Map<String, String> urlParams) {

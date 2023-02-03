@@ -49,6 +49,7 @@ public class CreateGalleryImage extends Endpoint<EmptyResponse, CreateGalleryIma
         public static class CreateGalleryImageRequestBuilder {
             /**
              * This will set the image to the specified file.
+             * 
              * @param file - The file to use.
              * @return The builder.
              */
