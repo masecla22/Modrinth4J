@@ -19,7 +19,6 @@ import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
 import masecla.modrinth4j.endpoints.project.ChangeProjectIcon.ChangeProjectIconRequest;
 import masecla.modrinth4j.endpoints.project.CreateProject.CreateProjectRequest;
 import masecla.modrinth4j.endpoints.project.GetMultipleProjects.GetMultipleProjectsRequest;
-import masecla.modrinth4j.endpoints.project.GetMultipleProjects.GetMultipleProjectsResponse;
 import masecla.modrinth4j.endpoints.project.GetProjectDependencies.GetProjectDependenciesResponse;
 import masecla.modrinth4j.endpoints.project.ModifyProject.ProjectModifications;
 import masecla.modrinth4j.endpoints.project.follow.FollowProject;
@@ -61,7 +60,7 @@ public class ProjectEndpoints {
      * @return A {@link CompletableFuture} that will return the projects.
      * @see #get(String[])
      */
-    public CompletableFuture<GetMultipleProjectsResponse> get(List<String> projects) {
+    public CompletableFuture<List<Project>> get(List<String> projects) {
         return new GetMultipleProjects(client, gson)
                 .sendRequest(new GetMultipleProjectsRequest(projects));
     }
@@ -73,7 +72,7 @@ public class ProjectEndpoints {
      * @return - A {@link CompletableFuture} that will return the projects.
      * @see #get(List)
      */
-    public CompletableFuture<GetMultipleProjectsResponse> get(String... projects) {
+    public CompletableFuture<List<Project>> get(String... projects) {
         return this.get(Arrays.asList(projects));
     }
 

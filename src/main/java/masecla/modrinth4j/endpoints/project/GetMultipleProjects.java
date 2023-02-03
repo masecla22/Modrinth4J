@@ -1,6 +1,5 @@
 package masecla.modrinth4j.endpoints.project;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -12,19 +11,15 @@ import lombok.NoArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.project.GetMultipleProjects.GetMultipleProjectsRequest;
-import masecla.modrinth4j.endpoints.project.GetMultipleProjects.GetMultipleProjectsResponse;
 import masecla.modrinth4j.model.project.Project;
 
-public class GetMultipleProjects extends Endpoint<GetMultipleProjectsResponse, GetMultipleProjectsRequest> {
+public class GetMultipleProjects extends Endpoint<List<Project>, GetMultipleProjectsRequest> {
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class GetMultipleProjectsRequest {
         private List<String> ids;
-    }
-
-    public static class GetMultipleProjectsResponse extends ArrayList<Project> {
     }
 
     public GetMultipleProjects(HttpClient client, Gson gson) {
@@ -42,8 +37,9 @@ public class GetMultipleProjects extends Endpoint<GetMultipleProjectsResponse, G
     }
 
     @Override
-    public TypeToken<GetMultipleProjectsResponse> getResponseClass() {
-        return TypeToken.get(GetMultipleProjectsResponse.class);
+    public TypeToken<List<Project>> getResponseClass() {
+        return new TypeToken<List<Project>>() {
+        };
     }
 
     @Override
