@@ -4,15 +4,23 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents a project gallery image.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProjectGalleryImage {
+    /** The image's URL */
     private String url;
+
+    /** Whether it's featured */
     private boolean featured;
 
+    /** The image's title */
     private String title;
 
+    /** The image's description */
     private String description;
 
     /** ISO 8601 format */
