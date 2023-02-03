@@ -25,15 +25,25 @@ import masecla.modrinth4j.model.project.ProjectDonationPlatform;
 import masecla.modrinth4j.model.project.ProjectGalleryImage;
 import masecla.modrinth4j.model.project.SupportStatus;
 
+/**
+ * Tests the {@link ProjectEndpoints} class.
+ */
 public class ProjectEndpointsTests {
+    /** The client to be used */
     private ModrinthAPI client;
 
+    /**
+     * Sets up the client.
+     */
     @Before
     public void setupClient() {
         EnvReader env = new EnvReader();
         this.client = ModrinthAPI.rateLimited(env.getAgent(), env.getStagingUrl(), env.getApiKey());
     }
 
+    /**
+     * This method tests the search endpoint.
+     */
     @Test
     public void testSearch() {
         // We're looking for the Gravestones mod
@@ -43,6 +53,9 @@ public class ProjectEndpointsTests {
                 Arrays.stream(response.getHits()).anyMatch(c -> c.getSlug().equals("gravestones")));
     }
 
+    /**
+     * This method tests changing the icon of a project.
+     */
     @Test
     @SneakyThrows
     public void testIconChange() {
@@ -54,6 +67,9 @@ public class ProjectEndpointsTests {
         DataUtil.deleteSampleProject(client);
     }
 
+    /**
+     * This method tests checking for slug availability.
+     */
     @Test
     public void testSlugAvailability() {
         assertTrue("The slug 'modrinth4j-test-project' is not available!",
@@ -62,6 +78,9 @@ public class ProjectEndpointsTests {
                 client.projects().checkSlugAvailability("gravestones").join());
     }
 
+    /**
+     * This method tests converting a slug to an ID.
+     */
     @Test
     public void testGetIdBySlug() {
         Project prj = DataUtil.createSampleProject(client);
@@ -74,6 +93,9 @@ public class ProjectEndpointsTests {
 
     }
 
+    /**
+     * This method tests creating a project.
+     */
     @Test
     public void testCreate() {
         Project prj = DataUtil.createSampleProject(client);
@@ -81,6 +103,9 @@ public class ProjectEndpointsTests {
         DataUtil.deleteSampleProject(client);
     }
 
+    /**
+     * This method tests creating gallery images.
+     */
     @Test
     public void testGalleryCreate() {
         Project prj = DataUtil.createSampleProject(client);
@@ -104,6 +129,9 @@ public class ProjectEndpointsTests {
         DataUtil.deleteSampleProject(client);
     }
 
+    /**
+     * This method tests deleting a gallery image.
+     */
     @Test
     public void testDeleteGalleryImage() {
         Project prj = DataUtil.createSampleProject(client);
@@ -122,6 +150,9 @@ public class ProjectEndpointsTests {
         DataUtil.deleteSampleProject(client);
     }
 
+    /**
+     * This method tests modifying a gallery image.
+     */
     @Test
     public void testGalleryModify() {
         Project prj = DataUtil.createSampleProject(client);
@@ -150,6 +181,9 @@ public class ProjectEndpointsTests {
         DataUtil.deleteSampleProject(client);
     }
 
+    /**
+     * This method tests deleting a project.
+     */
     @Test
     public void testProjectDelete() {
         Project prj = DataUtil.createSampleProject(client);
@@ -157,6 +191,9 @@ public class ProjectEndpointsTests {
         assertTrue("The project was not deleted!", client.projects().get(prj.getSlug()).join() == null);
     }
 
+    /**
+     * This method tests fetching a project.
+     */
     @Test
     public void testGetSingle() {
         Project prj = DataUtil.createSampleProject(client);
@@ -165,6 +202,9 @@ public class ProjectEndpointsTests {
         DataUtil.deleteSampleProject(client);
     }
 
+    /**
+     * This method tests fetching multiple projects.
+     */
     @Test
     public void testGetMultiple() {
         Project prj = DataUtil.createSampleProject(client);
@@ -173,6 +213,9 @@ public class ProjectEndpointsTests {
         DataUtil.deleteSampleProject(client);
     }
 
+    /**
+     * This method tests following and unfollowing projects.
+     */
     @Test
     public void testFollowUnfollow() {
         String id = "AULzIar5";
@@ -186,12 +229,18 @@ public class ProjectEndpointsTests {
         assertFalse("The project was not unfollowed!", follows.stream().anyMatch(c -> c.getId().equals(id)));
     }
 
+    /**
+     * This method tests fetching a project's dependencies.
+     */
     @Test
     public void testProjectDependencies() {
         assertTrue("The project 'gravestones' has dependencies?",
                 client.projects().getProjectDependencies("gravestones").join().getProjects().size() == 0);
     }
 
+    /**
+     * This method tests modifying a project.
+     */
     @Test
     public void testModifyProject() {
         Project prj = DataUtil.createSampleProject(client);
