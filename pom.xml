@@ -7,6 +7,27 @@
     <artifactId>Modrinth4J</artifactId>
     <version>1.0.0</version>
 
+    <name>Modrinth4J</name>
+    <description>A comprehensive Java wrapper for the Modrinth API</description>
+    <url>https://github.com/masecla22/Modrinth4J</url>
+    <scm>
+        <url>https://github.com/masecla22/Modrinth4J</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>masecla22</id>
+            <email>supermasecla22@gmail.com</email>
+            <name>masecla22</name>
+            <organization>TeamMT</organization>
+            <organizationUrl>https://masecla.dev</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <url>https://masecla.dev</url>
+        </developer>
+    </developers>
+
     <licenses>
         <license>
             <name>MIT License</name>
@@ -94,7 +115,7 @@
                 <version>3.3.1</version>
                 <configuration>
                     <source>8</source>
-                    <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                    <javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
                 </configuration>
                 <executions>
                     <execution>
