@@ -12,10 +12,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents a collection of facets.
+ */
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class FacetCollection {
+    /**
+     * The collection of facets.
+     */
     private List<List<Facet>> facets;
 
     /**
@@ -53,7 +59,14 @@ public class FacetCollection {
         this.facets.add(list);
     }
 
+    /**
+     * This is a {@link TypeAdapter} for {@link FacetCollection}. It is used to
+     * serialize and deserialize {@link FacetCollection} objects.
+     */
     public static class FacetAdapter extends TypeAdapter<FacetCollection> {
+        /**
+         * Serializes a {@link FacetCollection} object into a JSON string.
+         */
         @Override
         public void write(JsonWriter out, FacetCollection value) throws java.io.IOException {
             if(value == null){
@@ -72,6 +85,9 @@ public class FacetCollection {
             out.endArray();
         }
 
+        /**
+         * Deserializes a JSON string into a {@link FacetCollection} object.
+         */
         @Override
         public FacetCollection read(JsonReader in) throws java.io.IOException {
             JsonToken token = in.peek();
@@ -98,6 +114,10 @@ public class FacetCollection {
 
     }
 
+    /**
+     * Returns a string representation of this object.
+     */
+    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("[");
