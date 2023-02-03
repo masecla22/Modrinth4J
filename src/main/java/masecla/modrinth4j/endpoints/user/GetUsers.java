@@ -27,6 +27,7 @@ public class GetUsers extends Endpoint<List<ModrinthUser>, GetUsersRequest> {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class GetUsersRequest {
+        /** The list of ids to get. */
         public List<String> ids;
     }
 

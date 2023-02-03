@@ -51,6 +51,8 @@ public abstract class Endpoint<O, I> {
     /**
      * Whether or not the request body should be JSON.
      * If this is false, the request will embed the parameters in the URL.
+     * 
+     * @return - Whether or not the request body should be JSON.
      */
     public boolean isJsonBody() {
         return true;
@@ -58,6 +60,8 @@ public abstract class Endpoint<O, I> {
 
     /**
      * If this is false, the request will not have a body.
+     * 
+     * @return - Whether or not the request requires a body.
      */
     public boolean requiresBody() {
         return true;
@@ -94,7 +98,6 @@ public abstract class Endpoint<O, I> {
      * 
      * @param request    - The request to use.
      * @param urlParams  - The URL parameters to use.
-     * @param bodyParams - The body parameters to use.
      * @return - A {@link CompletableFuture} that will return the response.
      */
     public CompletableFuture<O> sendRequest(I request, Map<String, String> urlParams) {

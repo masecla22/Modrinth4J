@@ -46,6 +46,10 @@ public class ModrinthAPI {
     /**
      * Returns a client which will send unlimited requests.
      * 
+     * @param agent  - The user agent to use
+     * @param apiKey - The API key to use
+     * @return - A client which will send unlimited requests.
+     * 
      * @deprecated - Use {@link #rateLimited(UserAgent, String)} instead.
      */
     @Deprecated
@@ -60,6 +64,11 @@ public class ModrinthAPI {
     /**
      * Returns a client which will send unlimited requests.
      * 
+     * @param agent  - The user agent to use
+     * @param url    - The URL to use
+     * @param apiKey - The API key to use
+     * @return - A client which will send unlimited requests.
+     * 
      * @deprecated - Use {@link #rateLimited(UserAgent, String, String)} instead.
      */
     @Deprecated
@@ -72,7 +81,8 @@ public class ModrinthAPI {
     }
 
     /**
-     * Returns a client which will send requests and adjust speed based on rate limits
+     * Returns a client which will send requests and adjust speed based on rate
+     * limits
      * 
      * @param agent  - The user agent to use
      * @param apiKey - The API key to use
@@ -88,7 +98,8 @@ public class ModrinthAPI {
     }
 
     /**
-     * Returns a client which will send requests and adjust speed based on rate limits
+     * Returns a client which will send requests and adjust speed based on rate
+     * limits
      * 
      * @param agent  - The user agent to use
      * @param url    - The base URL to use
@@ -114,7 +125,7 @@ public class ModrinthAPI {
                 .create();
     }
 
-    /** 
+    /**
      * Executes a search request.
      * 
      * @param request - The request to execute
@@ -127,6 +138,7 @@ public class ModrinthAPI {
 
     /**
      * Returns the project endpoints.
+     * 
      * @return - The project endpoints
      */
     public ProjectEndpoints projects() {
@@ -135,6 +147,7 @@ public class ModrinthAPI {
 
     /**
      * Returns the version endpoints.
+     * 
      * @return - The version endpoints
      */
     public VersionEndpoints versions() {
@@ -143,6 +156,7 @@ public class ModrinthAPI {
 
     /**
      * Returns the user endpoints.
+     * 
      * @return - The user endpoints
      */
     public UserEndpoints users() {
@@ -151,6 +165,7 @@ public class ModrinthAPI {
 
     /**
      * Returns the team endpoints.
+     * 
      * @return - The team endpoints
      */
     public TeamsEndpoints teams() {
@@ -159,6 +174,7 @@ public class ModrinthAPI {
 
     /**
      * Returns the tag endpoints.
+     * 
      * @return - The tag endpoints
      */
     public TagsEndpoints tags() {

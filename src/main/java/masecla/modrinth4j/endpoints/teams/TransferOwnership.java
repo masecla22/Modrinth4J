@@ -24,6 +24,7 @@ public class TransferOwnership extends Endpoint<EmptyResponse, TransferOwnership
     @AllArgsConstructor
     @NoArgsConstructor
     public static class TransferOwnershipRequest {
+        /** The user ID to transfer ownership to */
         public String userId;
     }
 

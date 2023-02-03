@@ -16,6 +16,12 @@ import masecla.modrinth4j.model.version.ProjectVersion;
  * This endpoint is used to get a list of versions with certain filters.
  */
 public class GetProjectVersions extends Endpoint<List<ProjectVersion>, GetProjectVersionsRequest> {
+    /**
+     * Creates a new instance of the endpoint.
+     *
+     * @param httpClient The client to use.
+     * @param gson       The gson instance to use.
+     */
     public GetProjectVersions(HttpClient httpClient, Gson gson) {
         super(httpClient, gson);
     }

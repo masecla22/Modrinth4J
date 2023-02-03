@@ -44,7 +44,7 @@ public class ProjectEndpoints {
     /**
      * This endpoint is used to fetch a project by its ID.
      * 
-     * @param - project The ID of the project to fetch.
+     * @param project - project The ID of the project to fetch.
      * @return A {@link CompletableFuture} that will return the project.
      */
     public CompletableFuture<Project> get(String project) {
@@ -56,7 +56,7 @@ public class ProjectEndpoints {
     /**
      * This endpoint is used to fetch a list of projects by their IDs.
      * 
-     * @param - projects The IDs of the projects to fetch.
+     * @param projects - The IDs of the projects to fetch.
      * @return A {@link CompletableFuture} that will return the projects.
      * @see #get(String[])
      */
@@ -116,7 +116,8 @@ public class ProjectEndpoints {
      * This endpoint is used to check slug availability.
      * 
      * @param slug - The slug to check.
-     * @return A {@link CompletableFuture} that will return true if the slug is available.
+     * @return A {@link CompletableFuture} that will return true if the slug is
+     *         available.
      */
     public CompletableFuture<Boolean> checkSlugAvailability(String slug) {
         Map<String, String> parameters = new HashMap<>();
@@ -227,7 +228,7 @@ public class ProjectEndpoints {
      * This endpoint is used to change the icon of a project.
      * 
      * @param projectId - The ID of the project to change the icon for.
-     * @param file - The file to use as the icon.
+     * @param file      - The file to use as the icon.
      * @return - A {@link CompletableFuture} that will return an empty response.
      * @throws FileNotFoundException - If the file is not found.
      * @see #changeProjectIcon(String, InputStream, String)
@@ -241,8 +242,8 @@ public class ProjectEndpoints {
      * This endpoint is used to change the icon of a project.
      * 
      * @param projectId - The ID of the project to change the icon for.
-     * @param stream - The stream to use as the icon.
-     * @param fileName - The name of the file.
+     * @param stream    - The stream to use as the icon.
+     * @param fileName  - The name of the file.
      * @return - A {@link CompletableFuture} that will return an empty response.
      * @see #changeProjectIcon(String, File)
      */

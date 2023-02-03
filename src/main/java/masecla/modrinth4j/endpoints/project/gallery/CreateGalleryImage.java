@@ -47,6 +47,11 @@ public class CreateGalleryImage extends Endpoint<EmptyResponse, CreateGalleryIma
          * Represents the builder for this class.
          */
         public static class CreateGalleryImageRequestBuilder {
+            /**
+             * This will set the image to the specified file.
+             * @param file - The file to use.
+             * @return The builder.
+             */
             public CreateGalleryImageRequestBuilder file(File file) {
                 try {
                     this.filename = file.getName();

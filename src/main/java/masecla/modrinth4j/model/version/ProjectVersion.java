@@ -59,10 +59,13 @@ public class ProjectVersion {
      * The type of the version
      */
     public static enum VersionType {
+        /** If this version was released on the "release" channel */
         @SerializedName("release")
         RELEASE,
+        /** If this version was released on the "beta" channel */
         @SerializedName("beta")
         BETA,
+        /** If this version was released on the "alpha" channel */
         @SerializedName("alpha")
         ALPHA;
     }
@@ -71,12 +74,16 @@ public class ProjectVersion {
      * The type of the dependency
      */
     public static enum ProjectDependencyType {
+        /** If this dependency is required */
         @SerializedName("required")
         REQUIRED,
+        /** If this dependency is optional */
         @SerializedName("optional")
         OPTIONAL,
+        /** If this dependency is incompatible */
         @SerializedName("incompatible")
         INCOMPATIBLE,
+        /** If this dependency is embedded */
         @SerializedName("embedded")
         EMBEDDED;
     }

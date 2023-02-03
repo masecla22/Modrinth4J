@@ -45,8 +45,7 @@ public class FacetCollection {
      * translates to Projects that support 1.16.5 AND are modpacks
      * 
      * For more information on how to use this, please see the Modrinth
-     * documentation here:
-     * {@link https://docs.modrinth.com/docs/tutorials/api_search/}
+     * documentation here: https://docs.modrinth.com/docs/tutorials/api_search/
      * 
      * @param facets - The block of facets to add to the collection
      */

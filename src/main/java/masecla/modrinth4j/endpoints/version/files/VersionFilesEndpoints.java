@@ -107,8 +107,6 @@ public class VersionFilesEndpoints {
     /**
      * This endpoint is used to get the latest version of a project from a hash.
      * 
-     * @param algorithm The algorithm to use
-     * @param hash      The hash to use
      * @param request   The request to use
      * @return A {@link CompletableFuture} that will return the latest version of
      *         the project with the given hash.
