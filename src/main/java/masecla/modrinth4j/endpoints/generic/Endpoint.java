@@ -172,7 +172,7 @@ public abstract class Endpoint<O, I> {
 
                         throw new EndpointException(error, description);
                     }
-                O object = this.gson.fromJson(unparsedObject, getResponseClass());
+                O object = this.gson.fromJson(unparsedObject, getResponseClass().getType());
                 return object;
             }
             return null;

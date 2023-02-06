@@ -5,8 +5,10 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
@@ -70,9 +72,12 @@ public class ModifyGalleryImage extends Endpoint<EmptyResponse, ModifyGalleryIma
         String endpoint = super.getReplacedUrl(request, parameters);
         List<String> encoded = new ArrayList<>();
         JsonObject object = getGson().toJsonTree(request).getAsJsonObject();
-        for (String key : object.keySet()) {
+
+        for (Entry<String,JsonElement> entry : object.entrySet()) {
             try {
-                encoded.add(key + "=" + URLEncoder.encode(object.get(key).getAsString(), "UTF-8"));
+                String key = entry.getKey();
+                String value = entry.getValue().getAsString();
+                encoded.add(key + "=" + URLEncoder.encode(value, "UTF-8"));
             } catch (UnsupportedEncodingException e) {
             }
         }
