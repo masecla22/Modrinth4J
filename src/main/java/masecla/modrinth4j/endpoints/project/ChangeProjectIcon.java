@@ -1,6 +1,5 @@
 package masecla.modrinth4j.endpoints.project;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -28,7 +27,7 @@ public class ChangeProjectIcon extends Endpoint<EmptyResponse, ChangeProjectIcon
      * Creates a new instance of the endpoint.
      * 
      * @param client - The client to use.
-     * @param gson - The gson instance to use.
+     * @param gson   - The gson instance to use.
      */
     public ChangeProjectIcon(HttpClient client, Gson gson) {
         super(client, gson);
@@ -94,21 +93,17 @@ public class ChangeProjectIcon extends Endpoint<EmptyResponse, ChangeProjectIcon
      * Sends the request.
      */
     @Override
-    public CompletableFuture<EmptyResponse> sendRequest(ChangeProjectIconRequest request, Map<String, String> urlParams) {
+    public CompletableFuture<EmptyResponse> sendRequest(ChangeProjectIconRequest request,
+            Map<String, String> urlParams) {
         String url = getReplacedUrl(request, urlParams);
         return getClient().connect(url).thenApply(c -> {
-            try {
-                InputStream stream = request.getIcon();
-                c.method(getMethod(), RequestBody.create(readStream(stream)));
-                
-                Response response = getClient().execute(c);
-                checkBodyForErrors(response.body());
+            InputStream stream = request.getIcon();
+            c.method(getMethod(), RequestBody.create(readStream(stream)));
 
-                return new EmptyResponse();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
+            Response response = executeRequest(c);
+            checkBodyForErrors(response.body());
+
+            return new EmptyResponse();
         });
     }
 

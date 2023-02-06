@@ -1,5 +1,7 @@
 package masecla.modrinth4j.endpoints.user;
 
+import java.time.Instant;
+
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
@@ -96,8 +98,8 @@ public class ReportProjectUserOrVersion
         /** The ID of the report */
         private String reporter;
 
-        /** ISO 8601 String */
-        private String created;
+        /** When the report was created */
+        private Instant created;
     }
 
     /**

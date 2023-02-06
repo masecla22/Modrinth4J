@@ -1,5 +1,6 @@
 package masecla.modrinth4j.model.user;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,8 +39,8 @@ public class ModrinthUserNotification {
     /** If the notification has been read */
     private boolean read;
 
-    /** ISO 8601 String */
-    private String created;
+    /** When the notification was created */
+    private Instant created;
 
     /** We have no ideea what this Object is, so a Map is given for now */
     private List<Map<String, Object>> actions = new ArrayList<>();

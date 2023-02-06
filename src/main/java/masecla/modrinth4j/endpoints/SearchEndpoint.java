@@ -1,5 +1,6 @@
 package masecla.modrinth4j.endpoints;
 
+import java.time.Instant;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -90,11 +91,11 @@ public class SearchEndpoint extends PaginatedEndpoint<SearchResult, SearchRespon
         /** The number of followers */
         private int follows;
 
-        /** The date the project was created. ISO-8601 time. */
-        private String dateCreated;
+        /** The date the project was created. */
+        private Instant dateCreated;
 
-        /** The date the project was last modified. ISO-8601 time. */
-        private String dateModified;
+        /** The date the project was last modified. */
+        private Instant dateModified;
 
         /** The latest version of the project */
         private String latestVersion;

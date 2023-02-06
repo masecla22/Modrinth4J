@@ -49,17 +49,14 @@ public class AddFilesToVersion extends Endpoint<EmptyResponse, Map<String, Input
 
             builder.addFormDataPart("data", "{}"); // Not sure what this is for, but it's required
 
-            try {
-                for (String key : request.keySet())
-                    builder.addFormDataPart(key, key, RequestBody.create(this.readStream(request.get(key))));
+            for (String key : request.keySet())
+                builder.addFormDataPart(key, key, RequestBody.create(this.readStream(request.get(key))));
 
-                c.post(builder.build());
+            c.post(builder.build());
 
-                Response response = getClient().execute(c);
-                checkBodyForErrors(response.body());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            Response response = executeRequest(c);
+            checkBodyForErrors(response.body());
+            
             return new EmptyResponse();
         });
     }

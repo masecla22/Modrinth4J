@@ -1,5 +1,6 @@
 package masecla.modrinth4j.main;
 
+import java.time.Instant;
 import java.util.concurrent.CompletableFuture;
 
 import com.google.gson.FieldNamingPolicy;
@@ -21,6 +22,7 @@ import masecla.modrinth4j.endpoints.tags.TagsEndpoints;
 import masecla.modrinth4j.endpoints.teams.TeamsEndpoints;
 import masecla.modrinth4j.endpoints.user.UserEndpoints;
 import masecla.modrinth4j.endpoints.version.VersionEndpoints;
+import masecla.modrinth4j.model.adapters.ISOTimeAdapter;
 import masecla.modrinth4j.model.search.FacetCollection;
 import masecla.modrinth4j.model.search.FacetCollection.FacetAdapter;
 import masecla.modrinth4j.model.team.ModrinthPermissionMask;
@@ -122,6 +124,7 @@ public class ModrinthAPI {
         this.gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .registerTypeAdapter(FacetCollection.class, new FacetAdapter())
                 .registerTypeAdapter(ModrinthPermissionMask.class, new ModrinthPermissionMaskAdapter())
+                .registerTypeAdapter(Instant.class, new ISOTimeAdapter())
                 .create();
     }
 

@@ -3,8 +3,10 @@ package masecla.modrinth4j.client;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletionException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -18,6 +20,7 @@ import masecla.modrinth4j.endpoints.version.ModifyVersion.ModifyVersionRequest;
 import masecla.modrinth4j.endpoints.version.files.GetProjectLatestVersionFromHash.GetProjectLatestVersionFromHashRequest;
 import masecla.modrinth4j.endpoints.version.files.GetProjectLatestVersionsFromHashes.GetProjectLatestVersionsFromHashesRequest;
 import masecla.modrinth4j.environment.EnvReader;
+import masecla.modrinth4j.exception.EndpointException;
 import masecla.modrinth4j.main.ModrinthAPI;
 import masecla.modrinth4j.model.project.Project;
 import masecla.modrinth4j.model.version.FileHash;
@@ -91,6 +94,21 @@ public class VersionEndpointsTests {
         assertTrue("Versions were not identical!", version.equals(vers.get(0)));
     }
 
+    @Test
+    public void testProjectDateCreationDate() {
+        Project prj = DataUtil.fetchSampleProject(client);
+        DataUtil.appendVersion(client, prj.getId());
+        List<ProjectVersion> vers = client.versions().getProjectVersions(prj.getSlug(),
+                GetProjectVersionsRequest.builder().build()).join();
+
+        Instant now = Instant.now();
+        Instant versionDate = vers.get(0).getDatePublished();
+
+        // Should be less than 10 seconds apart (this should test date parsing)
+        assertTrue("Version date was not within 10 seconds of now!",
+                now.plusSeconds(10).isAfter(versionDate));
+    }
+
     /**
      * This method tests the modification of a version.
      */
@@ -130,6 +148,31 @@ public class VersionEndpointsTests {
         client.versions().deleteProjectVersion(version.getId()).join();
         assertTrue(client.versions().getProjectVersions(prj.getSlug(), GetProjectVersionsRequest.builder().build())
                 .join().size() == 0);
+    }
+
+    /**
+     * This method will make sure .join() throws an exception when making a version
+     */
+    @Test
+    public void testJoinThrow() {
+        Project prj = DataUtil.fetchSampleProject(client);
+        try {
+            client.versions().createProjectVersion(CreateVersionRequest.builder()
+                    .changelog("This is a changelog")
+                    .featured(true)
+                    .projectId(prj.getId())
+                    .loaders(Arrays.asList("paper"))
+                    .name("name")
+                    .versionNumber("1.0.0")
+                    .files(Arrays.asList(DataUtil.getJar()))
+                    .versionType(VersionType.RELEASE)
+                    .build()).join();
+        } catch (CompletionException e) {
+            assertTrue(e.getCause() instanceof EndpointException);
+            EndpointException ex = (EndpointException) e.getCause();
+            assertEquals("invalid_input", ex.getError());
+            assertTrue(ex.getDescription().contains("game_versions"));
+        }
     }
 
     /**
@@ -184,6 +227,20 @@ public class VersionEndpointsTests {
                 .getVersionByHash(FileHash.SHA1, version.getFiles().get(0).getHashes().getSha1()).join();
 
         assertTrue(vers.getId().equals(version.getId()));
+    }
+
+    /**
+     * This method tests getting a version by hash SHA-512
+     */
+    @Test
+    public void testGetVersionByHash512() {
+        Project prj = DataUtil.fetchSampleProject(client);
+        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+
+        ProjectVersion vers = client.versions().files()
+                .getVersionByHash(FileHash.SHA512, version.getFiles().get(0).getHashes().getSha512()).join();
+
+        assertEquals(vers.getId(), version.getId());
     }
 
     /**

@@ -1,6 +1,5 @@
 package masecla.modrinth4j.endpoints.user;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -96,18 +95,13 @@ public class ChangeUserIcon extends Endpoint<EmptyResponse, ChangeUserIconReques
     public CompletableFuture<EmptyResponse> sendRequest(ChangeUserIconRequest request, Map<String, String> urlParams) {
         String url = getReplacedUrl(request, urlParams);
         return getClient().connect(url).thenApply(c -> {
-            try {
-                InputStream stream = request.getIconData();
-                c.method(getMethod(), RequestBody.create(readStream(stream)));
+            InputStream stream = request.getIconData();
+            c.method(getMethod(), RequestBody.create(readStream(stream)));
 
-                Response response = getClient().execute(c);
-                checkBodyForErrors(response.body());
+            Response response = executeRequest(c);
+            checkBodyForErrors(response.body());
 
-                return new EmptyResponse();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
+            return new EmptyResponse();
         });
     }
 

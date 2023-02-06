@@ -19,6 +19,7 @@ import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.version.CreateVersion.CreateVersionRequest;
@@ -94,17 +95,14 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
              * @param files - The files to add.
              * @return - The builder.
              */
+            @SneakyThrows
             public CreateVersionRequestBuilder files(File... files) {
-                try {
-                    this.fileNames = new ArrayList<>();
-                    this.fileStreams = new ArrayList<>();
+                this.fileNames = new ArrayList<>();
+                this.fileStreams = new ArrayList<>();
 
-                    for (int i = 0; i < files.length; i++) {
-                        this.fileNames.add(files[i].getName());
-                        this.fileStreams.add(new FileInputStream(files[i]));
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                for (int i = 0; i < files.length; i++) {
+                    this.fileNames.add(files[i].getName());
+                    this.fileStreams.add(new FileInputStream(files[i]));
                 }
                 return this;
             }
@@ -165,22 +163,16 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
             MultipartBody.Builder body = new MultipartBody.Builder()
                     .addFormDataPart("data", getGson().toJson(jsonObject));
 
-            try {
-                for (int i = 0; i < request.getFileNames().size(); i++) {
-                    body.addFormDataPart(request.getFileNames().get(i), request.getFileNames().get(i),
-                            RequestBody.create(this.readStream(request.getFileStreams().get(i))));
-                }
-
-                c.post(body.build());
-
-                Response response = this.getClient().execute(c);
-
-                ProjectVersion version = this.checkBodyForErrors(response.body());
-                return version;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
+            for (int i = 0; i < request.getFileNames().size(); i++) {
+                body.addFormDataPart(request.getFileNames().get(i), request.getFileNames().get(i),
+                        RequestBody.create(this.readStream(request.getFileStreams().get(i))));
             }
+
+            c.post(body.build());
+
+            Response response = executeRequest(c);
+            ProjectVersion version = this.checkBodyForErrors(response.body());
+            return version;
         });
     }
 

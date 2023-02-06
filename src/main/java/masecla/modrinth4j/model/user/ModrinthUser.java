@@ -1,5 +1,7 @@
 package masecla.modrinth4j.model.user;
 
+import java.time.Instant;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,8 +34,8 @@ public class ModrinthUser {
     /** The user's avatar url */
     private String avatarUrl;
 
-    /** ISO 8601 String */
-    private String created;
+    /** When the user account was created */
+    private Instant created;
 
     /** The user's role on Modrinth */
     private ModrinthUserRole role;

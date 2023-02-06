@@ -2,8 +2,6 @@ package masecla.modrinth4j.endpoints.project.gallery;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.SneakyThrows;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
@@ -53,14 +52,10 @@ public class CreateGalleryImage extends Endpoint<EmptyResponse, CreateGalleryIma
              * @param file - The file to use.
              * @return The builder.
              */
+            @SneakyThrows
             public CreateGalleryImageRequestBuilder file(File file) {
-                try {
-                    this.filename = file.getName();
-                    this.image = new FileInputStream(file);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-
+                this.filename = file.getName();
+                this.image = new FileInputStream(file);
                 return this;
             }
         }
@@ -116,20 +111,13 @@ public class CreateGalleryImage extends Endpoint<EmptyResponse, CreateGalleryIma
         queryParams.put("description", parameters.getDescription());
 
         return getClient().connect(url, queryParams).thenApply(c -> {
-            try {
-                c.method(getMethod(), RequestBody.create(readStream(parameters.getImage())));
-                c.header("Content-Type", "image/*");
+            c.method(getMethod(), RequestBody.create(readStream(parameters.getImage())));
+            c.header("Content-Type", "image/*");
 
-                Response response = getClient().execute(c);
+            Response response = executeRequest(c);
 
-                checkBodyForErrors(response.body());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            checkBodyForErrors(response.body());
             return new EmptyResponse();
-        }).exceptionally(c -> {
-            c.printStackTrace();
-            return null;
         });
     }
 
