@@ -1,6 +1,5 @@
 package masecla.modrinth4j.endpoints.project;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -156,30 +155,22 @@ public class CreateProject extends Endpoint<Project, CreateProjectRequest> {
     @Override
     public CompletableFuture<Project> sendRequest(CreateProjectRequest parameters, Map<String, String> urlParams) {
         return getClient().connect(getEndpoint()).thenApply(c -> {
-            try {
-                MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
+            MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
 
-                JsonObject obj = getGson().toJsonTree(parameters.getData()).getAsJsonObject();
-                obj.add("initial_versions", new JsonArray());
-                obj.addProperty("is_draft", true);
+            JsonObject obj = getGson().toJsonTree(parameters.getData()).getAsJsonObject();
+            obj.add("initial_versions", new JsonArray());
+            obj.addProperty("is_draft", true);
 
-                bodyBuilder.addFormDataPart("data", getGson().toJson(obj));
-                if (parameters.getIconData() != null)
-                    bodyBuilder.addFormDataPart("icon", parameters.getIconFilename(),
-                            RequestBody.create(readStream(parameters.getIconData())));
+            bodyBuilder.addFormDataPart("data", getGson().toJson(obj));
+            if (parameters.getIconData() != null)
+                bodyBuilder.addFormDataPart("icon", parameters.getIconFilename(),
+                        RequestBody.create(readStream(parameters.getIconData())));
 
-                c.method(getMethod(), bodyBuilder.build());
+            c.method(getMethod(), bodyBuilder.build());
 
-                Response response = getClient().execute(c);
+            Response response = executeRequest(c);
 
-                return checkBodyForErrors(response.body());
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }).exceptionally(c -> {
-            c.printStackTrace();
-            return null;
+            return checkBodyForErrors(response.body());
         });
     }
 }

@@ -3,8 +3,6 @@ package masecla.modrinth4j.endpoints.generic;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,10 +14,12 @@ import com.google.gson.reflect.TypeToken;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyRequest;
 import masecla.modrinth4j.exception.EndpointException;
 import okhttp3.MediaType;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -117,29 +117,35 @@ public abstract class Endpoint<O, I> {
         }
 
         return client.connect(url, queryParameters).thenApply(c -> {
-            try {
-                if (HttpMethod.permitsRequestBody(getMethod()))
-                    c.method(getMethod(), RequestBody.create("", MediaType.parse("application/json; charset=utf-8")));
-                else
-                    c.method(getMethod(), null);
+            if (HttpMethod.permitsRequestBody(getMethod()))
+                c.method(getMethod(), RequestBody.create("", MediaType.parse("application/json; charset=utf-8")));
+            else
+                c.method(getMethod(), null);
 
-                if (this.requiresBody() && !getRequestClass().getType().equals(EmptyRequest.class)) {
-                    JsonElement jsonBody = gson.toJsonTree(request, getRequestClass().getType());
-                    if (isJsonBody()) {
-                        c.method(getMethod(), RequestBody.create(gson.toJson(jsonBody),
-                                MediaType.parse("application/json; charset=utf-8")));
-                    }
+            if (this.requiresBody() && !getRequestClass().getType().equals(EmptyRequest.class)) {
+                JsonElement jsonBody = gson.toJsonTree(request, getRequestClass().getType());
+                if (isJsonBody()) {
+                    c.method(getMethod(), RequestBody.create(gson.toJson(jsonBody),
+                            MediaType.parse("application/json; charset=utf-8")));
                 }
-
-                Response response = this.client.execute(c);
-                ResponseBody body = response.body();
-
-                return checkBodyForErrors(body);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
             }
+
+            Response response = executeRequest(c);
+            ResponseBody body = response.body();
+
+            return checkBodyForErrors(body);
         });
+    }
+
+    /**
+     * This will execute the given request with this endpoint's HTTP client.
+     * 
+     * @param request - The request to execute.
+     * @return - The response.
+     */
+    @SneakyThrows
+    protected Response executeRequest(Request.Builder request) {
+        return this.client.execute(request);
     }
 
     /**
@@ -148,14 +154,10 @@ public abstract class Endpoint<O, I> {
      * @param body - The body to check.
      * @return - The parsed response.
      */
+    @SneakyThrows
     protected O checkBodyForErrors(ResponseBody body) {
         if (body.contentLength() != 0) {
-            String bodySrc = "UNAVAILABLE";
-            try {
-                bodySrc = body.string();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            String bodySrc = body.string();
 
             JsonElement unparsedObject = null;
             try {
@@ -164,6 +166,7 @@ public abstract class Endpoint<O, I> {
                 throw new EndpointException("invalid-json",
                         "Expected JSON response from endpoint, received: " + bodySrc + "");
             }
+
             if (unparsedObject != null) {
                 if (unparsedObject.isJsonObject())
                     if (unparsedObject.getAsJsonObject().has("error")) {
@@ -187,20 +190,16 @@ public abstract class Endpoint<O, I> {
      * @param stream - The stream to read.
      * @return - The byte array.
      */
+    @SneakyThrows
     protected byte[] readStream(InputStream stream) {
-        try {
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            int nRead;
-            byte[] data = new byte[16384];
-            while ((nRead = stream.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, nRead);
-            }
-            buffer.flush();
-            return buffer.toByteArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        int nRead;
+        byte[] data = new byte[16384];
+        while ((nRead = stream.read(data, 0, data.length)) != -1) {
+            buffer.write(data, 0, nRead);
         }
+        buffer.flush();
+        return buffer.toByteArray();
     }
 
     /**
@@ -209,13 +208,9 @@ public abstract class Endpoint<O, I> {
      * @param file - The file to read.
      * @return - The byte array.
      */
+    @SneakyThrows
     protected byte[] readFile(File file) {
-        try {
-            return readStream(new FileInputStream(file));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return readStream(new FileInputStream(file));
     }
 
     /**
