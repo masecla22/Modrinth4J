@@ -15,6 +15,27 @@
 This API presents a (more than) full up-to-date coverage of the Modrinth API, allowing for intuitive native integration with existing java projects.  
 
 ## Adding to a project:
+### Stable Release Channel
+Modrinth4J is distributed through Maven Central, so just adding the following is enough. 
+
+### Gradle:
+```java
+dependencies {
+      implementation 'dev.masecla:Modrinth4J:2.0.0'
+}
+```
+
+### Maven
+```xml
+<dependency>
+    <groupId>dev.masecla</groupId>
+    <artifactId>Modrinth4J</artifactId>
+    <version>2.0.0</version>
+</dependency>
+```
+
+### Bleeding Edge
+The following is for running Modrinth4J on the bleeding edge. 
 ### Gradle:
 Add jitpack to the gradle repositories:
 ```java
