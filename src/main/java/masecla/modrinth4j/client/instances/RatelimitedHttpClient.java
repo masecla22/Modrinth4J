@@ -3,6 +3,7 @@ package masecla.modrinth4j.client.instances;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import lombok.SneakyThrows;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.client.agent.UserAgent;
 import okhttp3.Response;
@@ -47,20 +48,20 @@ public class RatelimitedHttpClient extends HttpClient {
         // Check if we still have requests remaining
         if (requestCount.get() <= 0) {
             // If not, wait until we have more
-            return CompletableFuture.runAsync(() -> {
-                try {
-                    // *technically we should wait timeLeft seconds, but waiting a little more won't
-                    // hurt*
-                    Thread.sleep(timeLeft.get() * 1100 + 1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            });
+            return CompletableFuture.runAsync(this::waitLeft);
         } else {
             // If we do, decrement the request count
             requestCount.decrementAndGet();
             return CompletableFuture.completedFuture(null);
         }
+    }
+    
+    /**
+     * This will wait until we have more requests.
+     */
+    @SneakyThrows
+    private void waitLeft() {
+        Thread.sleep(timeLeft.get() * 1100 + 1000);
     }
 
     /**
