@@ -202,6 +202,20 @@ public class VersionEndpointsTests {
     }
 
     /**
+     * This method tests getting a version by hash SHA-512
+     */
+    @Test
+    public void testGetVersionByHash512() {
+        Project prj = DataUtil.fetchSampleProject(client);
+        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+
+        ProjectVersion vers = client.versions().files()
+                .getVersionByHash(FileHash.SHA512, version.getFiles().get(0).getHashes().getSha512()).join();
+
+        assertEquals(vers.getId(), version.getId());
+    }
+
+    /**
      * This method tests getting multiple versions by hash
      */
     @Test
