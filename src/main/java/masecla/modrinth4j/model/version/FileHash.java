@@ -9,7 +9,7 @@ public enum FileHash {
     /** Represents the SHA1 hash */
     @SerializedName("sha1")
     SHA1,
-    /** Represents the SHA256 hash */
-    @SerializedName("sha256")
-    SHA256;
+    /** Represents the SHA512 hash */
+    @SerializedName("sha512")
+    SHA512;
 }
