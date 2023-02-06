@@ -19,6 +19,7 @@ import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.version.CreateVersion.CreateVersionRequest;
@@ -26,6 +27,7 @@ import masecla.modrinth4j.model.version.ProjectVersion;
 import masecla.modrinth4j.model.version.ProjectVersion.ProjectDependency;
 import masecla.modrinth4j.model.version.ProjectVersion.VersionType;
 import okhttp3.MultipartBody;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
@@ -145,43 +147,47 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
     @Override
     public CompletableFuture<ProjectVersion> sendRequest(CreateVersionRequest request, Map<String, String> urlParams) {
         String url = getReplacedUrl(request, urlParams);
-        return getClient().connect(url).thenApply(c -> {
-            JsonObject jsonObject = getGson().toJsonTree(request).getAsJsonObject();
+        return getClient().connect(url).thenApply(c -> prepareRequest(request, c));
+    }
 
-            if (request.getFileNames().size() > 1) {
-                String primaryFile = request.getPrimaryFile();
-                if (primaryFile == null || primaryFile.isEmpty()) {
-                    primaryFile = request.getFileNames().get(0);
-                }
-                jsonObject.addProperty("primary_file", primaryFile);
+    /**
+     * This will prepare and send the request.
+     * 
+     * @param request - The request to send.
+     * @param c - The Request Builder with all authentication.
+     * @return - The response.
+     */
+    @SneakyThrows
+    private ProjectVersion prepareRequest(CreateVersionRequest request, Request.Builder c) {
+        JsonObject jsonObject = getGson().toJsonTree(request).getAsJsonObject();
+
+        if (request.getFileNames().size() > 1) {
+            String primaryFile = request.getPrimaryFile();
+            if (primaryFile == null || primaryFile.isEmpty()) {
+                primaryFile = request.getFileNames().get(0);
             }
+            jsonObject.addProperty("primary_file", primaryFile);
+        }
 
-            JsonArray array = new JsonArray();
-            for (String filename : request.getFileNames()) {
-                array.add(filename);
-            }
-            jsonObject.add("file_parts", array);
+        JsonArray array = new JsonArray();
+        for (String filename : request.getFileNames()) {
+            array.add(filename);
+        }
+        jsonObject.add("file_parts", array);
 
-            MultipartBody.Builder body = new MultipartBody.Builder()
-                    .addFormDataPart("data", getGson().toJson(jsonObject));
+        MultipartBody.Builder body = new MultipartBody.Builder()
+                .addFormDataPart("data", getGson().toJson(jsonObject));
 
-            try {
-                for (int i = 0; i < request.getFileNames().size(); i++) {
-                    body.addFormDataPart(request.getFileNames().get(i), request.getFileNames().get(i),
-                            RequestBody.create(this.readStream(request.getFileStreams().get(i))));
-                }
+        for (int i = 0; i < request.getFileNames().size(); i++) {
+            body.addFormDataPart(request.getFileNames().get(i), request.getFileNames().get(i),
+                    RequestBody.create(this.readStream(request.getFileStreams().get(i))));
+        }
 
-                c.post(body.build());
+        c.post(body.build());
 
-                Response response = this.getClient().execute(c);
-
-                ProjectVersion version = this.checkBodyForErrors(response.body());
-                return version;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        });
+        Response response = this.getClient().execute(c);
+        ProjectVersion version = this.checkBodyForErrors(response.body());
+        return version;
     }
 
     /**
