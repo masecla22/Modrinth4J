@@ -3,6 +3,7 @@ package masecla.modrinth4j.client;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
@@ -89,6 +90,20 @@ public class VersionEndpointsTests {
         vers.get(0).setDatePublished(null);
 
         assertTrue("Versions were not identical!", version.equals(vers.get(0)));
+    }
+
+    @Test
+    public void testProjectDateCreationDate() {
+        Project prj = DataUtil.fetchSampleProject(client);
+        List<ProjectVersion> vers = client.versions().getProjectVersions(prj.getSlug(),
+                GetProjectVersionsRequest.builder().build()).join();
+
+        Instant now = Instant.now();
+        Instant versionDate = vers.get(0).getDatePublished();
+
+        // Should be less than 10 seconds apart (this should test date parsing)
+        assertTrue("Version date was not within 10 seconds of now!",
+                now.plusSeconds(10).isAfter(versionDate));
     }
 
     /**
