@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletionException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -19,6 +20,7 @@ import masecla.modrinth4j.endpoints.version.ModifyVersion.ModifyVersionRequest;
 import masecla.modrinth4j.endpoints.version.files.GetProjectLatestVersionFromHash.GetProjectLatestVersionFromHashRequest;
 import masecla.modrinth4j.endpoints.version.files.GetProjectLatestVersionsFromHashes.GetProjectLatestVersionsFromHashesRequest;
 import masecla.modrinth4j.environment.EnvReader;
+import masecla.modrinth4j.exception.EndpointException;
 import masecla.modrinth4j.main.ModrinthAPI;
 import masecla.modrinth4j.model.project.Project;
 import masecla.modrinth4j.model.version.FileHash;
@@ -145,6 +147,31 @@ public class VersionEndpointsTests {
         client.versions().deleteProjectVersion(version.getId()).join();
         assertTrue(client.versions().getProjectVersions(prj.getSlug(), GetProjectVersionsRequest.builder().build())
                 .join().size() == 0);
+    }
+
+    /**
+     * This method will make sure .join() throws an exception when making a version
+     */
+    @Test
+    public void testJoinThrow() {
+        Project prj = DataUtil.fetchSampleProject(client);
+        try {
+            client.versions().createProjectVersion(CreateVersionRequest.builder()
+                    .changelog("This is a changelog")
+                    .featured(true)
+                    .projectId(prj.getId())
+                    .loaders(Arrays.asList("paper"))
+                    .name("name")
+                    .versionNumber("1.0.0")
+                    .files(Arrays.asList(DataUtil.getJar()))
+                    .versionType(VersionType.RELEASE)
+                    .build()).join();
+        } catch (CompletionException e) {
+            assertTrue(e.getCause() instanceof EndpointException);
+            EndpointException ex = (EndpointException) e.getCause();
+            assertEquals("invalid_input", ex.getError());
+            assertTrue(ex.getDescription().contains("game_versions"));
+        }
     }
 
     /**
