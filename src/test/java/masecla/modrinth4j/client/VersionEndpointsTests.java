@@ -97,6 +97,7 @@ public class VersionEndpointsTests {
     @Test
     public void testProjectDateCreationDate() {
         Project prj = DataUtil.fetchSampleProject(client);
+        DataUtil.appendVersion(client, prj.getId());
         List<ProjectVersion> vers = client.versions().getProjectVersions(prj.getSlug(),
                 GetProjectVersionsRequest.builder().build()).join();
 
