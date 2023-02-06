@@ -1,5 +1,7 @@
 package masecla.modrinth4j.model.project;
 
+import java.time.Instant;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,6 @@ public class ProjectGalleryImage {
     /** The image's description */
     private String description;
 
-    /** ISO 8601 format */
-    private String created;
+    /** When the gallery image was created */
+    private Instant created;
 }

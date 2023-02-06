@@ -1,5 +1,6 @@
 package masecla.modrinth4j.model.project;
 
+import java.time.Instant;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -64,14 +65,14 @@ public class Project {
     /** A project moderation message */
     private String moderatorMessage;
 
-    /** Date published. ISO 8601 format. */
-    private String published;
+    /** Date published. */
+    private Instant published;
 
-    /** Date published. ISO 8601 format. */
-    private String updated;
+    /** Date published */
+    private Instant updated;
 
-    /** Date approved. ISO 8601 format. */
-    private String approved;
+    /** Date approved */
+    private Instant approved;
 
     /** Follower count */
     private int followers;

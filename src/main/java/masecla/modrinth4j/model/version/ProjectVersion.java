@@ -1,5 +1,6 @@
 package masecla.modrinth4j.model.version;
 
+import java.time.Instant;
 import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
@@ -46,8 +47,8 @@ public class ProjectVersion {
     /** The id of the author of this version */
     private String authorId;
 
-    /** The date this version was published. ISO 8601 String */
-    private String datePublished;
+    /** The date this version was published. */
+    private Instant datePublished;
 
     /** The amount of downloads this version has */
     private int downloads;

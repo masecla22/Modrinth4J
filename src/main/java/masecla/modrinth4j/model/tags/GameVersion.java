@@ -1,5 +1,7 @@
 package masecla.modrinth4j.model.tags;
 
+import java.time.Instant;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,8 +18,8 @@ public class GameVersion {
     /** The game version's type */
     private String versionType;
 
-    /** ISO 8601 date */
-    private String date;
+    /** When this game version was released */
+    private Instant date;
 
     /** If this is a major version */
     private boolean major;
