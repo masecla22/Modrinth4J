@@ -16,6 +16,7 @@ import masecla.modrinth4j.data.DataUtil;
 import masecla.modrinth4j.endpoints.SearchEndpoint.SearchRequest;
 import masecla.modrinth4j.endpoints.SearchEndpoint.SearchResponse;
 import masecla.modrinth4j.endpoints.project.ModifyProject.ProjectModifications;
+import masecla.modrinth4j.endpoints.project.ProjectEndpoints;
 import masecla.modrinth4j.endpoints.project.gallery.CreateGalleryImage.CreateGalleryImageRequest;
 import masecla.modrinth4j.endpoints.project.gallery.ModifyGalleryImage.ModifyGalleryImageRequest;
 import masecla.modrinth4j.environment.EnvReader;
@@ -296,5 +297,20 @@ public class ProjectEndpointsTests {
                 prj.getWikiUrl().equals("https://example.com/wiki"));
 
         client.projects().delete("diff-slug-too").join();
+    }
+
+    @Test
+    public void testModifyProjectIdenticalSlug() {
+        Project prj = DataUtil.createSampleProject(client);
+
+        client.projects().modify(prj.getId(), ProjectModifications.builder()
+                .slug(prj.getSlug())
+                .build()).join();
+
+        prj = client.projects().get(prj.getSlug()).join();
+
+        assertTrue("The project did not have the correct slug!", prj.getSlug().equals("test-project"));
+
+        client.projects().delete("test-project").join();
     }
 }
