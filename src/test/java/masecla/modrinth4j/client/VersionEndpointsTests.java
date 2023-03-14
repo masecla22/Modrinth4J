@@ -230,6 +230,20 @@ public class VersionEndpointsTests {
     }
 
     /**
+     * This method tests getting a version by project number and version
+     * 
+     */
+    @Test
+    public void testGetVersionByProjectNumberAndVersion() {
+        Project prj = DataUtil.fetchSampleProject(client);
+        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+
+        ProjectVersion vers = client.versions().getVersionByNumber(prj.getSlug(), version.getVersionNumber()).join();
+
+        assertTrue(vers.getId().equals(version.getId()));
+    }
+
+    /**
      * This method tests getting a version by hash SHA-512
      */
     @Test
