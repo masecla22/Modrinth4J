@@ -72,6 +72,17 @@ public class VersionEndpoints {
     }
 
     /**
+     * Fetches a version based on the project slug and version number
+     */
+    public CompletableFuture<ProjectVersion> getVersionByNumber(String projectSlug, String versionNumber) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("slug", projectSlug);
+        parameters.put("versionNumber", versionNumber);
+
+        return new GetVersionByVersionNumber(httpClient, gson).sendRequest(null, parameters);
+    }
+
+    /**
      * Fetches multiple versions based on the version ids
      * 
      * @param versionIds - The ids of the versions to fetch
