@@ -309,8 +309,8 @@ public class ProjectEndpointsTests {
 
         prj = client.projects().get(prj.getSlug()).join();
 
-        assertTrue("The project did not have the correct slug!", prj.getSlug().equals("test-project"));
+        assertTrue("The project did not have the correct slug!", prj.getSlug().equals("modrinth4j-test-project"));
 
-        client.projects().delete("test-project").join();
+        client.projects().delete("modrinth4j-test-project").join();
     }
 }
