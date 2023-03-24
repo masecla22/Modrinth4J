@@ -39,7 +39,7 @@ public class GetProjectVersions extends Endpoint<List<ProjectVersion>, GetProjec
         private List<String> gameVersions;
 
         /** If the version is featured. */
-        private boolean featured;
+        private Boolean featured;
     }
 
     /**
