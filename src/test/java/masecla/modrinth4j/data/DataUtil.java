@@ -84,13 +84,28 @@ public class DataUtil {
      * @param projectId - The ID of the project to append the version to.
      * @return - The created version.
      */
-    public static ProjectVersion appendVersion(ModrinthAPI api, String projectId) {
+    public static ProjectVersion appendFeaturedVersion(ModrinthAPI api, String projectId) {
         return api.versions().createProjectVersion(CreateVersionRequest.builder()
                 .projectId(projectId)
                 .changelog("This is a changelog")
                 .gameVersions(Arrays.asList("1.16.5"))
                 .versionNumber("1.0.0")
                 .name("Version Name!")
+                .featured(true)
+                .versionType(VersionType.RELEASE)
+                .loaders(Arrays.asList("spigot"))
+                .files(getJar())
+                .build()).join();
+    }
+
+    public static ProjectVersion appendUnfeaturedVersion(ModrinthAPI api, String projectId) {
+        return api.versions().createProjectVersion(CreateVersionRequest.builder()
+                .projectId(projectId)
+                .changelog("This is a changelog")
+                .gameVersions(Arrays.asList("1.16.5"))
+                .versionNumber("1.0.1")
+                .name("Version Name!")
+                .featured(false)
                 .versionType(VersionType.RELEASE)
                 .loaders(Arrays.asList("spigot"))
                 .files(getJar())
