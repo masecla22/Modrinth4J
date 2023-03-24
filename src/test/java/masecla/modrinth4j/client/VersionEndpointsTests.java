@@ -69,7 +69,7 @@ public class VersionEndpointsTests {
     @Test
     public void testGetVersions() {
         String projectId = DataUtil.fetchSampleProject(client).getId();
-        ProjectVersion version = DataUtil.appendVersion(client, projectId);
+        ProjectVersion version = DataUtil.appendFeaturedVersion(client, projectId);
         assertTrue(client.versions().getVersion("NlIrj4dz", version.getId()).join().size() == 2);
     }
 
@@ -79,7 +79,7 @@ public class VersionEndpointsTests {
     @Test
     public void testProjectVersions() {
         Project prj = DataUtil.fetchSampleProject(client);
-        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+        ProjectVersion version = DataUtil.appendFeaturedVersion(client, prj.getId());
         List<ProjectVersion> vers = client.versions().getProjectVersions(prj.getSlug(),
                 GetProjectVersionsRequest.builder().build()).join();
 
@@ -94,10 +94,41 @@ public class VersionEndpointsTests {
         assertTrue("Versions were not identical!", version.equals(vers.get(0)));
     }
 
+    /**
+     * This method will check searching by featured and unfeatured.
+     */
+    @Test
+    public void testFeaturedLookup() {
+        Project prj = DataUtil.fetchSampleProject(client);
+        ProjectVersion featVer = DataUtil.appendFeaturedVersion(client, prj.getId());
+        ProjectVersion unfeatVer = DataUtil.appendUnfeaturedVersion(client, prj.getId());
+
+        List<ProjectVersion> featVers = client.versions().getProjectVersions(prj.getSlug(),
+                GetProjectVersionsRequest.builder().featured(true).build()).join();
+        List<ProjectVersion> unfeatVers = client.versions().getProjectVersions(prj.getSlug(),
+                GetProjectVersionsRequest.builder().featured(false).build()).join();
+        List<ProjectVersion> allVers = client.versions().getProjectVersions(prj.getSlug(),
+                GetProjectVersionsRequest.builder().build()).join();
+
+        assertEquals("Featured versions should only be 1!", featVers.size(), 1);
+        assertEquals("Unfeatured versions should only be 1!", unfeatVers.size(), 1);
+        assertEquals("All versions should only be 2!", allVers.size(), 2);
+
+        // Same consistency issue as above
+        featVers.get(0).setDatePublished(null);
+        unfeatVers.get(0).setDatePublished(null);
+        featVer.setDatePublished(null);
+        unfeatVer.setDatePublished(null);
+
+        assertTrue("Featured version was not the featured version!", featVers.get(0).equals(featVer));
+        assertTrue("Unfeatured version was not the unfeatured version!",
+                unfeatVers.get(0).equals(unfeatVer));
+    }
+
     @Test
     public void testProjectDateCreationDate() {
         Project prj = DataUtil.fetchSampleProject(client);
-        DataUtil.appendVersion(client, prj.getId());
+        DataUtil.appendFeaturedVersion(client, prj.getId());
         List<ProjectVersion> vers = client.versions().getProjectVersions(prj.getSlug(),
                 GetProjectVersionsRequest.builder().build()).join();
 
@@ -115,7 +146,7 @@ public class VersionEndpointsTests {
     @Test
     public void testModifyProjectVersion() {
         Project prj = DataUtil.fetchSampleProject(client);
-        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+        ProjectVersion version = DataUtil.appendFeaturedVersion(client, prj.getId());
 
         client.versions().modifyProjectVersion(version.getId(), ModifyVersionRequest.builder()
                 .changelog("This is a DIFFERENT changelog")
@@ -144,7 +175,7 @@ public class VersionEndpointsTests {
     @Test
     public void testDeleteProjectVersion() {
         Project prj = DataUtil.fetchSampleProject(client);
-        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+        ProjectVersion version = DataUtil.appendFeaturedVersion(client, prj.getId());
         client.versions().deleteProjectVersion(version.getId()).join();
         assertTrue(client.versions().getProjectVersions(prj.getSlug(), GetProjectVersionsRequest.builder().build())
                 .join().size() == 0);
@@ -209,7 +240,7 @@ public class VersionEndpointsTests {
     @SneakyThrows
     public void testAddFilesToVersion() {
         Project prj = DataUtil.fetchSampleProject(client);
-        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+        ProjectVersion version = DataUtil.appendFeaturedVersion(client, prj.getId());
         client.versions().addFilesToVersion(version.getId(), Arrays.asList(DataUtil.getAnotherJar())).join();
 
         assertTrue(client.versions().getVersion(version.getId()).join().getFiles().size() == 2);
@@ -221,7 +252,7 @@ public class VersionEndpointsTests {
     @Test
     public void testGetVersionByHash() {
         Project prj = DataUtil.fetchSampleProject(client);
-        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+        ProjectVersion version = DataUtil.appendFeaturedVersion(client, prj.getId());
 
         ProjectVersion vers = client.versions().files()
                 .getVersionByHash(FileHash.SHA1, version.getFiles().get(0).getHashes().getSha1()).join();
@@ -236,7 +267,7 @@ public class VersionEndpointsTests {
     @Test
     public void testGetVersionByProjectNumberAndVersion() {
         Project prj = DataUtil.fetchSampleProject(client);
-        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+        ProjectVersion version = DataUtil.appendFeaturedVersion(client, prj.getId());
 
         ProjectVersion vers = client.versions().getVersionByNumber(prj.getSlug(), version.getVersionNumber()).join();
 
@@ -249,7 +280,7 @@ public class VersionEndpointsTests {
     @Test
     public void testGetVersionByHash512() {
         Project prj = DataUtil.fetchSampleProject(client);
-        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+        ProjectVersion version = DataUtil.appendFeaturedVersion(client, prj.getId());
 
         ProjectVersion vers = client.versions().files()
                 .getVersionByHash(FileHash.SHA512, version.getFiles().get(0).getHashes().getSha512()).join();
@@ -264,7 +295,7 @@ public class VersionEndpointsTests {
     @SneakyThrows
     public void testGetVersionsByHash() {
         Project prj = DataUtil.fetchSampleProject(client);
-        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+        ProjectVersion version = DataUtil.appendFeaturedVersion(client, prj.getId());
 
         // Add a file
         client.versions().addFilesToVersion(version.getId(), Arrays.asList(DataUtil.getAnotherJar())).join();
@@ -288,7 +319,7 @@ public class VersionEndpointsTests {
     @SneakyThrows
     public void testDeleteFileByHash() {
         Project prj = DataUtil.fetchSampleProject(client);
-        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+        ProjectVersion version = DataUtil.appendFeaturedVersion(client, prj.getId());
 
         // Add file
         client.versions().addFilesToVersion(version.getId(), Arrays.asList(DataUtil.getAnotherJar())).join();
@@ -306,7 +337,7 @@ public class VersionEndpointsTests {
     @Test
     public void testGetLatestVersionByHash() {
         Project prj = DataUtil.fetchSampleProject(client);
-        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+        ProjectVersion version = DataUtil.appendFeaturedVersion(client, prj.getId());
 
         ProjectVersion vers = client.versions().files()
                 .getLatestVersionByHash(FileHash.SHA1, version.getFiles().get(0).getHashes().getSha1(),
@@ -323,7 +354,7 @@ public class VersionEndpointsTests {
     @SneakyThrows
     public void testGetLatestVersionsByHash() {
         Project prj = DataUtil.fetchSampleProject(client);
-        ProjectVersion version = DataUtil.appendVersion(client, prj.getId());
+        ProjectVersion version = DataUtil.appendFeaturedVersion(client, prj.getId());
 
         // Add a file
         client.versions().addFilesToVersion(version.getId(), Arrays.asList(DataUtil.getAnotherJar())).join();
