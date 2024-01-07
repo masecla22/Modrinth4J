@@ -2,6 +2,7 @@ target/
 .apt_generated
 .apt_generated_tests
 .vscode
+.idea
 src/main/java/masecla/modrinth4j/main/Testing.java
 .env
 
