@@ -35,6 +35,18 @@ public class UnlimitedHttpClient extends HttpClient {
     }
 
     /**
+     * Creates a new instance of the client.
+     * 
+     * @param userAgent The user agent to use.
+     * @param baseUrl   The base URL to use.
+     * @param apiKey    The API key to use.
+     * @param timeout   The timeout to use in milliseconds.
+     */
+    public UnlimitedHttpClient(UserAgent userAgent, String baseUrl, String apiKey, long timeout) {
+        super(userAgent, baseUrl, apiKey, timeout);
+    }
+
+    /**
      * Returns the next request.
      */
     @Override

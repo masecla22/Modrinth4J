@@ -3,7 +3,9 @@ package masecla.modrinth4j.client;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
+import lombok.Getter;
 import lombok.NonNull;
 import masecla.modrinth4j.client.agent.UserAgent;
 import okhttp3.HttpUrl;
@@ -28,6 +30,10 @@ public abstract class HttpClient {
     /** The client to use. */
     private OkHttpClient client;
 
+    /** The timeout for this HTTP client */
+    @Getter
+    private long timeout = 5000;
+
     /**
      * Creates a new instance of the client.
      * 
@@ -50,6 +56,21 @@ public abstract class HttpClient {
     public HttpClient(UserAgent userAgent, String baseUrl, String apiKey) {
         this(userAgent, apiKey);
         this.baseUrl = baseUrl;
+    }
+
+    /**
+     * Creates a new instance of the client.
+     * 
+     * @param userAgent The user agent to use.
+     * @param baseUrl   The base URL to use.
+     * @param apiKey    The API key to use.
+     * @param timeout   The timeout to use.
+     */
+    public HttpClient(UserAgent userAgent, String baseUrl, String apiKey, long timeout) {
+        this.baseUrl = baseUrl;
+        this.apiKey = apiKey;
+        this.userAgent = userAgent;
+        this.client = new OkHttpClient.Builder().callTimeout(timeout, TimeUnit.MILLISECONDS).build();
     }
 
     /**

@@ -41,6 +41,18 @@ public class RatelimitedHttpClient extends HttpClient {
     }
 
     /**
+     * Creates a new instance of the client.
+     * 
+     * @param userAgent The user agent to use.
+     * @param baseUrl   The base URL to use.
+     * @param apiKey    The API key to use.
+     * @param timeout   The timeout to use in milliseconds.
+     */
+    public RatelimitedHttpClient(UserAgent userAgent, String baseUrl, String apiKey, long timeout) {
+        super(userAgent, baseUrl, apiKey, timeout);
+    }
+
+    /**
      * Returns the next request.
      */
     @Override
@@ -55,7 +67,7 @@ public class RatelimitedHttpClient extends HttpClient {
             return CompletableFuture.completedFuture(null);
         }
     }
-    
+
     /**
      * This will wait until we have more requests.
      */
