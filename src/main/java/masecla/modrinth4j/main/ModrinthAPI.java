@@ -84,6 +84,27 @@ public class ModrinthAPI {
     }
 
     /**
+     * Returns a client which will send unlimited requests.
+     * 
+     * @param agent   - The user agent to use
+     * @param url     - The URL to use
+     * @param apiKey  - The API key to use
+     * @param timeout - The timeout to use in milliseconds
+     * @return - A client which will send unlimited requests.
+     * 
+     * @deprecated - Use {@link #rateLimited(UserAgent, String, String, long)}
+     *             instead.
+     */
+    @Deprecated
+    public static ModrinthAPI unlimited(UserAgent agent, String url, String apiKey, long timeout) {
+        HttpClient client = new UnlimitedHttpClient(agent, url, apiKey, timeout);
+        ModrinthAPI result = new ModrinthAPI(client, apiKey);
+
+        result.initializeGson();
+        return result;
+    }
+
+    /**
      * Returns a client which will send requests and adjust speed based on rate
      * limits
      * 
@@ -112,6 +133,25 @@ public class ModrinthAPI {
      */
     public static ModrinthAPI rateLimited(UserAgent agent, String url, String apiKey) {
         HttpClient client = new RatelimitedHttpClient(agent, url, apiKey);
+        ModrinthAPI result = new ModrinthAPI(client, apiKey);
+
+        result.initializeGson();
+        return result;
+    }
+
+    /**
+     * Returns a client which will send requests and adjust speed based on rate
+     * limits
+     * 
+     * @param agent   - The user agent to use
+     * @param url     - The base URL to use
+     * @param apiKey  - The API key to use
+     * @param timeout - The timeout to use in milliseconds
+     * 
+     * @return - A client which will send requests and adjust speed based on rate
+     */
+    public static ModrinthAPI rateLimited(UserAgent agent, String url, String apiKey, long timeout) {
+        HttpClient client = new RatelimitedHttpClient(agent, url, apiKey, timeout);
         ModrinthAPI result = new ModrinthAPI(client, apiKey);
 
         result.initializeGson();
