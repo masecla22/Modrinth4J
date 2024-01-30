@@ -23,6 +23,7 @@ import lombok.SneakyThrows;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.version.CreateVersion.CreateVersionRequest;
+import masecla.modrinth4j.model.project.ProjectStatus;
 import masecla.modrinth4j.model.version.ProjectVersion;
 import masecla.modrinth4j.model.version.ProjectVersion.ProjectDependency;
 import masecla.modrinth4j.model.version.ProjectVersion.VersionType;
@@ -68,6 +69,12 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
 
         /** If the version is featured */
         private boolean featured;
+
+        /** The project status */
+        private ProjectStatus status;
+
+        /** The requested status of the project */
+        private ProjectStatus requestedStatus;
 
         /** The project ID of the version */
         @NonNull
