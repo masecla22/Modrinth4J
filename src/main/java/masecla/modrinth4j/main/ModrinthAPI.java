@@ -31,6 +31,7 @@ import masecla.modrinth4j.model.team.ModrinthPermissionMask.ModrinthPermissionMa
 /**
  * The main class for the Modrinth API.
  */
+@SuppressWarnings("deprecation")
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ModrinthAPI {
 
