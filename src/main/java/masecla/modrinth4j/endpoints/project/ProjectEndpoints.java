@@ -16,11 +16,13 @@ import lombok.AllArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyRequest;
 import masecla.modrinth4j.endpoints.generic.empty.EmptyResponse;
+import masecla.modrinth4j.endpoints.project.BulkModifyProjects.BulkModifyProjectsRequest;
 import masecla.modrinth4j.endpoints.project.ChangeProjectIcon.ChangeProjectIconRequest;
 import masecla.modrinth4j.endpoints.project.CreateProject.CreateProjectRequest;
 import masecla.modrinth4j.endpoints.project.GetMultipleProjects.GetMultipleProjectsRequest;
 import masecla.modrinth4j.endpoints.project.GetProjectDependencies.GetProjectDependenciesResponse;
 import masecla.modrinth4j.endpoints.project.ModifyProject.ProjectModifications;
+import masecla.modrinth4j.endpoints.project.ScheduleProject.ScheduleProjectRequest;
 import masecla.modrinth4j.endpoints.project.follow.FollowProject;
 import masecla.modrinth4j.endpoints.project.follow.UnfollowProject;
 import masecla.modrinth4j.endpoints.project.gallery.CreateGalleryImage;
@@ -253,5 +255,55 @@ public class ProjectEndpoints {
 
         return new ChangeProjectIcon(client, gson).sendRequest(new ChangeProjectIconRequest(stream, fileName),
                 parameters);
+    }
+
+    /**
+     * This endpoint is used to delete a project icon.
+     * 
+     * @param projectId - The ID of the project to delete the icon for.
+     * @return A {@link CompletableFuture} that will return an empty response.
+     */
+    public CompletableFuture<EmptyResponse> deleteProjectIcon(String projectId) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", projectId);
+
+        return new DeleteProjectIcon(client, gson).sendRequest(new EmptyRequest(), parameters);
+    }
+
+    /**
+     * This endpoint is used to modify properties about projects in bulk.
+     * 
+     * @param request - The request to send.
+     * @return A {@link CompletableFuture} that will return an empty response.
+     */
+    public CompletableFuture<EmptyResponse> bulkModifyProjects(BulkModifyProjectsRequest request) {
+        return new BulkModifyProjects(client, gson).sendRequest(request);
+    }
+
+    /**
+     * This endpoint is used to get a list of random projects
+     * 
+     * @param count - The amount of projects to get.
+     * @return A {@link CompletableFuture} that will return the projects.
+     */
+    public CompletableFuture<List<Project>> getRandomProjects(int count) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("count", String.valueOf(count));
+
+        return new GetRandomProjects(client, gson).sendRequest(new EmptyRequest(), parameters);
+    }
+
+    /**
+     * This endpoint is used to schedule a project.
+     * 
+     * @param projectId - The ID of the project to schedule.
+     * @param request   - The request to send.
+     * @return A {@link CompletableFuture} that will return an empty response.
+     */
+    public CompletableFuture<EmptyResponse> scheduleProject(String projectId, ScheduleProjectRequest request) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("slug", projectId);
+
+        return new ScheduleProject(client, gson).sendRequest(request, parameters);
     }
 }
