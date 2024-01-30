@@ -10,9 +10,9 @@ public enum ProjectType {
     @SerializedName("mod")
     MOD,
     /** A modpack */
-    @SerializedName("resourcepack")
+    @SerializedName("modpack")
     MODPACK,
     /** A resourcepack */
-    @SerializedName("modpack")
+    @SerializedName("resourcepack")
     RESOURCEPACK;
 }
