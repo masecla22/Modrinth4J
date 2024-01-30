@@ -12,9 +12,11 @@ import lombok.NoArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.endpoints.generic.Endpoint;
 import masecla.modrinth4j.endpoints.version.ModifyVersion.ModifyVersionRequest;
+import masecla.modrinth4j.model.project.ProjectStatus;
 import masecla.modrinth4j.model.version.ProjectVersion;
 import masecla.modrinth4j.model.version.ProjectVersion.ProjectDependency;
 import masecla.modrinth4j.model.version.ProjectVersion.VersionType;
+import masecla.modrinth4j.model.version.files.EditableFileType.FileType;
 
 /**
  * This endpoint is used to modify a version.
@@ -47,12 +49,21 @@ public class ModifyVersion extends Endpoint<ProjectVersion, ModifyVersionRequest
         /** If the version is featured */
         private boolean featured;
 
+        /** The status of the project */
+        private ProjectStatus status;
+
+        /** The requested status of the project */
+        private ProjectStatus requestedStatus;
+
         /**
          * This is expected to be a length 2 array, where the first one is expected to
          * contains a hash type (such as SHA1) and the second one is meant to contain
          * the hash itself. This should be refactored into a class in the future.
          */
         private String[] primaryFile;
+
+        /** A list of file types to edit. */
+        private List<FileType> fileTypes;
     }
 
     /**
