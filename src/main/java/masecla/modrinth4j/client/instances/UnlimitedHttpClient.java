@@ -7,7 +7,10 @@ import masecla.modrinth4j.client.agent.UserAgent;
 
 /**
  * This class is used to connect to the Modrinth API without any rate limiting.
+ * 
+ * @deprecated - Use {@link RatelimitedHttpClient} instead.
  */
+@Deprecated
 public class UnlimitedHttpClient extends HttpClient {
 
     /**
