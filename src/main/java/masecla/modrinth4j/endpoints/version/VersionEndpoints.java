@@ -19,6 +19,7 @@ import masecla.modrinth4j.endpoints.version.CreateVersion.CreateVersionRequest;
 import masecla.modrinth4j.endpoints.version.GetProjectVersions.GetProjectVersionsRequest;
 import masecla.modrinth4j.endpoints.version.GetVersions.GetVersionsRequest;
 import masecla.modrinth4j.endpoints.version.ModifyVersion.ModifyVersionRequest;
+import masecla.modrinth4j.endpoints.version.ScheduleVersion.ScheduleVersionRequest;
 import masecla.modrinth4j.endpoints.version.files.VersionFilesEndpoints;
 import masecla.modrinth4j.model.version.ProjectVersion;
 
@@ -172,6 +173,7 @@ public class VersionEndpoints {
      * @param versionId - The id of the version to add files to
      * @param files     - A {@link List} of {@link File}s to add to the version
      * @return CompletableFuture - A {@link CompletableFuture} that
+     *         will return an empty response when the files have been added
      * @throws FileNotFoundException - If a file in the list does not exist
      */
     public CompletableFuture<EmptyResponse> addFilesToVersion(String versionId, List<File> files)
@@ -182,5 +184,20 @@ public class VersionEndpoints {
         }
 
         return addFilesToVersion(versionId, fileMap);
+    }
+
+    /**
+     * Schedules a version.
+     * 
+     * @param versionId - The id of the version to schedule
+     * @return CompletableFuture - A {@link CompletableFuture} that
+     *         will return an empty response when the version has been scheduled
+     */
+    public CompletableFuture<EmptyResponse> scheduleVersion(String versionId,
+            ScheduleVersionRequest request) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("id", versionId);
+
+        return new ScheduleVersion(httpClient, gson).sendRequest(request, parameters);
     }
 }
