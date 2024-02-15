@@ -56,9 +56,6 @@
     <profiles>
         <profile>
             <id>release</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <distributionManagement>
                 <snapshotRepository>
                     <id>ossrh</id>
@@ -101,9 +98,6 @@
         </profile>
         <profile>
             <id>test</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
             <properties>
                 <skipTests>false</skipTests>
             </properties>
