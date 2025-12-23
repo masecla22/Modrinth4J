@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -83,6 +84,9 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
         /** The primary file of the version */
         private String primaryFile;
 
+        /** The file types of the version's additional files */
+        private Map<String, String> fileTypes;
+
         /** The files of the version */
         @NonNull
         private transient List<String> fileNames;
@@ -95,6 +99,31 @@ public class CreateVersion extends Endpoint<ProjectVersion, CreateVersionRequest
          * This class is used to build the request.
          */
         public static class CreateVersionRequestBuilder {
+            /**
+             * This method is used to add files to the request.
+             *
+             * @param files - The files to add.
+             * @return - The builder.
+             */
+            @SneakyThrows
+            public CreateVersionRequestBuilder files(Map<File, String> files) {
+                this.fileNames = new ArrayList<>();
+                this.fileStreams = new ArrayList<>();
+                this.fileTypes = new LinkedHashMap<>();
+
+                for (Map.Entry<File, String> entry : files.entrySet()) {
+                    File file = entry.getKey();
+                    String fileType = entry.getValue();
+
+                    this.fileNames.add(file.getName());
+                    this.fileStreams.add(new FileInputStream(file));
+                    if (fileType != null && !fileType.equals("primary")) {
+                        this.fileTypes.put(file.getName(), fileType);
+                    }
+                }
+
+                return this;
+            }
 
             /**
              * This method is used to add files to the request.
