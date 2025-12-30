@@ -15,5 +15,8 @@ public enum SupportStatus {
     OPTIONAL,
     /** The project does not support this. */
     @SerializedName("unsupported")
-    UNSUPPORTED;
+    UNSUPPORTED,
+    /** It is not known if the project supports this. */
+    @SerializedName("unknown")
+    UNKNOWN;
 }
