@@ -59,6 +59,39 @@ public class DataUtil {
     }
 
     /**
+     * Creates a 2nd sample project for testing.
+     * 
+     * @param api
+     * @return
+     */
+    @SneakyThrows
+    public static Project createAnotherSampleProject(ModrinthAPI api) {
+        License randomLicense = api.tags().getLicenses().join().get(0);
+
+        File icon = getImage();
+        FileInputStream fis = new FileInputStream(icon);
+
+        if (api.projects().checkSlugAvailability("modrinth4j-test-project-2").join())
+            return api.projects().create(CreateProjectRequest.builder()
+                    .iconData(fis)
+                    .iconFilename(icon.getName())
+                    .data(ProjectData.builder()
+                            .body("This is another nifty builder")
+                            .categories(Arrays.asList("utility"))
+                            .clientSide(SupportStatus.REQUIRED)
+                            .serverSide(SupportStatus.REQUIRED)
+                            .description("this is another test project")
+                            .discordUrl("https://google.com")
+                            .licenseId(randomLicense.getShortName())
+                            .slug("modrinth4j-test-project-2")
+                            .title("bruh 2")
+                            .build())
+                    .build()).join();
+        fis.close();
+        return fetchSampleProject(api);
+    }
+
+    /**
      * Fetches the sample project.
      * 
      * @param api - The API to use.
@@ -75,6 +108,15 @@ public class DataUtil {
      */
     public static void deleteSampleProject(ModrinthAPI api) {
         api.projects().delete("modrinth4j-test-project").join();
+    }
+
+    /**
+     * Deletes the 2nd sample project.
+     * 
+     * @param api - The API to use.
+     */
+    public static void deleteAnotherSampleProject(ModrinthAPI api) {
+        api.projects().delete("modrinth4j-test-project-2").join();
     }
 
     /**
