@@ -19,17 +19,19 @@ public class UnlimitedHttpClient extends HttpClient {
      * @param userAgent The user agent to use.
      * @param apiKey    The API key to use.
      */
+    @Deprecated
     public UnlimitedHttpClient(UserAgent userAgent, String apiKey) {
         super(userAgent, apiKey);
     }
-
+    
     /**
      * Creates a new instance of the client.
      * 
      * @param userAgent The user agent to use.
      * @param baseUrl   The base URL to use.
      * @param apiKey    The API key to use.
-     */
+    */
+    @Deprecated
     public UnlimitedHttpClient(UserAgent userAgent, String baseUrl, String apiKey) {
         super(userAgent, baseUrl, apiKey);
     }
@@ -42,6 +44,8 @@ public class UnlimitedHttpClient extends HttpClient {
      * @param apiKey    The API key to use.
      * @param timeout   The timeout to use in milliseconds.
      */
+    @Deprecated
+
     public UnlimitedHttpClient(UserAgent userAgent, String baseUrl, String apiKey, long timeout) {
         super(userAgent, baseUrl, apiKey, timeout);
     }
@@ -50,6 +54,7 @@ public class UnlimitedHttpClient extends HttpClient {
      * Returns the next request.
      */
     @Override
+    @Deprecated
     public CompletableFuture<Void> nextRequest() {
         return CompletableFuture.completedFuture(null);
     }
