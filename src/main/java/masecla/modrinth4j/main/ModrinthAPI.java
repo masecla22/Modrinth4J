@@ -7,9 +7,7 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import lombok.AccessLevel;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import masecla.modrinth4j.client.HttpClient;
 import masecla.modrinth4j.client.agent.UserAgent;
 import masecla.modrinth4j.client.instances.RatelimitedHttpClient;
@@ -17,9 +15,15 @@ import masecla.modrinth4j.client.instances.UnlimitedHttpClient;
 import masecla.modrinth4j.endpoints.SearchEndpoint;
 import masecla.modrinth4j.endpoints.SearchEndpoint.SearchRequest;
 import masecla.modrinth4j.endpoints.SearchEndpoint.SearchResponse;
+import masecla.modrinth4j.endpoints.collection.CollectionEndpoints;
+import masecla.modrinth4j.endpoints.friends.FriendsEndpoints;
+import masecla.modrinth4j.endpoints.images.ImagesEndpoints;
+import masecla.modrinth4j.endpoints.limits.LimitsEndpoints;
+import masecla.modrinth4j.endpoints.organization.OrganizationEndpoints;
 import masecla.modrinth4j.endpoints.project.ProjectEndpoints;
 import masecla.modrinth4j.endpoints.tags.TagsEndpoints;
 import masecla.modrinth4j.endpoints.teams.TeamsEndpoints;
+import masecla.modrinth4j.endpoints.threads.ThreadsEndpoints;
 import masecla.modrinth4j.endpoints.user.UserEndpoints;
 import masecla.modrinth4j.endpoints.version.VersionEndpoints;
 import masecla.modrinth4j.model.adapters.ISOTimeAdapter;
@@ -32,16 +36,14 @@ import masecla.modrinth4j.model.team.ModrinthPermissionMask.ModrinthPermissionMa
  * The main class for the Modrinth API.
  */
 @SuppressWarnings("deprecation")
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ModrinthAPI {
 
     /** The HTTP Client to use */
-    @NonNull
     private HttpClient client;
 
-    /** The API key to use */
-    @NonNull
-    private String apiKey;
+    private ModrinthAPI(@NonNull HttpClient client) {
+        this.client = client;
+    }
 
     /** The Gson instance to use */
     private Gson gson;
@@ -58,7 +60,7 @@ public class ModrinthAPI {
     @Deprecated
     public static ModrinthAPI unlimited(UserAgent agent, String apiKey) {
         HttpClient client = new UnlimitedHttpClient(agent, apiKey);
-        ModrinthAPI result = new ModrinthAPI(client, apiKey);
+        ModrinthAPI result = new ModrinthAPI(client);
 
         result.initializeGson();
         return result;
@@ -77,7 +79,7 @@ public class ModrinthAPI {
     @Deprecated
     public static ModrinthAPI unlimited(UserAgent agent, String url, String apiKey) {
         HttpClient client = new UnlimitedHttpClient(agent, url, apiKey);
-        ModrinthAPI result = new ModrinthAPI(client, apiKey);
+        ModrinthAPI result = new ModrinthAPI(client);
 
         result.initializeGson();
         return result;
@@ -98,7 +100,7 @@ public class ModrinthAPI {
     @Deprecated
     public static ModrinthAPI unlimited(UserAgent agent, String url, String apiKey, long timeout) {
         HttpClient client = new UnlimitedHttpClient(agent, url, apiKey, timeout);
-        ModrinthAPI result = new ModrinthAPI(client, apiKey);
+        ModrinthAPI result = new ModrinthAPI(client);
 
         result.initializeGson();
         return result;
@@ -115,7 +117,7 @@ public class ModrinthAPI {
      */
     public static ModrinthAPI rateLimited(UserAgent agent, String apiKey) {
         HttpClient client = new RatelimitedHttpClient(agent, apiKey);
-        ModrinthAPI result = new ModrinthAPI(client, apiKey);
+        ModrinthAPI result = new ModrinthAPI(client);
 
         result.initializeGson();
         return result;
@@ -133,7 +135,7 @@ public class ModrinthAPI {
      */
     public static ModrinthAPI rateLimited(UserAgent agent, String url, String apiKey) {
         HttpClient client = new RatelimitedHttpClient(agent, url, apiKey);
-        ModrinthAPI result = new ModrinthAPI(client, apiKey);
+        ModrinthAPI result = new ModrinthAPI(client);
 
         result.initializeGson();
         return result;
@@ -152,7 +154,7 @@ public class ModrinthAPI {
      */
     public static ModrinthAPI rateLimited(UserAgent agent, String url, String apiKey, long timeout) {
         HttpClient client = new RatelimitedHttpClient(agent, url, apiKey, timeout);
-        ModrinthAPI result = new ModrinthAPI(client, apiKey);
+        ModrinthAPI result = new ModrinthAPI(client);
 
         result.initializeGson();
         return result;
@@ -223,5 +225,59 @@ public class ModrinthAPI {
      */
     public TagsEndpoints tags() {
         return new TagsEndpoints(gson, client);
+    }
+
+    /**
+     * Returns the collection endpoints.
+     * 
+     * @return - The collection endpoints
+     */
+    public CollectionEndpoints collections() {
+        return new CollectionEndpoints(gson, client);
+    }
+
+    /**
+     * Returns the organization endpoints.
+     * 
+     * @return - The organization endpoints
+     */
+    public OrganizationEndpoints organizations() {
+        return new OrganizationEndpoints(gson, client);
+    }
+
+    /**
+     * Returns the friends endpoints.
+     * 
+     * @return - The friends endpoints
+     */
+    public FriendsEndpoints friends() {
+        return new FriendsEndpoints(gson, client);
+    }
+
+    /**
+     * Returns the threads endpoints.
+     * 
+     * @return - The threads endpoints
+     */
+    public ThreadsEndpoints threads() {
+        return new ThreadsEndpoints(gson, client);
+    }
+
+    /**
+     * Returns the images endpoints.
+     * 
+     * @return - The images endpoints
+     */
+    public ImagesEndpoints images() {
+        return new ImagesEndpoints(gson, client);
+    }
+
+    /**
+     * Returns the limits endpoints.
+     * 
+     * @return - The limits endpoints
+     */
+    public LimitsEndpoints limits() {
+        return new LimitsEndpoints(gson, client);
     }
 }

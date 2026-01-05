@@ -1,15 +1,14 @@
 package masecla.modrinth4j.client;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 import java.util.concurrent.CompletionException;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import masecla.modrinth4j.data.DataUtil;
 import masecla.modrinth4j.endpoints.teams.ModifyTeamMemberInfo.ModifyTeamMemberInfoRequest;
@@ -32,7 +31,7 @@ public class TeamEndpointsTests {
     /**
      * Sets up the client.
      */
-    @Before
+    @BeforeEach
     public void setupClient() {
         EnvReader env = new EnvReader();
         this.client = ModrinthAPI.rateLimited(env.getAgent(), env.getStagingUrl(), env.getApiKey());
@@ -43,7 +42,7 @@ public class TeamEndpointsTests {
     /**
      * Wipes the project.
      */
-    @After
+    @AfterEach
     public void wipeProject() {
         DataUtil.deleteSampleProject(client);
     }
@@ -55,8 +54,8 @@ public class TeamEndpointsTests {
     public void testGetProjectTeamMembers() {
         List<ModrinthTeamMember> mems = client.teams().getProjectTeamMembers(sampleProject.getId()).join();
 
-        assertEquals("Members should be 1", 1, mems.size());
-        assertEquals("Role should be Owner", "Owner", mems.get(0).getRole());
+        assertEquals(1, mems.size(), "Members should be 1");
+        assertEquals("Owner", mems.get(0).getRole(), "Role should be Owner");
     }
 
     /**
@@ -66,8 +65,8 @@ public class TeamEndpointsTests {
     public void testGetTeamMembers() {
         List<ModrinthTeamMember> mems = client.teams().getTeamMembers(sampleProject.getTeam()).join();
 
-        assertEquals("Members should be 1", 1, mems.size());
-        assertEquals("Role should be Owner", "Owner", mems.get(0).getRole());
+        assertEquals(1, mems.size(), "Members should be 1");
+        assertEquals("Owner", mems.get(0).getRole(), "Role should be Owner");
     }
 
     /**
@@ -77,11 +76,11 @@ public class TeamEndpointsTests {
     public void testGetTeamsMembers() {
         List<List<ModrinthTeamMember>> mems = client.teams().getTeamMembers(sampleProject.getTeam(), "pnm2l6xn").join();
 
-        assertEquals("There should 2 teams!", 2, mems.size());
-        assertEquals("Role should be Owner", "Owner", mems.get(0).get(0).getRole());
-        assertEquals("Role should be Owner", "Owner", mems.get(1).get(0).getRole());
-        assertEquals("Members should be 1", 1, mems.get(0).size());
-        assertEquals("Members should be 1", 1, mems.get(1).size());
+        assertEquals(2, mems.size(), "There should 2 teams!");
+        assertEquals("Owner", mems.get(0).get(0).getRole(), "Role should be Owner");
+        assertEquals("Owner", mems.get(1).get(0).getRole(), "Role should be Owner");
+        assertEquals(1, mems.get(0).size(), "Members should be 1");
+        assertEquals(1, mems.get(1).size(), "Members should be 1");
     }
 
     /**
@@ -94,7 +93,7 @@ public class TeamEndpointsTests {
         List<ModrinthTeamMember> mems = client.teams().getTeamMembers(sampleProject.getTeam()).join();
 
         // Since it's a non-existent user, it should fail
-        assertEquals("Members should be 1", 1, mems.size());
+        assertEquals(1, mems.size(), "Members should be 1");
     }
 
     /**
@@ -109,8 +108,8 @@ public class TeamEndpointsTests {
             e = (EndpointException) ex.getCause();
         }
 
-        assertNotNull("Exception should not be null", e);
-        assertEquals("Error should be invalid_input", "invalid_input", e.getError());
+        assertNotNull(e, "Exception should not be null");
+        assertEquals("invalid_input", e.getError(), "Error should be invalid_input");
     }
 
     /**
@@ -127,7 +126,7 @@ public class TeamEndpointsTests {
             e = (EndpointException) ex.getCause();
         }
 
-        assertTrue(e != null);
+        assertNotNull(e);
         assertEquals("unauthorized", e.getError());
     }
 
@@ -144,7 +143,7 @@ public class TeamEndpointsTests {
             e = (EndpointException) ex.getCause();
         }
 
-        assertTrue(e != null);
+        assertNotNull(e);
         assertEquals("unauthorized", e.getError());
     }
 
@@ -162,8 +161,8 @@ public class TeamEndpointsTests {
             e = (EndpointException) ex.getCause();
         }
 
-        assertNotNull("Exception should not be null", e);
-        assertEquals("Error should be unauthorized", "unauthorized", e.getError());
+        assertNotNull(e, "Exception should not be null");
+        assertEquals("unauthorized", e.getError(), "Error should be unauthorized");
     }
 
 }

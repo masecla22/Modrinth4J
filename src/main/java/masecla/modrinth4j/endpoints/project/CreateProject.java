@@ -158,9 +158,11 @@ public class CreateProject extends Endpoint<Project, CreateProjectRequest> {
             MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
 
             JsonObject obj = getGson().toJsonTree(parameters.getData()).getAsJsonObject();
+
             obj.add("initial_versions", new JsonArray());
             obj.addProperty("is_draft", true);
-
+            
+            System.out.println("Sending -> " + obj);
             bodyBuilder.addFormDataPart("data", getGson().toJson(obj));
             if (parameters.getIconData() != null)
                 bodyBuilder.addFormDataPart("icon", parameters.getIconFilename(),

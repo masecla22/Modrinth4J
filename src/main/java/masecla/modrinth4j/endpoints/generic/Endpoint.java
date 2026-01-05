@@ -124,8 +124,10 @@ public abstract class Endpoint<O, I> {
 
             if (this.requiresBody() && !getRequestClass().getType().equals(EmptyRequest.class)) {
                 JsonElement jsonBody = gson.toJsonTree(request, getRequestClass().getType());
+                System.out.println("Sending -> " + jsonBody);
                 if (isJsonBody()) {
-                    c.method(getMethod(), RequestBody.create(gson.toJson(jsonBody),
+                    String body = gson.toJson(jsonBody);
+                    c.method(getMethod(), RequestBody.create(body,
                             MediaType.parse("application/json; charset=utf-8")));
                 }
             }
@@ -158,6 +160,7 @@ public abstract class Endpoint<O, I> {
     protected O checkBodyForErrors(ResponseBody body) {
         if (body.contentLength() != 0) {
             String bodySrc = body.string();
+            System.out.println(bodySrc);
 
             JsonElement unparsedObject = null;
             try {

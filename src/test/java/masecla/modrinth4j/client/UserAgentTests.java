@@ -1,8 +1,8 @@
 package masecla.modrinth4j.client;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import masecla.modrinth4j.client.agent.UserAgent;
 

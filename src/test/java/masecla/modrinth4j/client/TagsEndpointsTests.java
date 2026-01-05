@@ -1,9 +1,9 @@
 package masecla.modrinth4j.client;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import masecla.modrinth4j.environment.EnvReader;
 import masecla.modrinth4j.main.ModrinthAPI;
@@ -18,7 +18,7 @@ public class TagsEndpointsTests {
     /**
      * Sets up the client.
      */
-    @Before
+    @BeforeEach
     public void setupClient() {
         EnvReader env = new EnvReader();
         this.client = ModrinthAPI.rateLimited(env.getAgent(), env.getStagingUrl(), env.getApiKey());
@@ -30,7 +30,7 @@ public class TagsEndpointsTests {
      */
     @Test
     public void testGetCategories() {
-        assertTrue(client.tags().getCategories().join() != null);
+        assertNotNull(client.tags().getCategories().join());
     }
 
     /**
@@ -38,7 +38,7 @@ public class TagsEndpointsTests {
      */
     @Test
     public void testGetDonationPlatforms() {
-        assertTrue(client.tags().getDonationPlatforms().join() != null);
+        assertNotNull(client.tags().getDonationPlatforms().join());
     }
 
     /**
@@ -46,7 +46,7 @@ public class TagsEndpointsTests {
      */
     @Test
     public void testGetLoaders() {
-        assertTrue(client.tags().getLoaders().join() != null);
+        assertNotNull(client.tags().getLoaders().join());
     }
 
     /**
@@ -54,7 +54,7 @@ public class TagsEndpointsTests {
      */
     @Test
     public void testGetGameVersions() {
-        assertTrue(client.tags().getGameVersions().join() != null);
+        assertNotNull(client.tags().getGameVersions().join());
     }
 
     /**
@@ -62,7 +62,7 @@ public class TagsEndpointsTests {
      */
     @Test
     public void testGetLicenses() {
-        assertTrue(client.tags().getLicenses().join() != null);
+        assertNotNull(client.tags().getLicenses().join());
     }
 
     /**
@@ -70,6 +70,6 @@ public class TagsEndpointsTests {
      */
     @Test
     public void testGetReportTypes() {
-        assertTrue(client.tags().getReportTypes().join() != null);
+        assertNotNull(client.tags().getReportTypes().join());
     }
 }

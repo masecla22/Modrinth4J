@@ -1,13 +1,14 @@
 package masecla.modrinth4j.client;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.UUID;
 import java.util.concurrent.CompletionException;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import lombok.SneakyThrows;
 import masecla.modrinth4j.data.DataUtil;
@@ -33,7 +34,7 @@ public class UserEndpointsTests {
     /**
      * Sets up the client.
      */
-    @Before
+    @BeforeEach
     public void setupClient() {
         EnvReader env = new EnvReader();
         this.client = ModrinthAPI.rateLimited(env.getAgent(), env.getStagingUrl(), env.getApiKey());
@@ -45,7 +46,7 @@ public class UserEndpointsTests {
     @Test
     public void testGetUser() {
         ModrinthUser user = client.users().getUser("Geometrically").join();
-        assertTrue(user != null);
+        assertNotNull(user);
     }
 
     /**
@@ -66,7 +67,7 @@ public class UserEndpointsTests {
         client.users().modifyUser(self.getId(), ModifyUserRequest.builder()
                 .bio(random.toString()).build()).join();
 
-        assertTrue(client.users().getSelf().join().getBio().equals(random.toString()));
+        assertEquals(random.toString(), client.users().getSelf().join().getBio());
     }
 
     /**
@@ -81,7 +82,7 @@ public class UserEndpointsTests {
             error = (EndpointException) e.getCause();
         }
 
-        assertTrue(error != null);
+        assertNotNull(error);
         assertEquals("unauthorized", error.getError());
     }
 
@@ -91,7 +92,7 @@ public class UserEndpointsTests {
     @Test
     public void testGetSelf() {
         ModrinthUser self = client.users().getSelf().join();
-        assertTrue(self != null);
+        assertNotNull(self);
     }
 
     /**
@@ -111,7 +112,7 @@ public class UserEndpointsTests {
     @Test
     public void testGetNotifications() {
         ModrinthUser self = client.users().getSelf().join();
-        assertTrue(client.users().getNotifications(self.getId()).join() != null);
+        assertNotNull(client.users().getNotifications(self.getId()).join());
     }
 
     /**
@@ -124,7 +125,7 @@ public class UserEndpointsTests {
         client.users().changeProfilePicture(self.getId(), DataUtil.getImage()).join();
 
         self = client.users().getSelf().join();
-        assertTrue(self.getAvatarUrl() != null);
+        assertNotNull(self.getAvatarUrl());
     }
 
     /**
@@ -156,10 +157,10 @@ public class UserEndpointsTests {
                         .build())
                 .join();
 
-        assertTrue(response != null);
+        assertNotNull(response);
 
         ModrinthUser self = client.users().getSelf().join();
-        assertTrue(response.getReporter().equals(self.getId()));
+        assertEquals(self.getId(), response.getReporter());
 
         DataUtil.deleteSampleProject(client);
     }
